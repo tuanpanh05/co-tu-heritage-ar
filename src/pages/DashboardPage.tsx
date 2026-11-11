@@ -9,14 +9,14 @@ import {
   BookOpen,
   Trophy,
   Download,
-  Trash2,
   Clock,
   Smartphone,
   Monitor,
   Sparkles,
   ArrowUpRight,
   Layers,
-  CheckCircle2
+  CheckCircle2,
+  RefreshCw
 } from 'lucide-react';
 import {
   analyticsService,
@@ -35,7 +35,7 @@ export const DashboardPage: React.FC = () => {
   const [historyFilter, setHistoryFilter] = useState<
     'all' | 'page_view' | 'artifact_ar' | 'clil_audio' | 'quiz'
   >('all');
-  const [showResetConfirm, setShowResetConfirm] = useState<boolean>(false);
+  const [isSyncingCloud, setIsSyncingCloud] = useState<boolean>(false);
 
   const artifacts = artifactService.getAll();
 
@@ -46,11 +46,16 @@ export const DashboardPage: React.FC = () => {
     setLearnedWordsCount(words.filter((w) => w.learned).length);
   };
 
+  const handleSyncCloud = async () => {
+    setIsSyncingCloud(true);
+    await analyticsService.syncAllCloudCounters();
+    refreshData();
+    setIsSyncingCloud(false);
+  };
+
   useEffect(() => {
     refreshData();
-    analyticsService.syncGlobalVisitorCounter().then(() => {
-      refreshData();
-    });
+    handleSyncCloud();
 
     window.addEventListener('cotu_analytics_updated', refreshData);
     window.addEventListener('cotu_notebook_updated', refreshData);
@@ -201,22 +206,21 @@ export const DashboardPage: React.FC = () => {
           {/* Action Buttons */}
           <div className="flex flex-wrap items-center gap-3 self-start lg:self-center">
             <button
+              onClick={handleSyncCloud}
+              disabled={isSyncingCloud}
+              className="inline-flex items-center space-x-2 px-4 py-2.5 rounded-full bg-white hover:bg-heritage-cream text-heritage-clay border border-heritage-sand text-xs sm:text-sm font-semibold shadow-xs transition-all min-h-[44px]"
+            >
+              <RefreshCw className={`w-4 h-4 ${isSyncingCloud ? 'animate-spin' : ''}`} />
+              <span>{t('Đồng bộ Cloud', 'Sync Cloud')}</span>
+            </button>
+
+            <button
               onClick={() => analyticsService.exportHistoryCSV()}
               className="inline-flex items-center space-x-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-heritage-clay to-heritage-forest hover:from-heritage-clayDark hover:to-heritage-clay text-white text-xs sm:text-sm font-semibold shadow-md hover:shadow-glow transition-all min-h-[44px]"
             >
               <Download className="w-4 h-4" />
               <span>{t('Xuất báo cáo CSV (Excel)', 'Export CSV Report')}</span>
             </button>
-
-            {stats.history.length > 0 && (
-              <button
-                onClick={() => setShowResetConfirm(true)}
-                className="inline-flex items-center space-x-1.5 px-4 py-2.5 rounded-full bg-white/90 hover:bg-rose-50 text-rose-700 border border-rose-200 text-xs sm:text-sm font-medium transition-colors min-h-[44px]"
-              >
-                <Trash2 className="w-4 h-4" />
-                <span>{t('Làm mới nhật ký', 'Clear Log')}</span>
-              </button>
-            )}
           </div>
         </div>
       </div>
@@ -553,45 +557,6 @@ export const DashboardPage: React.FC = () => {
           </div>
         )}
       </div>
-
-      {/* Confirmation Modal to Clear History */}
-      {showResetConfirm && (
-        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl max-w-sm w-full p-6 space-y-4 shadow-2xl border border-heritage-sand">
-            <div className="w-12 h-12 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center mx-auto">
-              <Trash2 className="w-6 h-6" />
-            </div>
-            <div className="text-center space-y-1">
-              <h3 className="font-serif font-semibold text-lg text-heritage-wood">
-                {t('Làm mới nhật ký truy cập?', 'Reset Activity History?')}
-              </h3>
-              <p className="text-xs text-heritage-woodMuted">
-                {t(
-                  'Toàn bộ lịch sử tương tác lưu trên trình duyệt này sẽ được đặt về 0.',
-                  'All local activity logs recorded in this browser will be reset to zero.'
-                )}
-              </p>
-            </div>
-            <div className="flex items-center space-x-3 pt-2">
-              <button
-                onClick={() => setShowResetConfirm(false)}
-                className="flex-1 py-2.5 rounded-xl bg-heritage-cream hover:bg-heritage-sand text-heritage-wood text-xs font-semibold min-h-[42px]"
-              >
-                {t('Hủy bỏ', 'Cancel')}
-              </button>
-              <button
-                onClick={() => {
-                  analyticsService.clearLocalAnalytics();
-                  setShowResetConfirm(false);
-                }}
-                className="flex-1 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-semibold min-h-[42px]"
-              >
-                {t('Xác nhận xóa', 'Confirm Reset')}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

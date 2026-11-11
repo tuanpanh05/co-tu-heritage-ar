@@ -35,6 +35,7 @@ export interface AnalyticsState {
 
 const STORAGE_KEY = 'cotu_heritage_analytics_v1';
 const SESSION_KEY = 'cotu_heritage_session_counted';
+const CLOUD_NAMESPACE = 'cotu-heritage-ar-v1';
 const MAX_HISTORY_ITEMS = 120;
 
 const detectDevice = (): 'mobile' | 'desktop' => {
@@ -70,6 +71,38 @@ const createInitialState = (): AnalyticsState => {
   };
 };
 
+async function incrementCloudKey(key: string): Promise<number | null> {
+  try {
+    const safeKey = key.replace(/[^a-zA-Z0-9_-]/g, '_');
+    const res = await fetch(`https://api.counterapi.dev/v1/${CLOUD_NAMESPACE}/${safeKey}/up`);
+    if (res.ok) {
+      const data = await res.json();
+      if (typeof data?.count === 'number') {
+        return data.count;
+      }
+    }
+  } catch {
+    // Ignore network/adblock errors seamlessly
+  }
+  return null;
+}
+
+async function fetchCloudKey(key: string): Promise<number | null> {
+  try {
+    const safeKey = key.replace(/[^a-zA-Z0-9_-]/g, '_');
+    const res = await fetch(`https://api.counterapi.dev/v1/${CLOUD_NAMESPACE}/${safeKey}/`);
+    if (res.ok) {
+      const data = await res.json();
+      if (typeof data?.count === 'number') {
+        return data.count;
+      }
+    }
+  } catch {
+    // Ignore network/adblock errors seamlessly
+  }
+  return null;
+}
+
 export const analyticsService = {
   getState(): AnalyticsState {
     try {
@@ -103,29 +136,22 @@ export const analyticsService = {
   },
 
   /**
-   * Đồng bộ bộ đếm lượt truy cập toàn cục qua CounterAPI (không cần backend riêng, tự fallback nếu offline)
+   * Đồng bộ bộ đếm phiên truy cập toàn cục qua CounterAPI
    */
   async syncGlobalVisitorCounter(): Promise<number> {
     const state = this.getState();
     const alreadyCounted = sessionStorage.getItem(SESSION_KEY);
-    const endpoint = alreadyCounted
-      ? 'https://api.counterapi.dev/v1/cotu-heritage-ar/visits/'
-      : 'https://api.counterapi.dev/v1/cotu-heritage-ar/visits/up';
 
-    try {
-      const res = await fetch(endpoint, { method: 'GET' });
-      if (res.ok) {
-        const data = await res.json();
-        if (typeof data?.count === 'number') {
-          sessionStorage.setItem(SESSION_KEY, '1');
-          const updated = this.getState();
-          updated.globalVisitorsSync = Math.max(data.count, updated.totalPageViews, 1);
-          this.saveState(updated);
-          return updated.globalVisitorsSync;
-        }
-      }
-    } catch {
-      // Fallback nếu trình duyệt chặn hoặc offline
+    const cloudCount = alreadyCounted
+      ? await fetchCloudKey('visits')
+      : await incrementCloudKey('visits');
+
+    if (cloudCount !== null) {
+      sessionStorage.setItem(SESSION_KEY, '1');
+      const updated = this.getState();
+      updated.globalVisitorsSync = Math.max(cloudCount, updated.globalVisitorsSync, 1);
+      this.saveState(updated);
+      return updated.globalVisitorsSync;
     }
 
     if (!alreadyCounted) {
@@ -134,6 +160,62 @@ export const analyticsService = {
       this.saveState(state);
     }
     return state.globalVisitorsSync;
+  },
+
+  /**
+   * Đồng bộ toàn bộ số liệu Cloud (lượt xem từng hiện vật & các sự kiện chính) từ mọi thiết bị
+   */
+  async syncAllCloudCounters(): Promise<void> {
+    const artifacts = artifactService.getAll();
+    const eventKeys: AnalyticsEventType[] = [
+      'page_view',
+      'artifact_view',
+      'ar_launch',
+      'audio_play',
+      'vocab_lookup',
+      'vocab_save',
+      'quiz_complete'
+    ];
+
+    try {
+      const [visitsCloud, ...rest] = await Promise.all([
+        fetchCloudKey('visits'),
+        ...artifacts.map((a) => fetchCloudKey(`art_${a.slug}`)),
+        ...eventKeys.map((ev) => fetchCloudKey(`ev_${ev}`))
+      ]);
+
+      const artifactCounts = rest.slice(0, artifacts.length);
+      const evCounts = rest.slice(artifacts.length);
+
+      const updated = this.getState();
+
+      if (typeof visitsCloud === 'number') {
+        updated.globalVisitorsSync = Math.max(updated.globalVisitorsSync, visitsCloud);
+      }
+
+      artifacts.forEach((a, idx) => {
+        const c = artifactCounts[idx];
+        if (typeof c === 'number') {
+          updated.artifactViews[a.slug] = Math.max(updated.artifactViews[a.slug] || 0, c);
+        }
+      });
+
+      eventKeys.forEach((ev, idx) => {
+        const c = evCounts[idx];
+        if (typeof c === 'number') {
+          updated.eventCounts[ev] = Math.max(updated.eventCounts[ev] || 0, c);
+        }
+      });
+
+      updated.totalPageViews = Math.max(
+        updated.totalPageViews,
+        updated.eventCounts.page_view || 0
+      );
+
+      this.saveState(updated);
+    } catch {
+      // Ignore offline errors
+    }
   },
 
   logEvent(params: {
@@ -164,6 +246,18 @@ export const analyticsService = {
 
     state.eventCounts[params.type] = (state.eventCounts[params.type] || 0) + 1;
 
+    // Tăng bộ đếm Cloud bất đồng bộ cho loại sự kiện này
+    incrementCloudKey(`ev_${params.type}`).then((cloudVal) => {
+      if (typeof cloudVal === 'number') {
+        const current = this.getState();
+        current.eventCounts[params.type] = Math.max(current.eventCounts[params.type] || 0, cloudVal);
+        if (params.type === 'page_view') {
+          current.totalPageViews = Math.max(current.totalPageViews, cloudVal);
+        }
+        this.saveState(current);
+      }
+    });
+
     if (params.type === 'page_view') {
       state.totalPageViews += 1;
       if (state.globalVisitorsSync < state.totalPageViews) {
@@ -172,8 +266,17 @@ export const analyticsService = {
     }
 
     if (params.type === 'artifact_view' && params.artifactSlug) {
-      state.artifactViews[params.artifactSlug] =
-        (state.artifactViews[params.artifactSlug] || 0) + 1;
+      const slug = params.artifactSlug;
+      state.artifactViews[slug] = (state.artifactViews[slug] || 0) + 1;
+
+      // Tăng bộ đếm Cloud cho hiện vật cụ thể này
+      incrementCloudKey(`art_${slug}`).then((cloudVal) => {
+        if (typeof cloudVal === 'number') {
+          const current = this.getState();
+          current.artifactViews[slug] = Math.max(current.artifactViews[slug] || 0, cloudVal);
+          this.saveState(current);
+        }
+      });
     }
 
     if (params.type === 'quiz_complete' && typeof params.quizScorePercent === 'number') {
@@ -205,6 +308,7 @@ export const analyticsService = {
       state.totalPageViews += 1;
       state.eventCounts.page_view = (state.eventCounts.page_view || 0) + 1;
       this.saveState(state);
+      incrementCloudKey('ev_page_view');
       return;
     }
 
@@ -251,8 +355,14 @@ export const analyticsService = {
       artifactSlug: slug,
       titleVi: `Kích hoạt AR: ${nameVi}`,
       titleEn: `Launched WebAR: ${nameEn}`,
-      detailVi: mode === 'mobile_ar' ? 'Mở camera AR trực tiếp trên di động' : 'Mở mã QR chuyển tiếp AR sang điện thoại',
-      detailEn: mode === 'mobile_ar' ? 'Activated mobile AR camera' : 'Opened QR code for mobile AR handoff'
+      detailVi:
+        mode === 'mobile_ar'
+          ? 'Mở camera AR trực tiếp trên di động'
+          : 'Mở mã QR chuyển tiếp AR sang điện thoại',
+      detailEn:
+        mode === 'mobile_ar'
+          ? 'Activated mobile AR camera'
+          : 'Opened QR code for mobile AR handoff'
     });
   },
 
@@ -266,7 +376,12 @@ export const analyticsService = {
     });
   },
 
-  trackVocabLookup(term: string, meaningVi: string, artifactNameVi: string, artifactNameEn: string): void {
+  trackVocabLookup(
+    term: string,
+    meaningVi: string,
+    artifactNameVi: string,
+    artifactNameEn: string
+  ): void {
     this.logEvent({
       type: 'vocab_lookup',
       titleVi: `Tra cứu thuật ngữ "${term}"`,
@@ -327,6 +442,7 @@ export const analyticsService = {
     const summaryLines = [
       `# BAO CAO THONG KE TRUY CAP & TUONG TAC - CO TU HERITAGE AR`,
       `# Tong luot xem trang (Page Views),${state.totalPageViews}`,
+      `# Tong phien truy cap toan cuc (Global Sessions),${state.globalVisitorsSync}`,
       `# Tong luot xem hien vat (Artifact Views),${state.eventCounts.artifact_view || 0}`,
       `# Luot kich hoat 3D/AR,${state.eventCounts.ar_launch || 0}`,
       `# Luot nghe Audio Guide,${state.eventCounts.audio_play || 0}`,
@@ -352,11 +468,5 @@ export const analyticsService = {
     link.click();
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
-  },
-
-  clearLocalAnalytics(): void {
-    const fresh = createInitialState();
-    this.saveState(fresh);
   }
 };
-
