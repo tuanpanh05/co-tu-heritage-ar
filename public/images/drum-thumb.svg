@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#EBF5F0"/>
+      <stop offset="50%" stop-color="#DCECE5"/>
+      <stop offset="100%" stop-color="#F6FAF8"/>
+    </linearGradient>
+    <linearGradient id="body" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#2B6B58"/>
+      <stop offset="50%" stop-color="#3B8A72"/>
+      <stop offset="100%" stop-color="#1E5242"/>
+    </linearGradient>
+    <radialGradient id="drumhead" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FFFDF7"/>
+      <stop offset="75%" stop-color="#F3E5C8"/>
+      <stop offset="100%" stop-color="#D4B886"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="800" height="600" fill="url(#bg)"/>
+
+  <circle cx="400" cy="290" r="210" fill="none" stroke="#52B79A" stroke-width="1.5" opacity="0.25"/>
+  <circle cx="400" cy="290" r="255" fill="none" stroke="#D4A359" stroke-width="1.2" opacity="0.2"/>
+
+  <ellipse cx="400" cy="480" rx="230" ry="30" fill="#BDDCD0" opacity="0.7"/>
+
+  <line x1="290" y1="470" x2="365" y2="340" stroke="#4E7365" stroke-width="14" stroke-linecap="round"/>
+  <line x1="510" y1="470" x2="435" y2="340" stroke="#4E7365" stroke-width="14" stroke-linecap="round"/>
+
+  <path d="M255 200 C235 305, 245 365, 275 415 L525 415 C555 365, 565 305, 545 200 Z" fill="url(#body)"/>
+
+  <g stroke="#E5C384" stroke-width="2.5" stroke-linecap="round" opacity="0.85">
+    <line x1="270" y1="215" x2="290" y2="410"/>
+    <line x1="305" y1="222" x2="335" y2="412"/>
+    <line x1="350" y1="226" x2="380" y2="413"/>
+    <line x1="400" y1="228" x2="425" y2="413"/>
+    <line x1="450" y1="226" x2="470" y2="412"/>
+    <line x1="495" y1="222" x2="510" y2="410"/>
+  </g>
+
+  <ellipse cx="400" cy="202" rx="150" ry="42" fill="#237A63"/>
+  <ellipse cx="400" cy="198" rx="140" ry="37" fill="url(#drumhead)"/>
+  <ellipse cx="400" cy="198" rx="65" ry="17" fill="none" stroke="#D4A359" stroke-width="2" opacity="0.5"/>
+
+  <rect x="260" y="510" width="280" height="40" rx="20" fill="#FFFFFF" opacity="0.9"/>
+  <text x="400" y="535" font-family="'Be Vietnam Pro', 'Segoe UI', Arial, sans-serif" font-size="14" font-weight="700" fill="#1E332C" text-anchor="middle" letter-spacing="1.2">TRỐNG K'TU TRUYỀN THỐNG</text>
+</svg>

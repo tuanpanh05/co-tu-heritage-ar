@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#E8F4EE"/>
+      <stop offset="50%" stop-color="#D6EAE1"/>
+      <stop offset="100%" stop-color="#F6FAF8"/>
+    </linearGradient>
+    <linearGradient id="wood" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#237A63"/>
+      <stop offset="50%" stop-color="#32967B"/>
+      <stop offset="100%" stop-color="#195E4B"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="800" height="600" fill="url(#bg)"/>
+
+  <circle cx="400" cy="230" r="140" fill="#FCE8B2" opacity="0.45"/>
+  <ellipse cx="400" cy="485" rx="185" ry="24" fill="#BDDCD0" opacity="0.7"/>
+
+  <polygon points="372,115 428,115 442,480 358,480" fill="url(#wood)"/>
+
+  <path d="M250 145 Q400 195 550 145 Q400 165 250 145 Z" fill="#D4A359"/>
+  <path d="M255 145 C225 115, 245 75, 285 90 C260 100, 265 125, 275 140 Z" fill="#237A63"/>
+  <path d="M545 145 C575 115, 555 75, 515 90 C540 100, 535 125, 525 140 Z" fill="#237A63"/>
+
+  <circle cx="400" cy="230" r="24" fill="#FFFFFF"/>
+  <circle cx="400" cy="230" r="15" fill="#D4A359"/>
+
+  <polygon points="400,275 418,305 400,335 382,305" fill="#FFFFFF" opacity="0.9"/>
+  <polygon points="400,345 418,375 400,405 382,375" fill="#E5C384"/>
+  <polygon points="400,415 418,445 400,470 382,445" fill="#FFFFFF" opacity="0.9"/>
+
+  <rect x="260" y="510" width="280" height="40" rx="20" fill="#FFFFFF" opacity="0.9"/>
+  <text x="400" y="535" font-family="'Be Vietnam Pro', 'Segoe UI', Arial, sans-serif" font-size="14" font-weight="700" fill="#1E332C" text-anchor="middle" letter-spacing="1.2">CỘT TẾ T'KƠƠR</text>
+</svg>

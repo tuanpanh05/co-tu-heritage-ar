@@ -1,0 +1,129 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  body {
+    background: linear-gradient(135deg, #F6FAF8 0%, #EDF6F2 50%, #F4F7F4 100%);
+    color: #1E332C;
+    @apply font-sans;
+    font-size: 15.5px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    font-feature-settings: 'kern' 1;
+  }
+
+  /* Tiêu đề: Lora mềm mại, đậm vừa phải, khoảng dòng thoáng để dấu tiếng Việt không bị chạm nhau */
+  h1, h2, h3, h4, .font-serif {
+    font-variant-numeric: lining-nums;
+    letter-spacing: -0.005em;
+  }
+
+  h1, h2 {
+    line-height: 1.28;
+  }
+
+  h3, h4 {
+    line-height: 1.4;
+  }
+}
+
+/* Hiệu ứng kính mờ mềm mại (Soft Glassmorphism) */
+.soft-glass {
+  background: rgba(255, 255, 255, 0.78);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(179, 206, 196, 0.45);
+}
+
+.soft-glass-card {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(213, 229, 223, 0.8);
+  transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.soft-glass-card:hover {
+  background: rgba(255, 255, 255, 0.96);
+  border-color: rgba(82, 183, 154, 0.55);
+  box-shadow: 0 20px 40px -12px rgba(35, 122, 99, 0.12);
+}
+
+/* 3D Model Viewer Element Styling - Dịu mắt, sáng sủa */
+model-viewer {
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at 50% 45%, #F2F8F5 0%, #DCECE6 65%, #CBE0D8 100%);
+  --poster-color: transparent;
+  --progress-bar-color: #237A63;
+  --progress-bar-height: 4px;
+}
+
+/* Custom Scrollbar mềm mại */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #EDF5F2;
+}
+::-webkit-scrollbar-thumb {
+  background: #B3CEC4;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #237A63;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* In ấn nhãn QR Code chuyên dụng */
+@media print {
+  body {
+    background: white !important;
+    color: black !important;
+  }
+
+  header,
+  footer,
+  nav,
+  .no-print,
+  button,
+  .print-controls,
+  .interactive-bg-canvas {
+    display: none !important;
+  }
+
+  .printable-qr-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 24px !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 100% !important;
+  }
+
+  .qr-label-card {
+    page-break-inside: avoid;
+    break-inside: avoid;
+    border: 2px solid #1E332C !important;
+    border-radius: 16px !important;
+    padding: 20px !important;
+    background: white !important;
+    box-shadow: none !important;
+  }
+}
