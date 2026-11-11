@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Play, Pause, Square, Volume2, Headphones } from 'lucide-react';
 import { speechService } from '../../services/speechService';
 import { useLanguage } from '../../contexts/LanguageContext';
+import { analyticsService } from '../../services/analyticsService';
 
 interface AudioGuidePlayerProps {
   audioFiles?: {
@@ -17,7 +18,8 @@ interface AudioGuidePlayerProps {
 
 export const AudioGuidePlayer: React.FC<AudioGuidePlayerProps> = ({
   audioFiles,
-  textToRead
+  textToRead,
+  artifactName = 'Hiện vật Cơ Tu'
 }) => {
   const { lang, t } = useLanguage();
   const [selectedLang, setSelectedLang] = useState<'vi' | 'en'>(lang);
@@ -54,6 +56,7 @@ export const AudioGuidePlayer: React.FC<AudioGuidePlayerProps> = ({
     if (isPlaying) {
       handleStop();
     } else {
+      analyticsService.trackAudioPlay(artifactName, artifactName, selectedLang);
       if (activeAudioFile) {
         if (audioRef.current) {
           audioRef.current.play().then(() => {

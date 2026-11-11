@@ -9,7 +9,8 @@ import {
   GraduationCap, 
   Layers,
   Sparkles,
-  Globe
+  Globe,
+  BarChart3
 } from 'lucide-react';
 import { notebookService } from '../../services/notebookService';
 import { useLanguage } from '../../contexts/LanguageContext';
@@ -39,12 +40,13 @@ export const Header: React.FC = () => {
     { to: '/learn', label: 'Học tập', en: 'Learning Hub', icon: GraduationCap },
     { 
       to: '/learn/notebook', 
-      label: 'Sổ tay từ vựng', 
-      en: 'Vocabulary', 
+      label: 'Sổ tay', 
+      en: 'Notebook', 
       icon: BookMarked,
       badge: savedCount > 0 ? savedCount : null
     },
-    { to: '/qr-codes', label: 'In mã QR', en: 'QR Labels', icon: QrCode }
+    { to: '/qr-codes', label: 'Mã QR', en: 'QR Labels', icon: QrCode },
+    { to: '/dashboard', label: 'Thống kê', en: 'Analytics', icon: BarChart3 }
   ];
 
   return (

@@ -14,6 +14,7 @@ import {
 import { speechService } from '../../services/speechService';
 import { notebookService } from '../../services/notebookService';
 import { useLanguage } from '../../contexts/LanguageContext';
+import { analyticsService } from '../../services/analyticsService';
 
 interface VocabularyPopupProps {
   item: VocabularyItem | null;
@@ -64,6 +65,7 @@ export const VocabularyPopup: React.FC<VocabularyPopupProps> = ({
     } else {
       const success = notebookService.save(item, artifact);
       if (success) {
+        analyticsService.trackVocabSave(item.term, artifact.name.vi, artifact.name.en);
         setIsSaved(true);
         setSaveSuccessMsg(true);
         setTimeout(() => setSaveSuccessMsg(false), 2000);

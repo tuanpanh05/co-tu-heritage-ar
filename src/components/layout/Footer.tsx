@@ -69,6 +69,11 @@ export const Footer: React.FC = () => {
                   {t('In nhãn mã QR hiện vật', 'Printable QR Exhibit Labels')}
                 </Link>
               </li>
+              <li>
+                <Link to="/dashboard" className="hover:text-heritage-clay transition-colors">
+                  {t('Thống kê & Lịch sử truy cập', 'Analytics & Activity Dashboard')}
+                </Link>
+              </li>
             </ul>
           </div>
 

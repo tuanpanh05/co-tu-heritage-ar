@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { Analytics } from '@vercel/analytics/react';
 import { LanguageProvider } from './contexts/LanguageContext';
 import { Layout } from './components/layout/Layout';
 import { HomePage } from './pages/HomePage';
@@ -8,6 +9,7 @@ import { ArtifactDetailPage } from './pages/ArtifactDetailPage';
 import { LearningPage } from './pages/LearningPage';
 import { NotebookPage } from './pages/NotebookPage';
 import { QRCodesPage } from './pages/QRCodesPage';
+import { DashboardPage } from './pages/DashboardPage';
 import { NotFoundPage } from './pages/NotFoundPage';
 
 export const App: React.FC = () => {
@@ -22,15 +24,18 @@ export const App: React.FC = () => {
             <Route path="learn" element={<LearningPage />} />
             <Route path="learn/notebook" element={<NotebookPage />} />
             <Route path="qr-codes" element={<QRCodesPage />} />
+            <Route path="dashboard" element={<DashboardPage />} />
             
             {/* Legacy redirect or aliases if any */}
             <Route path="notebook" element={<Navigate to="/learn/notebook" replace />} />
+            <Route path="analytics" element={<Navigate to="/dashboard" replace />} />
             
             {/* 404 Fallback */}
             <Route path="*" element={<NotFoundPage />} />
           </Route>
         </Routes>
       </BrowserRouter>
+      <Analytics />
     </LanguageProvider>
   );
 };

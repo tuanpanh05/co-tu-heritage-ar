@@ -12,6 +12,7 @@ import { VocabularyPopup } from '../components/artifact/VocabularyPopup';
 import { AudioGuidePlayer } from '../components/artifact/AudioGuidePlayer';
 import { ArtifactCard } from '../components/artifact/ArtifactCard';
 import { useLanguage } from '../contexts/LanguageContext';
+import { analyticsService } from '../services/analyticsService';
 import { 
   ChevronRight, 
   MapPin, 
@@ -38,6 +39,9 @@ export const ArtifactDetailPage: React.FC = () => {
     if (slug) {
       const found = artifactService.getBySlug(slug);
       setArtifact(found || null);
+      if (found) {
+        analyticsService.trackArtifactView(found.slug, found.name.vi, found.name.en);
+      }
       window.scrollTo(0, 0);
     }
   }, [slug]);
@@ -258,7 +262,15 @@ export const ArtifactDetailPage: React.FC = () => {
                 {artifact.vocabulary.map((vocab) => (
                   <button
                     key={vocab.id}
-                    onClick={() => setActiveVocab(vocab)}
+                    onClick={() => {
+                      setActiveVocab(vocab);
+                      analyticsService.trackVocabLookup(
+                        vocab.term,
+                        vocab.vietnameseMeaning,
+                        artifact.name.vi,
+                        artifact.name.en
+                      );
+                    }}
                     className="inline-flex items-center space-x-1.5 px-3 py-2 rounded-xl bg-white hover:bg-heritage-clay hover:text-white border border-heritage-sand text-heritage-wood text-xs font-semibold shadow-xs transition-all transform active:scale-95 min-h-[40px]"
                   >
                     <span>{vocab.term}</span>

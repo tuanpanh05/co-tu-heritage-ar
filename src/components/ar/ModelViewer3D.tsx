@@ -15,6 +15,7 @@ import {
 import { qrService } from '../../services/qrService';
 import { QRCodeSVG } from 'qrcode.react';
 import { useLanguage } from '../../contexts/LanguageContext';
+import { analyticsService } from '../../services/analyticsService';
 
 interface ModelViewer3DProps {
   modelUrl?: string;
@@ -85,6 +86,7 @@ export const ModelViewer3D: React.FC<ModelViewer3DProps> = ({
     if (modelViewerRef.current && isMobileDevice) {
       try {
         if (typeof modelViewerRef.current.activateAR === 'function') {
+          analyticsService.trackArLaunch(artifactSlug, artifactName, artifactName, 'mobile_ar');
           modelViewerRef.current.activateAR();
           return;
         }
@@ -92,6 +94,7 @@ export const ModelViewer3D: React.FC<ModelViewer3DProps> = ({
         console.warn('Lỗi khi kích hoạt activateAR:', err);
       }
     }
+    analyticsService.trackArLaunch(artifactSlug, artifactName, artifactName, 'qr_modal');
     setShowDesktopArModal(true);
   };
 

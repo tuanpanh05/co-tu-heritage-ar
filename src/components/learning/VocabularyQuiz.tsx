@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { useLanguage } from '../../contexts/LanguageContext';
+import { analyticsService } from '../../services/analyticsService';
 
 interface VocabularyQuizProps {
   questions: QuizQuestion[];
@@ -51,6 +52,7 @@ export const VocabularyQuiz: React.FC<VocabularyQuizProps> = ({ questions }) => 
       setIsAnswered(false);
     } else {
       setQuizFinished(true);
+      analyticsService.trackQuizComplete(score, questions.length);
       if (score + (selectedOption === currentQ.correctIndex ? 1 : 0) >= questions.length / 2) {
         try {
           confetti({
