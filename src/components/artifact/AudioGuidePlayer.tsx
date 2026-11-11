@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Play, Pause, Square, Volume2, Headphones } from 'lucide-react';
 import { speechService } from '../../services/speechService';
+import { useLanguage } from '../../contexts/LanguageContext';
 
 interface AudioGuidePlayerProps {
   audioFiles?: {
@@ -18,9 +19,14 @@ export const AudioGuidePlayer: React.FC<AudioGuidePlayerProps> = ({
   audioFiles,
   textToRead
 }) => {
-  const [selectedLang, setSelectedLang] = useState<'vi' | 'en'>('vi');
+  const { lang, t } = useLanguage();
+  const [selectedLang, setSelectedLang] = useState<'vi' | 'en'>(lang);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  useEffect(() => {
+    setSelectedLang(lang);
+  }, [lang]);
 
   const activeAudioFile = audioFiles?.[selectedLang];
   const activeText = textToRead[selectedLang];
@@ -94,10 +100,12 @@ export const AudioGuidePlayer: React.FC<AudioGuidePlayerProps> = ({
           </div>
           <div>
             <h4 className="text-sm font-serif font-semibold text-heritage-wood">
-              Thuyết minh âm thanh (Audio Guide)
+              {t('Thuyết minh âm thanh (Audio Guide)', 'Bilingual Audio Guide')}
             </h4>
             <span className="text-[11px] text-heritage-woodMuted">
-              {activeAudioFile ? 'Bản thu âm chất lượng cao' : 'Trình đọc tự động thông minh (TTS)'}
+              {activeAudioFile
+                ? t('Bản thu âm chất lượng cao', 'High-quality studio recording')
+                : t('Trình đọc tự động thông minh (TTS)', 'Smart Web Speech API synthesis (TTS)')}
             </span>
           </div>
         </div>
@@ -138,12 +146,14 @@ export const AudioGuidePlayer: React.FC<AudioGuidePlayerProps> = ({
           {isPlaying ? (
             <>
               <Pause className="w-4 h-4" />
-              <span>Tạm dừng thuyết minh</span>
+              <span>{t('Tạm dừng thuyết minh', 'Pause Audio Guide')}</span>
             </>
           ) : (
             <>
               <Play className="w-4 h-4" />
-              <span>Nghe thuyết minh ({selectedLang === 'vi' ? 'Tiếng Việt' : 'English'})</span>
+              <span>
+                {t('Nghe thuyết minh', 'Listen to Guide')} ({selectedLang === 'vi' ? 'Tiếng Việt' : 'English'})
+              </span>
             </>
           )}
         </button>
@@ -152,7 +162,7 @@ export const AudioGuidePlayer: React.FC<AudioGuidePlayerProps> = ({
           <button
             onClick={handleStop}
             className="p-2.5 rounded-xl bg-white hover:bg-heritage-sand text-heritage-wood border border-heritage-sand text-xs font-medium transition-colors min-h-[42px] min-w-[42px] flex items-center justify-center"
-            title="Dừng hẳn"
+            title={t('Dừng hẳn', 'Stop')}
           >
             <Square className="w-4 h-4" />
           </button>
@@ -160,7 +170,11 @@ export const AudioGuidePlayer: React.FC<AudioGuidePlayerProps> = ({
 
         <div className="hidden sm:flex items-center space-x-1.5 text-xs text-heritage-woodMuted ml-auto">
           <Volume2 className={`w-4 h-4 ${isPlaying ? 'text-heritage-clay animate-pulse' : ''}`} />
-          <span>{isPlaying ? 'Đang phát âm thanh...' : 'Sẵn sàng phát'}</span>
+          <span>
+            {isPlaying
+              ? t('Đang phát âm thanh...', 'Playing audio...')
+              : t('Sẵn sàng phát', 'Ready to play')}
+          </span>
         </div>
       </div>
     </div>

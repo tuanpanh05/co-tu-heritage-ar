@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { LanguageProvider } from './contexts/LanguageContext';
 import { Layout } from './components/layout/Layout';
 import { HomePage } from './pages/HomePage';
 import { ArtifactsPage } from './pages/ArtifactsPage';
@@ -11,26 +12,27 @@ import { NotFoundPage } from './pages/NotFoundPage';
 
 export const App: React.FC = () => {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route index element={<HomePage />} />
-          <Route path="artifacts" element={<ArtifactsPage />} />
-          <Route path="artifacts/:slug" element={<ArtifactDetailPage />} />
-          <Route path="learn" element={<LearningPage />} />
-          <Route path="learn/notebook" element={<NotebookPage />} />
-          <Route path="qr-codes" element={<QRCodesPage />} />
-          
-          {/* Legacy redirect or aliases if any */}
-          <Route path="notebook" element={<Navigate to="/learn/notebook" replace />} />
-          
-          {/* 404 Fallback */}
-          <Route path="*" element={<NotFoundPage />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
+    <LanguageProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Layout />}>
+            <Route index element={<HomePage />} />
+            <Route path="artifacts" element={<ArtifactsPage />} />
+            <Route path="artifacts/:slug" element={<ArtifactDetailPage />} />
+            <Route path="learn" element={<LearningPage />} />
+            <Route path="learn/notebook" element={<NotebookPage />} />
+            <Route path="qr-codes" element={<QRCodesPage />} />
+            
+            {/* Legacy redirect or aliases if any */}
+            <Route path="notebook" element={<Navigate to="/learn/notebook" replace />} />
+            
+            {/* 404 Fallback */}
+            <Route path="*" element={<NotFoundPage />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </LanguageProvider>
   );
 };
 
 export default App;
-

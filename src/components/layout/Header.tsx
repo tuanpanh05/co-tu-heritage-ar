@@ -8,14 +8,17 @@ import {
   QrCode, 
   GraduationCap, 
   Layers,
-  Sparkles
+  Sparkles,
+  Globe
 } from 'lucide-react';
 import { notebookService } from '../../services/notebookService';
+import { useLanguage } from '../../contexts/LanguageContext';
 
 export const Header: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [savedCount, setSavedCount] = useState<number>(0);
   const location = useLocation();
+  const { lang, setLang, t } = useLanguage();
 
   useEffect(() => {
     const updateCount = () => {
@@ -47,12 +50,12 @@ export const Header: React.FC = () => {
   return (
     <header className="sticky top-0 z-40 bg-white/75 backdrop-blur-xl border-b border-heritage-sand/70 transition-all shadow-[0_4px_24px_-6px_rgba(35,122,99,0.06)]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 sm:h-20">
+        <div className="flex items-center justify-between h-16 sm:h-20 gap-3">
           
           {/* Logo & Brand */}
           <Link 
             to="/" 
-            className="flex items-center space-x-3.5 group py-2 focus:outline-none rounded-2xl"
+            className="flex items-center space-x-3.5 group py-2 focus:outline-none rounded-2xl shrink-0"
           >
             <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-gradient-to-br from-heritage-clay to-heritage-forest flex items-center justify-center text-white shadow-md group-hover:shadow-glow group-hover:scale-105 transition-all duration-300">
               <Sparkles className="w-5 h-5 text-heritage-ivory" />
@@ -62,50 +65,107 @@ export const Header: React.FC = () => {
                 Cơ Tu Heritage AR
               </span>
               <span className="text-[11px] sm:text-xs text-heritage-woodMuted font-medium">
-                Không gian Di sản Tây Giang · Song ngữ
+                {t('Không gian Di sản Tây Giang · Song ngữ', 'Tây Giang Heritage · Bilingual WebAR')}
               </span>
             </div>
           </Link>
 
-          {/* Desktop Navigation - Soft Pill Bar */}
-          <nav className="hidden md:flex items-center space-x-1 bg-heritage-cream/70 p-1.5 rounded-full border border-heritage-sand/80">
-            {navLinks.map((link) => {
-              const Icon = link.icon;
-              const isActive =
-                link.to === '/'
-                  ? location.pathname === '/'
-                  : location.pathname.startsWith(link.to);
-              return (
-                <Link
-                  key={link.to}
-                  to={link.to}
-                  className={`relative flex items-center space-x-1.5 px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
-                    isActive
-                      ? 'bg-gradient-to-r from-heritage-clay to-heritage-forest text-white shadow-sm'
-                      : 'text-heritage-woodLight hover:bg-white/80 hover:text-heritage-clay'
-                  }`}
-                >
-                  <Icon className={`w-4 h-4 ${isActive ? 'text-white' : 'text-heritage-clay'}`} />
-                  <span>{link.label}</span>
-                  {link.badge !== null && link.badge !== undefined && (
-                    <span className={`ml-1 px-1.5 py-0.5 text-[11px] font-bold rounded-full leading-none ${
-                      isActive ? 'bg-white text-heritage-clay' : 'bg-heritage-clay text-white'
-                    }`}>
-                      {link.badge}
-                    </span>
-                  )}
-                </Link>
-              );
-            })}
-          </nav>
+          {/* Desktop Navigation + Language Toggle */}
+          <div className="hidden md:flex items-center space-x-2.5">
+            <nav className="flex items-center space-x-1 bg-heritage-cream/70 p-1.5 rounded-full border border-heritage-sand/80">
+              {navLinks.map((link) => {
+                const Icon = link.icon;
+                const isActive =
+                  link.to === '/'
+                    ? location.pathname === '/'
+                    : location.pathname.startsWith(link.to);
+                return (
+                  <Link
+                    key={link.to}
+                    to={link.to}
+                    className={`relative flex items-center space-x-1.5 px-3.5 lg:px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 whitespace-nowrap ${
+                      isActive
+                        ? 'bg-gradient-to-r from-heritage-clay to-heritage-forest text-white shadow-sm'
+                        : 'text-heritage-woodLight hover:bg-white/80 hover:text-heritage-clay'
+                    }`}
+                  >
+                    <Icon className={`w-4 h-4 ${isActive ? 'text-white' : 'text-heritage-clay'}`} />
+                    <span>{t(link.label, link.en)}</span>
+                    {link.badge !== null && link.badge !== undefined && (
+                      <span className={`ml-1 px-1.5 py-0.5 text-[11px] font-bold rounded-full leading-none ${
+                        isActive ? 'bg-white text-heritage-clay' : 'bg-heritage-clay text-white'
+                      }`}>
+                        {link.badge}
+                      </span>
+                    )}
+                  </Link>
+                );
+              })}
+            </nav>
 
-          {/* Mobile menu button */}
+            {/* Global Language Switcher Pill */}
+            <div
+              className="inline-flex items-center bg-heritage-cream/80 p-1 rounded-full border border-heritage-sand/90 shadow-xs"
+              role="group"
+              aria-label={t('Chuyển đổi ngôn ngữ', 'Switch language')}
+            >
+              <Globe className="w-3.5 h-3.5 text-heritage-clay ml-2 mr-1 hidden lg:block" />
+              <button
+                onClick={() => setLang('vi')}
+                className={`px-2.5 py-1 rounded-full text-xs font-semibold transition-all ${
+                  lang === 'vi'
+                    ? 'bg-heritage-clay text-white shadow-xs'
+                    : 'text-heritage-woodLight hover:text-heritage-clay'
+                }`}
+                title="Tiếng Việt"
+              >
+                VI
+              </button>
+              <button
+                onClick={() => setLang('en')}
+                className={`px-2.5 py-1 rounded-full text-xs font-semibold transition-all ${
+                  lang === 'en'
+                    ? 'bg-heritage-clay text-white shadow-xs'
+                    : 'text-heritage-woodLight hover:text-heritage-clay'
+                }`}
+                title="English"
+              >
+                EN
+              </button>
+            </div>
+          </div>
+
+          {/* Mobile controls: Language Switcher + Notebook + Hamburger */}
           <div className="flex md:hidden items-center space-x-2">
+            {/* Compact Mobile Language Toggle */}
+            <div className="inline-flex items-center bg-heritage-cream/80 p-0.5 rounded-full border border-heritage-sand">
+              <button
+                onClick={() => setLang('vi')}
+                className={`px-2.5 py-1 rounded-full text-xs font-semibold transition-all ${
+                  lang === 'vi'
+                    ? 'bg-heritage-clay text-white'
+                    : 'text-heritage-woodLight'
+                }`}
+              >
+                VI
+              </button>
+              <button
+                onClick={() => setLang('en')}
+                className={`px-2.5 py-1 rounded-full text-xs font-semibold transition-all ${
+                  lang === 'en'
+                    ? 'bg-heritage-clay text-white'
+                    : 'text-heritage-woodLight'
+                }`}
+              >
+                EN
+              </button>
+            </div>
+
             {savedCount > 0 && (
               <Link
                 to="/learn/notebook"
                 className="relative p-2.5 text-heritage-wood bg-heritage-cream/80 rounded-full border border-heritage-sand"
-                title="Sổ tay từ vựng"
+                title={t('Sổ tay từ vựng', 'Vocabulary Notebook')}
               >
                 <BookMarked className="w-5 h-5 text-heritage-clay" />
                 <span className="absolute -top-0.5 -right-0.5 w-4 h-4 flex items-center justify-center text-[10px] font-bold bg-heritage-clay text-white rounded-full">
@@ -116,7 +176,7 @@ export const Header: React.FC = () => {
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="p-2.5 rounded-2xl text-heritage-wood bg-heritage-cream/70 hover:bg-heritage-cream border border-heritage-sand/80 min-w-[44px] min-h-[44px] flex items-center justify-center transition-colors"
-              aria-label={mobileMenuOpen ? 'Đóng menu' : 'Mở menu'}
+              aria-label={mobileMenuOpen ? t('Đóng menu', 'Close menu') : t('Mở menu', 'Open menu')}
             >
               {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
@@ -150,13 +210,13 @@ export const Header: React.FC = () => {
                     <Icon className="w-4 h-4" />
                   </div>
                   <div>
-                    <div className="text-sm font-semibold">{link.label}</div>
-                    <div className="text-xs text-heritage-woodMuted font-normal">{link.en}</div>
+                    <div className="text-sm font-semibold">{t(link.label, link.en)}</div>
+                    <div className="text-xs text-heritage-woodMuted font-normal">{t(link.en, link.label)}</div>
                   </div>
                 </div>
                 {link.badge !== null && link.badge !== undefined && (
                   <span className="px-2.5 py-0.5 text-xs font-bold bg-heritage-clay text-white rounded-full">
-                    {link.badge} từ
+                    {link.badge} {t('từ', 'words')}
                   </span>
                 )}
               </Link>

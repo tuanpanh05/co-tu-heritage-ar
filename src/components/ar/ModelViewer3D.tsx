@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import { qrService } from '../../services/qrService';
 import { QRCodeSVG } from 'qrcode.react';
+import { useLanguage } from '../../contexts/LanguageContext';
 
 interface ModelViewer3DProps {
   modelUrl?: string;
@@ -38,6 +39,7 @@ export const ModelViewer3D: React.FC<ModelViewer3DProps> = ({
   const [copiedUrl, setCopiedUrl] = useState<boolean>(false);
   const [isMobileDevice, setIsMobileDevice] = useState<boolean>(false);
   const modelViewerRef = useRef<any>(null);
+  const { t } = useLanguage();
 
   const directArtifactUrl = qrService.getArtifactUrl(artifactSlug);
 
@@ -115,13 +117,16 @@ export const ModelViewer3D: React.FC<ModelViewer3DProps> = ({
           </div>
           <div>
             <div className="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-heritage-clay/10 text-heritage-clay mb-2">
-              Trạng thái 3D / AR
+              {t('Trạng thái 3D / AR', '3D / AR Status')}
             </div>
             <h3 className="text-lg sm:text-xl font-serif font-semibold text-heritage-wood">
-              Mô hình 3D đang được tái tạo
+              {t('Mô hình 3D đang được tái tạo', '3D Model Under Reconstruction')}
             </h3>
             <p className="text-xs sm:text-sm text-heritage-woodMuted mt-1">
-              3D model coming soon · Hiện vật đang trong lộ trình số hóa 3D từ tư liệu thực địa Tây Giang.
+              {t(
+                '3D model coming soon · Hiện vật đang trong lộ trình số hóa 3D từ tư liệu thực địa Tây Giang.',
+                '3D model coming soon · This artifact is currently in our 3D digitization pipeline from Tây Giang field documentation.'
+              )}
             </p>
           </div>
 
@@ -131,7 +136,7 @@ export const ModelViewer3D: React.FC<ModelViewer3DProps> = ({
               className="inline-flex items-center space-x-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-heritage-clay to-heritage-forest text-white text-xs sm:text-sm font-semibold hover:shadow-glow transition-all shadow-sm min-h-[44px]"
             >
               <QrCode className="w-4 h-4" />
-              <span>Xem QR quét di động</span>
+              <span>{t('Xem QR quét di động', 'View Mobile QR Code')}</span>
             </button>
           </div>
         </div>
@@ -170,7 +175,9 @@ export const ModelViewer3D: React.FC<ModelViewer3DProps> = ({
         {loading && (
           <div slot="progress-bar" className="absolute inset-0 bg-heritage-ivory/80 backdrop-blur-sm flex flex-col items-center justify-center z-20 text-heritage-wood">
             <RefreshCw className="w-8 h-8 animate-spin text-heritage-clay mb-2" />
-            <span className="text-xs font-medium tracking-wide">Đang tải không gian 3D...</span>
+            <span className="text-xs font-medium tracking-wide">
+              {t('Đang tải không gian 3D...', 'Loading 3D Space...')}
+            </span>
           </div>
         )}
       </model-viewer>
@@ -179,10 +186,11 @@ export const ModelViewer3D: React.FC<ModelViewer3DProps> = ({
         <div className="absolute inset-0 bg-heritage-ivory flex flex-col items-center justify-center p-6 text-center text-heritage-wood z-30">
           <AlertCircle className="w-12 h-12 text-heritage-clay mb-2" />
           <h4 className="font-serif font-semibold text-base text-heritage-wood">
-            Không tải được tệp mô hình 3D (.glb)
+            {t('Không tải được tệp mô hình 3D (.glb)', 'Failed to load 3D model file (.glb)')}
           </h4>
           <p className="text-xs text-heritage-woodMuted max-w-sm mt-1">
-            Vui lòng kiểm tra đường dẫn tệp trong <code className="bg-heritage-cream px-1.5 py-0.5 rounded text-heritage-clay">public/models/</code>.
+            {t('Vui lòng kiểm tra đường dẫn tệp trong', 'Please check the file path in')}{' '}
+            <code className="bg-heritage-cream px-1.5 py-0.5 rounded text-heritage-clay">public/models/</code>.
           </p>
         </div>
       )}
@@ -191,11 +199,11 @@ export const ModelViewer3D: React.FC<ModelViewer3DProps> = ({
       <div className="absolute top-3.5 left-3.5 right-3.5 flex items-center justify-between pointer-events-none z-10">
         <div className="bg-white/85 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-heritage-sand/80 shadow-xs text-[11px] sm:text-xs text-heritage-wood font-medium flex items-center space-x-1.5">
           <Rotate3d className="w-3.5 h-3.5 text-heritage-clay" />
-          <span>Kéo để xoay 360° · Cuộn để phóng to</span>
+          <span>{t('Kéo để xoay 360° · Cuộn để phóng to', 'Drag to rotate 360° · Scroll to zoom')}</span>
         </div>
         <div className="hidden sm:flex bg-white/85 backdrop-blur-md px-3 py-1.5 rounded-full border border-heritage-sand/80 shadow-xs text-[11px] text-heritage-clay font-semibold items-center space-x-1">
           <Box className="w-3.5 h-3.5" />
-          <span>Mô hình 3D minh họa</span>
+          <span>{t('Mô hình 3D minh họa', 'Illustrative 3D Model')}</span>
         </div>
       </div>
 
@@ -206,7 +214,11 @@ export const ModelViewer3D: React.FC<ModelViewer3DProps> = ({
           className="flex items-center space-x-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-heritage-clay to-heritage-forest hover:from-heritage-clayDark hover:to-heritage-clay text-white text-xs sm:text-sm font-semibold shadow-md hover:shadow-glow transition-all transform active:scale-95 min-h-[44px]"
         >
           <Sparkles className="w-4 h-4 text-amber-200" />
-          <span>{isMobileDevice ? 'Đặt vào không gian thực (AR)' : 'Trải nghiệm AR trên điện thoại'}</span>
+          <span>
+            {isMobileDevice
+              ? t('Đặt vào không gian thực (AR)', 'Place in Real Space (AR)')
+              : t('Trải nghiệm AR trên điện thoại', 'Experience AR on Mobile')}
+          </span>
         </button>
 
         <button
@@ -216,7 +228,7 @@ export const ModelViewer3D: React.FC<ModelViewer3DProps> = ({
             }
           }}
           className="p-2.5 rounded-full bg-white/85 hover:bg-white text-heritage-wood hover:text-heritage-clay border border-heritage-sand shadow-sm transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
-          title="Đặt lại góc nhìn"
+          title={t('Đặt lại góc nhìn', 'Reset camera view')}
         >
           <Maximize2 className="w-4 h-4" />
         </button>
@@ -242,13 +254,15 @@ const ArGuidanceModal: React.FC<{
   copiedUrl: boolean;
   onCopy: () => void;
 }> = ({ onClose, artifactUrl, artifactName, copiedUrl, onCopy }) => {
+  const { t } = useLanguage();
+
   return (
     <div className="fixed inset-0 z-50 bg-heritage-wood/40 backdrop-blur-sm flex items-center justify-center p-4">
       <div className="bg-white rounded-3xl max-w-md w-full p-6 text-heritage-wood shadow-2xl border border-heritage-sand relative animate-in fade-in zoom-in-95">
         <button
           onClick={onClose}
           className="absolute top-4 right-4 p-2 text-heritage-woodMuted hover:text-heritage-wood rounded-full hover:bg-heritage-cream"
-          aria-label="Đóng"
+          aria-label={t('Đóng', 'Close')}
         >
           <X className="w-5 h-5" />
         </button>
@@ -258,10 +272,18 @@ const ArGuidanceModal: React.FC<{
             <Smartphone className="w-6 h-6" />
           </div>
           <h3 className="text-lg font-serif font-semibold text-heritage-wood">
-            Trải nghiệm AR trên Thiết bị Di động
+            {t('Trải nghiệm AR trên Thiết bị Di động', 'Experience AR on Mobile Device')}
           </h3>
           <p className="text-xs sm:text-sm text-heritage-woodMuted leading-relaxed">
-            Tính năng đặt mô hình 3D <span className="font-semibold text-heritage-clay">{artifactName}</span> vào không gian thực sử dụng camera và cảm biến AR trên điện thoại thông minh.
+            {t(
+              'Tính năng đặt mô hình 3D',
+              'Placing the 3D model of'
+            )}{' '}
+            <span className="font-semibold text-heritage-clay">{artifactName}</span>{' '}
+            {t(
+              'vào không gian thực sử dụng camera và cảm biến AR trên điện thoại thông minh.',
+              'into your real environment uses the camera and AR sensors on your smartphone.'
+            )}
           </p>
 
           <div className="p-4 bg-heritage-ivory rounded-2xl border border-heritage-sand inline-block shadow-inner my-2">
@@ -274,7 +296,10 @@ const ArGuidanceModal: React.FC<{
           </div>
 
           <p className="text-xs text-heritage-woodMuted">
-            Dùng máy ảnh điện thoại quét mã QR trên để mở trực tiếp trang hiện vật.
+            {t(
+              'Dùng máy ảnh điện thoại quét mã QR trên để mở trực tiếp trang hiện vật.',
+              'Scan the QR code above with your phone camera to open the artifact page directly.'
+            )}
           </p>
 
           <div className="pt-2 flex items-center space-x-2">
@@ -291,10 +316,10 @@ const ArGuidanceModal: React.FC<{
               {copiedUrl ? (
                 <>
                   <Check className="w-3.5 h-3.5" />
-                  <span>Đã chép</span>
+                  <span>{t('Đã chép', 'Copied')}</span>
                 </>
               ) : (
-                <span>Sao chép</span>
+                <span>{t('Sao chép', 'Copy')}</span>
               )}
             </button>
           </div>

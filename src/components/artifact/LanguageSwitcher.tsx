@@ -1,6 +1,7 @@
 import React from 'react';
 import { LanguageMode } from '../../types';
 import { Languages, BookOpen } from 'lucide-react';
+import { useLanguage } from '../../contexts/LanguageContext';
 
 interface LanguageSwitcherProps {
   currentMode: LanguageMode;
@@ -13,17 +14,19 @@ export const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({
   onChange,
   className = ''
 }) => {
+  const { t } = useLanguage();
+
   const modes: { id: LanguageMode; label: string; sub: string }[] = [
     { id: 'vi', label: 'Tiếng Việt', sub: 'VI' },
     { id: 'en', label: 'English', sub: 'EN' },
-    { id: 'bilingual', label: 'Song ngữ', sub: 'CLIL' }
+    { id: 'bilingual', label: t('Song ngữ', 'Bilingual'), sub: 'CLIL' }
   ];
 
   return (
     <div className={`flex items-center space-x-2 ${className}`}>
       <div className="hidden sm:flex items-center text-xs font-semibold text-heritage-woodMuted uppercase tracking-wider">
         <Languages className="w-4 h-4 mr-1 text-heritage-clay" />
-        <span>Chế độ đọc:</span>
+        <span>{t('Chế độ đọc:', 'Reading Mode:')}</span>
       </div>
 
       <div className="inline-flex p-1 bg-heritage-cream rounded-xl border border-heritage-sand shadow-inner">
@@ -53,4 +56,3 @@ export const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({
     </div>
   );
 };
-

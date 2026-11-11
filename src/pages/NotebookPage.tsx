@@ -14,12 +14,14 @@ import {
   Layers
 } from 'lucide-react';
 import { speechService } from '../services/speechService';
+import { useLanguage } from '../contexts/LanguageContext';
 
 export const NotebookPage: React.FC = () => {
   const [words, setWords] = useState<SavedVocabularyItem[]>([]);
   const [filter, setFilter] = useState<'all' | 'unlearned' | 'learned'>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [showClearConfirm, setShowClearConfirm] = useState<boolean>(false);
+  const { t } = useLanguage();
 
   const loadWords = () => {
     setWords(notebookService.getAll());
@@ -52,11 +54,9 @@ export const NotebookPage: React.FC = () => {
   };
 
   const filteredWords = words.filter((w) => {
-    // Lọc theo trạng thái
     if (filter === 'unlearned' && w.learned) return false;
     if (filter === 'learned' && !w.learned) return false;
 
-    // Lọc theo từ khóa tìm kiếm
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase().trim();
       const matchTerm = w.term.toLowerCase().includes(q);
@@ -77,13 +77,16 @@ export const NotebookPage: React.FC = () => {
         <div className="space-y-2">
           <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-heritage-clay/10 text-heritage-clay text-xs font-semibold">
             <BookMarked className="w-3.5 h-3.5" />
-            <span>Sổ tay cá nhân</span>
+            <span>{t('Sổ tay cá nhân', 'Personal Notebook')}</span>
           </div>
           <h1 className="text-2xl sm:text-4xl font-serif font-semibold text-heritage-wood">
-            Sổ Tay Từ Vựng Di Sản
+            {t('Sổ Tay Từ Vựng Di Sản', 'Heritage Vocabulary Notebook')}
           </h1>
           <p className="text-xs sm:text-sm text-heritage-woodMuted max-w-xl">
-            Lưu giữ và rèn luyện các thuật ngữ văn hóa Cơ Tu từ các trang hiện vật. Dữ liệu được lưu trữ trực tiếp trên trình duyệt của bạn.
+            {t(
+              'Lưu giữ và rèn luyện các thuật ngữ văn hóa Cơ Tu từ các trang hiện vật. Dữ liệu được lưu trữ trực tiếp trên trình duyệt của bạn.',
+              'Save and review Cơ Tu cultural terminology collected from artifact pages. Your vocabulary list is stored directly in your browser.'
+            )}
           </p>
         </div>
 
@@ -93,7 +96,7 @@ export const NotebookPage: React.FC = () => {
             className="self-start sm:self-auto px-3.5 py-2 rounded-xl border border-rose-300 text-rose-700 hover:bg-rose-50 text-xs font-medium transition-colors flex items-center space-x-1.5 min-h-[40px]"
           >
             <Trash2 className="w-4 h-4" />
-            <span>Xóa toàn bộ sổ tay</span>
+            <span>{t('Xóa toàn bộ sổ tay', 'Clear All Words')}</span>
           </button>
         )}
       </div>
@@ -102,7 +105,11 @@ export const NotebookPage: React.FC = () => {
       <div className="p-4 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-xs flex items-start space-x-2">
         <AlertCircle className="w-4 h-4 shrink-0 text-amber-600 mt-0.5" />
         <p className="leading-relaxed">
-          <strong>Lưu ý về bộ nhớ:</strong> Sổ tay từ vựng được lưu cục bộ trên trình duyệt máy/điện thoại này (LocalStorage). Dữ liệu không đồng bộ sang thiết bị khác và có thể bị mất nếu bạn xóa lịch sử duyệt web hoặc đổi trình duyệt.
+          <strong>{t('Lưu ý về bộ nhớ:', 'Storage Note:')}</strong>{' '}
+          {t(
+            'Sổ tay từ vựng được lưu cục bộ trên trình duyệt máy/điện thoại này (LocalStorage). Dữ liệu không đồng bộ sang thiết bị khác và có thể bị mất nếu bạn xóa lịch sử duyệt web hoặc đổi trình duyệt.',
+            'Your vocabulary notebook is saved locally in this browser (LocalStorage). Data does not sync across devices and may be cleared if you wipe browser site data.'
+          )}
         </p>
       </div>
 
@@ -114,13 +121,16 @@ export const NotebookPage: React.FC = () => {
             {/* Quick Stats */}
             <div className="flex items-center space-x-4 text-xs sm:text-sm">
               <span className="text-heritage-wood">
-                Tổng số từ: <strong className="text-heritage-clay font-bold">{words.length}</strong>
+                {t('Tổng số từ:', 'Total:')}{' '}
+                <strong className="text-heritage-clay font-bold">{words.length}</strong>
               </span>
               <span className="text-heritage-wood">
-                Đã ghi nhớ: <strong className="text-emerald-700 font-bold">{learnedCount}</strong>
+                {t('Đã ghi nhớ:', 'Mastered:')}{' '}
+                <strong className="text-emerald-700 font-bold">{learnedCount}</strong>
               </span>
               <span className="text-heritage-wood">
-                Cần ôn lại: <strong className="text-amber-700 font-bold">{words.length - learnedCount}</strong>
+                {t('Cần ôn lại:', 'To review:')}{' '}
+                <strong className="text-amber-700 font-bold">{words.length - learnedCount}</strong>
               </span>
             </div>
 
@@ -131,7 +141,7 @@ export const NotebookPage: React.FC = () => {
                 className="px-3 py-1.5 rounded-lg bg-heritage-clay text-white text-xs font-semibold hover:bg-heritage-clayDark transition-colors flex items-center space-x-1 shadow-xs"
               >
                 <Sparkles className="w-3.5 h-3.5" />
-                <span>Ôn tập Flashcard</span>
+                <span>{t('Ôn tập Flashcard', 'Practice Flashcards')}</span>
               </Link>
             </div>
           </div>
@@ -145,7 +155,10 @@ export const NotebookPage: React.FC = () => {
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Tìm từ tiếng Anh hoặc nghĩa tiếng Việt trong sổ tay..."
+                placeholder={t(
+                  'Tìm từ tiếng Anh hoặc nghĩa tiếng Việt trong sổ tay...',
+                  'Search English terms or Vietnamese meanings in your notebook...'
+                )}
                 className="w-full pl-9 pr-3 py-2 text-xs sm:text-sm rounded-xl bg-white border border-heritage-sand text-heritage-wood placeholder-heritage-woodMuted focus:outline-none focus:ring-2 focus:ring-heritage-clay"
               />
             </div>
@@ -160,7 +173,7 @@ export const NotebookPage: React.FC = () => {
                     : 'text-heritage-wood hover:bg-heritage-cream'
                 }`}
               >
-                Tất cả ({words.length})
+                {t('Tất cả', 'All')} ({words.length})
               </button>
               <button
                 onClick={() => setFilter('unlearned')}
@@ -170,7 +183,7 @@ export const NotebookPage: React.FC = () => {
                     : 'text-heritage-wood hover:bg-heritage-cream'
                 }`}
               >
-                Chưa thuộc ({words.length - learnedCount})
+                {t('Chưa thuộc', 'Learning')} ({words.length - learnedCount})
               </button>
               <button
                 onClick={() => setFilter('learned')}
@@ -180,7 +193,7 @@ export const NotebookPage: React.FC = () => {
                     : 'text-heritage-wood hover:bg-heritage-cream'
                 }`}
               >
-                Đã thuộc ({learnedCount})
+                {t('Đã thuộc', 'Mastered')} ({learnedCount})
               </button>
             </div>
           </div>
@@ -209,7 +222,7 @@ export const NotebookPage: React.FC = () => {
                     <button
                       onClick={() => handleSpeak(item.term)}
                       className="p-1 rounded-md text-heritage-clay hover:bg-heritage-cream transition-colors"
-                      title="Nghe phát âm"
+                      title={t('Nghe phát âm', 'Listen to pronunciation')}
                     >
                       <Volume2 className="w-4 h-4" />
                     </button>
@@ -228,17 +241,21 @@ export const NotebookPage: React.FC = () => {
                       ? 'text-emerald-700 bg-emerald-100 hover:bg-emerald-200'
                       : 'text-heritage-woodMuted bg-heritage-cream hover:text-heritage-wood'
                   }`}
-                  title={item.learned ? 'Đánh dấu chưa thuộc' : 'Đánh dấu đã thuộc'}
+                  title={
+                    item.learned
+                      ? t('Đánh dấu chưa thuộc', 'Mark as unlearned')
+                      : t('Đánh dấu đã thuộc', 'Mark as mastered')
+                  }
                 >
                   {item.learned ? (
                     <>
                       <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                      <span>Đã thuộc</span>
+                      <span>{t('Đã thuộc', 'Mastered')}</span>
                     </>
                   ) : (
                     <>
                       <Circle className="w-4 h-4" />
-                      <span>Chưa thuộc</span>
+                      <span>{t('Chưa thuộc', 'Learning')}</span>
                     </>
                   )}
                 </button>
@@ -272,14 +289,14 @@ export const NotebookPage: React.FC = () => {
                 >
                   <Layers className="w-3.5 h-3.5" />
                   <span className="truncate max-w-[200px]">
-                    Từ: {item.sourceArtifactName.vi}
+                    {t('Từ:', 'From:')} {t(item.sourceArtifactName.vi, item.sourceArtifactName.en)}
                   </span>
                 </Link>
 
                 <button
                   onClick={() => handleRemove(item.id)}
                   className="p-1 text-heritage-woodMuted hover:text-rose-600 transition-colors"
-                  title="Xóa khỏi sổ tay"
+                  title={t('Xóa khỏi sổ tay', 'Remove from notebook')}
                 >
                   <Trash2 className="w-4 h-4" />
                 </button>
@@ -293,19 +310,27 @@ export const NotebookPage: React.FC = () => {
         <div className="bg-heritage-cream/40 rounded-2xl border border-heritage-sand p-10 text-center max-w-md mx-auto space-y-4">
           <BookMarked className="w-12 h-12 mx-auto text-heritage-woodMuted opacity-60" />
           <h3 className="font-serif font-semibold text-lg text-heritage-wood">
-            {words.length === 0 ? 'Sổ tay từ vựng đang trống' : 'Không có từ nào khớp với bộ lọc'}
+            {words.length === 0
+              ? t('Sổ tay từ vựng đang trống', 'Your Vocabulary Notebook is Empty')
+              : t('Không có từ nào khớp với bộ lọc', 'No words match your filter')}
           </h3>
           <p className="text-xs text-heritage-woodMuted leading-relaxed">
             {words.length === 0
-              ? 'Khi khám phá trang chi tiết hiện vật, bấm vào các thuật ngữ tiếng Anh để lưu vào Sổ tay của bạn.'
-              : 'Hãy thử đổi bộ lọc hoặc xóa từ khóa tìm kiếm.'}
+              ? t(
+                  'Khi khám phá trang chi tiết hiện vật, bấm vào các thuật ngữ tiếng Anh để lưu vào Sổ tay của bạn.',
+                  'While exploring artifact detail pages, click on English vocabulary terms to save them to your Notebook.'
+                )
+              : t(
+                  'Hãy thử đổi bộ lọc hoặc xóa từ khóa tìm kiếm.',
+                  'Try changing the filter or clearing your search query.'
+                )}
           </p>
           {words.length === 0 ? (
             <Link
               to="/artifacts"
               className="inline-flex items-center space-x-2 px-4 py-2.5 rounded-xl bg-heritage-clay text-white text-xs font-semibold hover:bg-heritage-clayDark transition-colors shadow"
             >
-              <span>Khám phá hiện vật để lưu từ</span>
+              <span>{t('Khám phá hiện vật để lưu từ', 'Explore Artifacts to Save Words')}</span>
             </Link>
           ) : (
             <button
@@ -315,7 +340,7 @@ export const NotebookPage: React.FC = () => {
               }}
               className="px-4 py-2 rounded-xl bg-heritage-sand text-heritage-wood text-xs font-semibold"
             >
-              Xem lại tất cả từ vựng
+              {t('Xem lại tất cả từ vựng', 'Show All Saved Words')}
             </button>
           )}
         </div>
@@ -330,10 +355,13 @@ export const NotebookPage: React.FC = () => {
             </div>
             <div className="text-center space-y-1">
               <h3 className="font-serif font-semibold text-lg text-heritage-wood">
-                Xóa toàn bộ sổ tay?
+                {t('Xóa toàn bộ sổ tay?', 'Clear Entire Notebook?')}
               </h3>
               <p className="text-xs text-heritage-woodMuted">
-                Thao tác này sẽ xóa vĩnh viễn {words.length} thuật ngữ đã lưu trên thiết bị của bạn. Bạn không thể hoàn tác.
+                {t(
+                  `Thao tác này sẽ xóa vĩnh viễn ${words.length} thuật ngữ đã lưu trên thiết bị của bạn. Bạn không thể hoàn tác.`,
+                  `This will permanently delete all ${words.length} saved terms from this device. This action cannot be undone.`
+                )}
               </p>
             </div>
             <div className="flex items-center space-x-3 pt-2">
@@ -341,13 +369,13 @@ export const NotebookPage: React.FC = () => {
                 onClick={() => setShowClearConfirm(false)}
                 className="flex-1 py-2.5 rounded-xl bg-heritage-sand/40 hover:bg-heritage-sand text-heritage-wood text-xs font-semibold min-h-[44px]"
               >
-                Hủy bỏ
+                {t('Hủy bỏ', 'Cancel')}
               </button>
               <button
                 onClick={handleClearAll}
                 className="flex-1 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-semibold min-h-[44px]"
               >
-                Xác nhận xóa
+                {t('Xác nhận xóa', 'Confirm Delete')}
               </button>
             </div>
           </div>

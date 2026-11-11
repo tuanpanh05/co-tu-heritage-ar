@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 import { speechService } from '../../services/speechService';
 import { notebookService } from '../../services/notebookService';
+import { useLanguage } from '../../contexts/LanguageContext';
 
 interface FlashcardViewerProps {
   items: (VocabularyItem | SavedVocabularyItem)[];
@@ -23,16 +24,20 @@ export const FlashcardViewer: React.FC<FlashcardViewerProps> = ({
 }) => {
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [isFlipped, setIsFlipped] = useState<boolean>(false);
+  const { t } = useLanguage();
 
   if (!items || items.length === 0) {
     return (
       <div className="text-center p-8 bg-heritage-cream/50 rounded-2xl border border-heritage-sand">
         <BookOpen className="w-12 h-12 text-heritage-clay mx-auto mb-2" />
         <h4 className="font-serif font-semibold text-base text-heritage-wood">
-          Chưa có thẻ từ vựng nào
+          {t('Chưa có thẻ từ vựng nào', 'No Flashcards Available')}
         </h4>
         <p className="text-xs text-heritage-woodMuted mt-1">
-          Hãy khám phá các trang hiện vật và lưu từ mới vào sổ tay để ôn tập Flashcard.
+          {t(
+            'Hãy khám phá các trang hiện vật và lưu từ mới vào sổ tay để ôn tập Flashcard.',
+            'Explore artifact pages and save new vocabulary terms to your notebook to practice with Flashcards.'
+          )}
         </p>
       </div>
     );
@@ -69,13 +74,15 @@ export const FlashcardViewer: React.FC<FlashcardViewerProps> = ({
     <div className="max-w-md mx-auto space-y-4">
       {/* Progress Counter */}
       <div className="flex items-center justify-between text-xs font-semibold text-heritage-woodMuted">
-        <span>Thẻ {currentIndex + 1} / {items.length}</span>
+        <span>
+          {t('Thẻ', 'Card')} {currentIndex + 1} / {items.length}
+        </span>
         <button
           onClick={() => setIsFlipped(!isFlipped)}
           className="flex items-center space-x-1 text-heritage-clay hover:text-heritage-clayDark"
         >
           <RotateCw className="w-3.5 h-3.5" />
-          <span>Nhấn thẻ để lật</span>
+          <span>{t('Nhấn thẻ để lật', 'Tap card to flip')}</span>
         </button>
       </div>
 
@@ -97,22 +104,22 @@ export const FlashcardViewer: React.FC<FlashcardViewerProps> = ({
           >
             <div className="flex items-center justify-between">
               <span className="text-[11px] font-bold uppercase tracking-wider text-heritage-clay">
-                Mặt trước · Thuật ngữ
+                {t('Mặt trước · Thuật ngữ', 'Front · English Term')}
               </span>
               <button
                 onClick={handleLearnedClick}
                 className="flex items-center space-x-1 text-xs text-heritage-woodMuted hover:text-emerald-700"
-                title="Đánh dấu đã học"
+                title={t('Đánh dấu đã học', 'Mark as learned')}
               >
                 {isLearned ? (
                   <>
                     <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                    <span className="text-emerald-700 font-medium">Đã thuộc</span>
+                    <span className="text-emerald-700 font-medium">{t('Đã thuộc', 'Mastered')}</span>
                   </>
                 ) : (
                   <>
                     <Circle className="w-4 h-4" />
-                    <span>Chưa thuộc</span>
+                    <span>{t('Chưa thuộc', 'Learning')}</span>
                   </>
                 )}
               </button>
@@ -133,15 +140,15 @@ export const FlashcardViewer: React.FC<FlashcardViewerProps> = ({
               <button
                 onClick={handleSpeak}
                 className="p-2 rounded-lg bg-heritage-sand/40 hover:bg-heritage-sand text-heritage-wood transition-colors flex items-center space-x-1 text-xs"
-                title="Nghe phát âm"
+                title={t('Nghe phát âm', 'Listen to pronunciation')}
               >
                 <Volume2 className="w-4 h-4 text-heritage-clay" />
-                <span>Phát âm</span>
+                <span>{t('Phát âm', 'Listen')}</span>
               </button>
 
               <span className="text-[11px] text-heritage-woodMuted flex items-center space-x-1">
                 <RotateCw className="w-3 h-3" />
-                <span>Chạm để xem nghĩa</span>
+                <span>{t('Chạm để xem nghĩa', 'Tap to see meaning')}</span>
               </span>
             </div>
           </div>
@@ -154,7 +161,7 @@ export const FlashcardViewer: React.FC<FlashcardViewerProps> = ({
           >
             <div className="flex items-center justify-between">
               <span className="text-[11px] font-bold uppercase tracking-wider text-heritage-clay">
-                Mặt sau · Ý nghĩa & Ví dụ
+                {t('Mặt sau · Ý nghĩa & Ví dụ', 'Back · Meaning & Example')}
               </span>
               <span className="text-xs font-semibold text-heritage-wood">
                 {currentItem.term}
@@ -164,7 +171,7 @@ export const FlashcardViewer: React.FC<FlashcardViewerProps> = ({
             <div className="space-y-3 my-auto">
               <div className="p-3 bg-heritage-cream rounded-xl border border-heritage-sand text-center">
                 <span className="text-[11px] text-heritage-woodMuted block uppercase">
-                  Nghĩa tiếng Việt
+                  {t('Nghĩa tiếng Việt', 'Vietnamese Meaning')}
                 </span>
                 <span className="text-base sm:text-lg font-bold text-heritage-wood">
                   {currentItem.vietnameseMeaning}
@@ -190,7 +197,7 @@ export const FlashcardViewer: React.FC<FlashcardViewerProps> = ({
             </div>
 
             <div className="text-center text-[11px] text-heritage-woodMuted pt-2 border-t border-heritage-sand/60">
-              Chạm để lật lại mặt trước
+              {t('Chạm để lật lại mặt trước', 'Tap to flip back')}
             </div>
           </div>
 
@@ -204,14 +211,14 @@ export const FlashcardViewer: React.FC<FlashcardViewerProps> = ({
           className="px-4 py-2 rounded-xl bg-heritage-sand/50 hover:bg-heritage-sand text-heritage-wood text-xs font-semibold transition-colors flex items-center space-x-1 min-h-[44px]"
         >
           <ChevronLeft className="w-4 h-4" />
-          <span>Thẻ trước</span>
+          <span>{t('Thẻ trước', 'Previous')}</span>
         </button>
 
         <button
           onClick={handleNext}
           className="px-4 py-2 rounded-xl bg-heritage-clay hover:bg-heritage-clayDark text-white text-xs font-semibold transition-colors flex items-center space-x-1 shadow-md min-h-[44px]"
         >
-          <span>Thẻ tiếp theo</span>
+          <span>{t('Thẻ tiếp theo', 'Next Card')}</span>
           <ChevronRight className="w-4 h-4" />
         </button>
       </div>

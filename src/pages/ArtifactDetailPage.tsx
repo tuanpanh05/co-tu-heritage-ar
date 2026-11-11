@@ -11,6 +11,7 @@ import { LanguageSwitcher } from '../components/artifact/LanguageSwitcher';
 import { VocabularyPopup } from '../components/artifact/VocabularyPopup';
 import { AudioGuidePlayer } from '../components/artifact/AudioGuidePlayer';
 import { ArtifactCard } from '../components/artifact/ArtifactCard';
+import { useLanguage } from '../contexts/LanguageContext';
 import { 
   ChevronRight, 
   MapPin, 
@@ -24,9 +25,14 @@ import {
 
 export const ArtifactDetailPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
+  const { lang, setLang, t } = useLanguage();
   const [artifact, setArtifact] = useState<Artifact | null>(null);
-  const [langMode, setLangMode] = useState<LanguageMode>('vi');
+  const [langMode, setLangMode] = useState<LanguageMode>(lang);
   const [activeVocab, setActiveVocab] = useState<VocabularyItem | null>(null);
+
+  useEffect(() => {
+    setLangMode(lang);
+  }, [lang]);
 
   useEffect(() => {
     if (slug) {
@@ -36,6 +42,13 @@ export const ArtifactDetailPage: React.FC = () => {
     }
   }, [slug]);
 
+  const handleLangModeChange = (mode: LanguageMode) => {
+    setLangMode(mode);
+    if (mode === 'vi' || mode === 'en') {
+      setLang(mode);
+    }
+  };
+
   if (!artifact) {
     return (
       <div className="max-w-2xl mx-auto px-4 py-20 text-center space-y-6">
@@ -44,10 +57,12 @@ export const ArtifactDetailPage: React.FC = () => {
         </div>
         <div className="space-y-2">
           <h2 className="text-2xl font-serif font-semibold text-heritage-wood">
-            Không tìm thấy hiện vật
+            {t('Không tìm thấy hiện vật', 'Artifact Not Found')}
           </h2>
           <p className="text-sm text-heritage-woodMuted">
-            Mã định danh <code className="bg-heritage-cream px-2 py-1 rounded font-mono text-heritage-clay">{slug}</code> không tồn tại trong hệ thống.
+            {t('Mã định danh', 'Artifact slug')}{' '}
+            <code className="bg-heritage-cream px-2 py-1 rounded font-mono text-heritage-clay">{slug}</code>{' '}
+            {t('không tồn tại trong hệ thống.', 'does not exist in the system.')}
           </p>
         </div>
         <div>
@@ -56,7 +71,7 @@ export const ArtifactDetailPage: React.FC = () => {
             className="inline-flex items-center space-x-2 px-5 py-2.5 rounded-xl bg-heritage-clay text-white text-sm font-semibold hover:bg-heritage-clayDark transition-colors shadow"
           >
             <ArrowLeft className="w-4 h-4" />
-            <span>Quay lại danh mục hiện vật</span>
+            <span>{t('Quay lại danh mục hiện vật', 'Back to Artifacts')}</span>
           </Link>
         </div>
       </div>
@@ -85,12 +100,16 @@ export const ArtifactDetailPage: React.FC = () => {
       
       {/* 1. BREADCRUMB */}
       <nav className="flex items-center space-x-1.5 text-xs text-heritage-woodMuted overflow-x-auto whitespace-nowrap pb-1">
-        <Link to="/" className="hover:text-heritage-wood transition-colors">Trang chủ</Link>
+        <Link to="/" className="hover:text-heritage-wood transition-colors">
+          {t('Trang chủ', 'Home')}
+        </Link>
         <ChevronRight className="w-3.5 h-3.5" />
-        <Link to="/artifacts" className="hover:text-heritage-wood transition-colors">Hiện vật</Link>
+        <Link to="/artifacts" className="hover:text-heritage-wood transition-colors">
+          {t('Hiện vật', 'Artifacts')}
+        </Link>
         <ChevronRight className="w-3.5 h-3.5" />
         <span className="text-heritage-clay font-medium truncate max-w-[200px] sm:max-w-none">
-          {artifact.name.vi}
+          {t(artifact.name.vi, artifact.name.en)}
         </span>
       </nav>
 
@@ -99,24 +118,24 @@ export const ArtifactDetailPage: React.FC = () => {
         <div className="space-y-1.5">
           <div className="flex items-center space-x-2">
             <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-heritage-clay/10 text-heritage-clay border border-heritage-clay/20">
-              {artifact.categoryName.vi}
+              {t(artifact.categoryName.vi, artifact.categoryName.en)}
             </span>
             <span className="text-xs text-heritage-woodMuted italic font-serif">
-              ({artifact.categoryName.en})
+              ({t(artifact.categoryName.en, artifact.categoryName.vi)})
             </span>
           </div>
 
           <h1 className="text-2xl sm:text-4xl font-serif font-semibold text-heritage-wood">
-            {artifact.name.vi}
+            {t(artifact.name.vi, artifact.name.en)}
           </h1>
           <p className="text-base sm:text-lg text-heritage-woodMuted italic font-serif">
-            {artifact.name.en}
+            {t(artifact.name.en, artifact.name.vi)}
           </p>
         </div>
 
         <LanguageSwitcher
           currentMode={langMode}
-          onChange={setLangMode}
+          onChange={handleLangModeChange}
           className="self-start md:self-auto shrink-0"
         />
       </div>
@@ -130,9 +149,9 @@ export const ArtifactDetailPage: React.FC = () => {
             <ModelViewer3D
               modelUrl={artifact.model3D}
               posterUrl={artifact.thumbnail}
-              altText={artifact.name.vi}
+              altText={t(artifact.name.vi, artifact.name.en)}
               artifactSlug={artifact.slug}
-              artifactName={artifact.name.vi}
+              artifactName={t(artifact.name.vi, artifact.name.en)}
               modelStatus={artifact.modelStatus}
             />
 
@@ -142,16 +161,19 @@ export const ArtifactDetailPage: React.FC = () => {
                 vi: `${artifact.name.vi}. ${artifact.description.vi}`,
                 en: `${artifact.name.en}. ${artifact.description.en}`
               }}
-              artifactName={artifact.name.vi}
+              artifactName={t(artifact.name.vi, artifact.name.en)}
             />
 
             <div className="p-4 rounded-xl bg-amber-50/90 border border-amber-200/80 text-amber-900 text-xs space-y-1">
               <div className="flex items-center space-x-1.5 font-semibold">
                 <ShieldAlert className="w-4 h-4 text-amber-700 shrink-0" />
-                <span>Trạng thái kiểm chứng nội dung</span>
+                <span>{t('Trạng thái kiểm chứng nội dung', 'Content Verification Status')}</span>
               </div>
               <p className="text-amber-800 leading-relaxed">
-                {artifact.verificationNote}
+                {t(
+                  artifact.verificationNote,
+                  'Illustrative educational content for competition & pilot testing — awaiting formal verification by Tây Giang village elders and museum specialists.'
+                )}
               </p>
             </div>
           </div>
@@ -163,7 +185,7 @@ export const ArtifactDetailPage: React.FC = () => {
           <div className="bg-heritage-cream/60 rounded-2xl border border-heritage-sand p-5 sm:p-6 space-y-3">
             <h3 className="font-serif font-semibold text-base text-heritage-wood flex items-center space-x-2">
               <Sparkles className="w-4 h-4 text-heritage-clay" />
-              <span>Tổng quan hiện vật</span>
+              <span>{t('Tổng quan hiện vật', 'Artifact Overview')}</span>
             </h3>
             <div className="text-xs sm:text-sm leading-relaxed">
               {renderBilingual(artifact.description.vi, artifact.description.en)}
@@ -172,14 +194,14 @@ export const ArtifactDetailPage: React.FC = () => {
 
           <div className="bg-heritage-ivory rounded-2xl border border-heritage-sand p-5 space-y-3">
             <h4 className="text-xs font-semibold uppercase tracking-wider text-heritage-woodMuted font-serif">
-              Đặc điểm quy chuẩn
+              {t('Đặc điểm quy chuẩn', 'Key Specifications')}
             </h4>
             <div className="divide-y divide-heritage-sand/60 text-xs sm:text-sm">
               {artifact.dimensions && (
                 <div className="py-2.5 flex items-start justify-between">
                   <span className="text-heritage-woodMuted flex items-center space-x-1.5">
                     <Ruler className="w-3.5 h-3.5 text-heritage-clay" />
-                    <span>Kích thước:</span>
+                    <span>{t('Kích thước:', 'Dimensions:')}</span>
                   </span>
                   <span className="font-medium text-heritage-wood text-right max-w-[60%]">
                     {artifact.dimensions}
@@ -190,7 +212,7 @@ export const ArtifactDetailPage: React.FC = () => {
                 <div className="py-2.5 flex items-start justify-between">
                   <span className="text-heritage-woodMuted flex items-center space-x-1.5">
                     <Hammer className="w-3.5 h-3.5 text-heritage-clay" />
-                    <span>Chất liệu:</span>
+                    <span>{t('Chất liệu:', 'Materials:')}</span>
                   </span>
                   <span className="font-medium text-heritage-wood text-right max-w-[60%]">
                     {langMode === 'en' ? artifact.materials.en : artifact.materials.vi}
@@ -201,7 +223,7 @@ export const ArtifactDetailPage: React.FC = () => {
                 <div className="py-2.5 flex items-start justify-between">
                   <span className="text-heritage-woodMuted flex items-center space-x-1.5">
                     <MapPin className="w-3.5 h-3.5 text-heritage-clay" />
-                    <span>Xuất xứ địa bàn:</span>
+                    <span>{t('Xuất xứ địa bàn:', 'Origin:')}</span>
                   </span>
                   <span className="font-medium text-heritage-wood text-right max-w-[60%]">
                     {langMode === 'en' ? artifact.origin.en : artifact.origin.vi}
@@ -217,16 +239,19 @@ export const ArtifactDetailPage: React.FC = () => {
                 <div className="flex items-center space-x-2">
                   <BookOpen className="w-4 h-4 text-heritage-clay" />
                   <h3 className="font-serif font-semibold text-sm sm:text-base text-heritage-wood">
-                    Thuật Ngữ Trong Ngữ Cảnh (CLIL)
+                    {t('Thuật Ngữ Trong Ngữ Cảnh (CLIL)', 'Vocabulary in Context (CLIL)')}
                   </h3>
                 </div>
                 <span className="text-[11px] text-heritage-woodMuted font-medium">
-                  Chạm để tra nghĩa & nghe
+                  {t('Chạm để tra nghĩa & nghe', 'Tap to view & listen')}
                 </span>
               </div>
 
               <p className="text-xs text-heritage-woodMuted">
-                Nhấp vào thuật ngữ tiếng Anh dưới đây để xem giải thích chi tiết, phiên âm và lưu vào Sổ tay:
+                {t(
+                  'Nhấp vào thuật ngữ tiếng Anh dưới đây để xem giải thích chi tiết, phiên âm và lưu vào Sổ tay:',
+                  'Click any English term below to view its definition, IPA pronunciation, and save it to your Notebook:'
+                )}
               </p>
 
               <div className="flex flex-wrap gap-2 pt-1">
@@ -271,7 +296,9 @@ export const ArtifactDetailPage: React.FC = () => {
 
           {artifact.sources && artifact.sources.length > 0 && (
             <div className="p-4 rounded-xl bg-heritage-cream/40 border border-heritage-sand/60 text-xs text-heritage-woodMuted space-y-1.5">
-              <div className="font-semibold text-heritage-wood">Tài liệu tham khảo:</div>
+              <div className="font-semibold text-heritage-wood">
+                {t('Tài liệu tham khảo:', 'References:')}
+              </div>
               <ul className="list-disc list-inside space-y-1">
                 {artifact.sources.map((src, idx) => (
                   <li key={idx} className="italic">{src}</li>
@@ -288,13 +315,13 @@ export const ArtifactDetailPage: React.FC = () => {
         <div className="pt-12 border-t border-heritage-sand/80 space-y-6">
           <div className="flex items-center justify-between">
             <h3 className="font-serif font-semibold text-xl text-heritage-wood">
-              Hiện Vật Cùng Chuyên Đề
+              {t('Hiện Vật Cùng Chuyên Đề', 'Related Cultural Artifacts')}
             </h3>
             <Link
               to="/artifacts"
               className="text-xs font-semibold text-heritage-clay hover:text-heritage-clayDark"
             >
-              Xem tất cả
+              {t('Xem tất cả', 'View All')}
             </Link>
           </div>
 

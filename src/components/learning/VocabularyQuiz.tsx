@@ -10,6 +10,7 @@ import {
   Sparkles
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
+import { useLanguage } from '../../contexts/LanguageContext';
 
 interface VocabularyQuizProps {
   questions: QuizQuestion[];
@@ -21,11 +22,12 @@ export const VocabularyQuiz: React.FC<VocabularyQuizProps> = ({ questions }) => 
   const [isAnswered, setIsAnswered] = useState<boolean>(false);
   const [score, setScore] = useState<number>(0);
   const [quizFinished, setQuizFinished] = useState<boolean>(false);
+  const { t } = useLanguage();
 
   if (!questions || questions.length === 0) {
     return (
       <div className="p-8 text-center text-heritage-woodMuted">
-        Chưa có bộ câu hỏi trắc nghiệm.
+        {t('Chưa có bộ câu hỏi trắc nghiệm.', 'No quiz questions available.')}
       </div>
     );
   }
@@ -49,7 +51,6 @@ export const VocabularyQuiz: React.FC<VocabularyQuizProps> = ({ questions }) => 
       setIsAnswered(false);
     } else {
       setQuizFinished(true);
-      // Bắn pháo hoa ăn mừng nếu điểm > 60%
       if (score + (selectedOption === currentQ.correctIndex ? 1 : 0) >= questions.length / 2) {
         try {
           confetti({
@@ -57,7 +58,7 @@ export const VocabularyQuiz: React.FC<VocabularyQuizProps> = ({ questions }) => 
             spread: 70,
             origin: { y: 0.6 }
           });
-        } catch (e) {
+        } catch {
           // ignore
         }
       }
@@ -82,10 +83,13 @@ export const VocabularyQuiz: React.FC<VocabularyQuizProps> = ({ questions }) => 
 
         <div className="space-y-2">
           <h3 className="text-xl sm:text-2xl font-serif font-semibold text-heritage-wood">
-            Hoàn thành bài trắc nghiệm!
+            {t('Hoàn thành bài trắc nghiệm!', 'Quiz Completed!')}
           </h3>
           <p className="text-xs sm:text-sm text-heritage-woodMuted">
-            Bạn đã hoàn thành phần ôn tập thuật ngữ di sản Cơ Tu Tây Giang.
+            {t(
+              'Bạn đã hoàn thành phần ôn tập thuật ngữ di sản Cơ Tu Tây Giang.',
+              'You have completed the Tây Giang Cơ Tu heritage terminology quiz.'
+            )}
           </p>
         </div>
 
@@ -94,7 +98,7 @@ export const VocabularyQuiz: React.FC<VocabularyQuizProps> = ({ questions }) => 
             {score} / {questions.length}
           </div>
           <div className="text-xs font-semibold text-heritage-woodMuted mt-1">
-            Đạt tỉ lệ {percentage}%
+            {t(`Đạt tỉ lệ ${percentage}%`, `Accuracy: ${percentage}%`)}
           </div>
         </div>
 
@@ -104,7 +108,7 @@ export const VocabularyQuiz: React.FC<VocabularyQuizProps> = ({ questions }) => 
             className="inline-flex items-center space-x-2 px-5 py-2.5 rounded-xl bg-heritage-clay hover:bg-heritage-clayDark text-white text-sm font-semibold transition-colors shadow-md min-h-[44px]"
           >
             <RotateCcw className="w-4 h-4" />
-            <span>Làm lại bài kiểm tra</span>
+            <span>{t('Làm lại bài kiểm tra', 'Retake Quiz')}</span>
           </button>
         </div>
       </div>
@@ -118,20 +122,23 @@ export const VocabularyQuiz: React.FC<VocabularyQuizProps> = ({ questions }) => 
       <div className="flex items-center justify-between border-b border-heritage-sand/60 pb-3">
         <div className="flex items-center space-x-1.5 text-xs font-bold text-heritage-clay uppercase tracking-wider">
           <HelpCircle className="w-4 h-4" />
-          <span>Câu hỏi {currentIndex + 1} / {questions.length}</span>
+          <span>
+            {t('Câu hỏi', 'Question')} {currentIndex + 1} / {questions.length}
+          </span>
         </div>
         <div className="text-xs font-semibold text-heritage-woodMuted">
-          Điểm hiện tại: <span className="text-heritage-clay font-bold">{score}</span>
+          {t('Điểm hiện tại:', 'Score:')}{' '}
+          <span className="text-heritage-clay font-bold">{score}</span>
         </div>
       </div>
 
       {/* Question Content */}
       <div className="space-y-1.5">
         <h4 className="text-base sm:text-lg font-serif font-semibold text-heritage-wood leading-snug">
-          {currentQ.question.vi}
+          {t(currentQ.question.vi, currentQ.question.en)}
         </h4>
         <p className="text-xs sm:text-sm text-heritage-woodMuted italic">
-          {currentQ.question.en}
+          {t(currentQ.question.en, currentQ.question.vi)}
         </p>
       </div>
 
@@ -174,10 +181,14 @@ export const VocabularyQuiz: React.FC<VocabularyQuizProps> = ({ questions }) => 
         <div className="p-4 rounded-xl bg-heritage-sand/20 border border-heritage-sand space-y-1 animate-in fade-in text-xs sm:text-sm">
           <div className="font-semibold text-heritage-clay flex items-center space-x-1">
             <Sparkles className="w-3.5 h-3.5" />
-            <span>Giải thích đáp án:</span>
+            <span>{t('Giải thích đáp án:', 'Explanation:')}</span>
           </div>
-          <p className="text-heritage-wood">{currentQ.explanation.vi}</p>
-          <p className="text-heritage-woodMuted italic">{currentQ.explanation.en}</p>
+          <p className="text-heritage-wood">
+            {t(currentQ.explanation.vi, currentQ.explanation.en)}
+          </p>
+          <p className="text-heritage-woodMuted italic">
+            {t(currentQ.explanation.en, currentQ.explanation.vi)}
+          </p>
         </div>
       )}
 
@@ -188,7 +199,11 @@ export const VocabularyQuiz: React.FC<VocabularyQuizProps> = ({ questions }) => 
             onClick={handleNextQuestion}
             className="flex items-center space-x-2 px-5 py-2.5 rounded-xl bg-heritage-clay hover:bg-heritage-clayDark text-white text-xs sm:text-sm font-semibold transition-colors shadow-md min-h-[44px]"
           >
-            <span>{currentIndex + 1 < questions.length ? 'Câu tiếp theo' : 'Xem kết quả'}</span>
+            <span>
+              {currentIndex + 1 < questions.length
+                ? t('Câu tiếp theo', 'Next Question')
+                : t('Xem kết quả', 'View Results')}
+            </span>
             <ArrowRight className="w-4 h-4" />
           </button>
         </div>
@@ -197,4 +212,3 @@ export const VocabularyQuiz: React.FC<VocabularyQuizProps> = ({ questions }) => 
     </div>
   );
 };
-

@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Artifact } from '../../types';
 import { Box, ArrowRight, Sparkles } from 'lucide-react';
+import { useLanguage } from '../../contexts/LanguageContext';
 
 interface ArtifactCardProps {
   artifact: Artifact;
@@ -9,6 +10,7 @@ interface ArtifactCardProps {
 
 export const ArtifactCard: React.FC<ArtifactCardProps> = ({ artifact }) => {
   const is3DAvailable = artifact.modelStatus === 'available';
+  const { t } = useLanguage();
 
   return (
     <Link
@@ -19,7 +21,7 @@ export const ArtifactCard: React.FC<ArtifactCardProps> = ({ artifact }) => {
       <div className="relative aspect-[16/10] overflow-hidden bg-heritage-cream m-2.5 rounded-2xl">
         <img
           src={artifact.thumbnail}
-          alt={artifact.name.vi}
+          alt={t(artifact.name.vi, artifact.name.en)}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
           loading="lazy"
         />
@@ -27,7 +29,7 @@ export const ArtifactCard: React.FC<ArtifactCardProps> = ({ artifact }) => {
         {/* Category Badge */}
         <div className="absolute top-3 left-3 flex flex-wrap gap-1.5">
           <span className="px-3 py-1 rounded-full text-xs font-semibold bg-white/90 backdrop-blur-md text-heritage-wood shadow-xs border border-heritage-sand/60">
-            {artifact.categoryName.vi}
+            {t(artifact.categoryName.vi, artifact.categoryName.en)}
           </span>
         </div>
 
@@ -39,7 +41,11 @@ export const ArtifactCard: React.FC<ArtifactCardProps> = ({ artifact }) => {
               : 'bg-white/90 text-heritage-woodLight border border-heritage-sand'
           }`}>
             <Box className="w-3.5 h-3.5" />
-            <span>{is3DAvailable ? '3D / AR Sẵn sàng' : '3D Đang cập nhật'}</span>
+            <span>
+              {is3DAvailable
+                ? t('3D / AR Sẵn sàng', '3D / AR Ready')
+                : t('3D Đang cập nhật', '3D Coming Soon')}
+            </span>
           </span>
         </div>
       </div>
@@ -49,15 +55,15 @@ export const ArtifactCard: React.FC<ArtifactCardProps> = ({ artifact }) => {
         <div className="space-y-2">
           <div>
             <h3 className="text-lg font-serif font-semibold text-heritage-wood group-hover:text-heritage-clay transition-colors leading-snug">
-              {artifact.name.vi}
+              {t(artifact.name.vi, artifact.name.en)}
             </h3>
             <p className="text-xs text-heritage-woodMuted italic font-serif">
-              {artifact.name.en}
+              {t(artifact.name.en, artifact.name.vi)}
             </p>
           </div>
 
           <p className="text-xs sm:text-sm text-heritage-woodLight line-clamp-2 leading-relaxed">
-            {artifact.brief.vi}
+            {t(artifact.brief.vi, artifact.brief.en)}
           </p>
         </div>
 
@@ -65,11 +71,11 @@ export const ArtifactCard: React.FC<ArtifactCardProps> = ({ artifact }) => {
         <div className="pt-3 border-t border-heritage-sand/60 flex items-center justify-between">
           <div className="flex items-center space-x-1.5 text-[11px] text-heritage-woodMuted">
             <Sparkles className="w-3.5 h-3.5 text-heritage-ochre" />
-            <span>Học liệu CLIL</span>
+            <span>{t('Học liệu CLIL', 'CLIL Material')}</span>
           </div>
 
           <span className="inline-flex items-center space-x-1.5 text-xs font-semibold text-heritage-clay group-hover:text-heritage-clayDark transition-colors bg-heritage-cream px-3.5 py-1.5 rounded-full">
-            <span>Khám phá</span>
+            <span>{t('Khám phá', 'Explore')}</span>
             <ArrowRight className="w-3.5 h-3.5 transform group-hover:translate-x-0.5 transition-transform" />
           </span>
         </div>

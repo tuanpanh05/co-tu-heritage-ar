@@ -3,6 +3,7 @@ import { QRCodeSVG } from 'qrcode.react';
 import { Artifact } from '../../types';
 import { Download, Printer, ExternalLink, AlertTriangle } from 'lucide-react';
 import { qrService } from '../../services/qrService';
+import { useLanguage } from '../../contexts/LanguageContext';
 
 interface QRLabelItemProps {
   artifact: Artifact;
@@ -16,6 +17,7 @@ export const QRLabelItem: React.FC<QRLabelItemProps> = ({
   const qrRef = useRef<HTMLDivElement>(null);
   const targetUrl = qrService.getArtifactUrl(artifact.slug);
   const isLocalhost = qrService.isLocalhost();
+  const { t } = useLanguage();
 
   const handleDownloadSVG = () => {
     if (!qrRef.current) return;
@@ -74,10 +76,10 @@ export const QRLabelItem: React.FC<QRLabelItemProps> = ({
           CO TU HERITAGE AR · TÂY GIANG
         </div>
         <h3 className="text-base sm:text-lg font-serif font-semibold text-heritage-wood mt-0.5">
-          {artifact.name.vi}
+          {t(artifact.name.vi, artifact.name.en)}
         </h3>
         <p className="text-xs text-heritage-woodMuted italic">
-          {artifact.name.en}
+          {t(artifact.name.en, artifact.name.vi)}
         </p>
       </div>
 
@@ -113,7 +115,11 @@ export const QRLabelItem: React.FC<QRLabelItemProps> = ({
         <div className="w-full flex items-start space-x-1.5 p-2 rounded-lg bg-amber-50 border border-amber-200 text-amber-800 text-[11px]">
           <AlertTriangle className="w-4 h-4 shrink-0 text-amber-600 mt-0.5" />
           <span>
-            <strong>Lưu ý:</strong> QR đang dùng địa chỉ localhost. Cần cấu hình URL Vercel HTTPS để điện thoại quét được!
+            <strong>{t('Lưu ý:', 'Note:')}</strong>{' '}
+            {t(
+              'QR đang dùng địa chỉ localhost. Cần mở trên URL Vercel HTTPS để điện thoại quét được!',
+              'QR uses localhost. Open on your HTTPS Vercel URL for mobile scanning!'
+            )}
           </span>
         </div>
       )}
@@ -123,7 +129,7 @@ export const QRLabelItem: React.FC<QRLabelItemProps> = ({
         <button
           onClick={handleDownloadPNG}
           className="px-3 py-1.5 rounded-lg bg-heritage-sand/50 hover:bg-heritage-sand text-heritage-wood text-xs font-medium transition-colors flex items-center space-x-1 min-h-[36px]"
-          title="Tải ảnh PNG"
+          title={t('Tải ảnh PNG', 'Download PNG image')}
         >
           <Download className="w-3.5 h-3.5" />
           <span>PNG</span>
@@ -132,7 +138,7 @@ export const QRLabelItem: React.FC<QRLabelItemProps> = ({
         <button
           onClick={handleDownloadSVG}
           className="px-3 py-1.5 rounded-lg bg-heritage-sand/50 hover:bg-heritage-sand text-heritage-wood text-xs font-medium transition-colors flex items-center space-x-1 min-h-[36px]"
-          title="Tải file Vector SVG"
+          title={t('Tải file Vector SVG', 'Download Vector SVG')}
         >
           <Download className="w-3.5 h-3.5" />
           <span>SVG</span>
@@ -147,10 +153,10 @@ export const QRLabelItem: React.FC<QRLabelItemProps> = ({
             }
           }}
           className="px-3 py-1.5 rounded-lg bg-heritage-sand/50 hover:bg-heritage-sand text-heritage-wood text-xs font-medium transition-colors flex items-center space-x-1 min-h-[36px]"
-          title="In nhãn hiện vật này"
+          title={t('In nhãn hiện vật này', 'Print this label')}
         >
           <Printer className="w-3.5 h-3.5" />
-          <span>In nhãn</span>
+          <span>{t('In nhãn', 'Print')}</span>
         </button>
 
         <a
@@ -158,10 +164,10 @@ export const QRLabelItem: React.FC<QRLabelItemProps> = ({
           target="_blank"
           rel="noopener noreferrer"
           className="px-3 py-1.5 rounded-lg bg-heritage-sand/50 hover:bg-heritage-sand text-heritage-wood text-xs font-medium transition-colors flex items-center space-x-1 min-h-[36px]"
-          title="Mở thử liên kết"
+          title={t('Mở thử liên kết', 'Test link')}
         >
           <ExternalLink className="w-3.5 h-3.5" />
-          <span>Mở thử</span>
+          <span>{t('Mở thử', 'Open')}</span>
         </a>
       </div>
 
