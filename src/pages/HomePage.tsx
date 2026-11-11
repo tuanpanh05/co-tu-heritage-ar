@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { artifactService } from '../services/artifactService';
 import { ArtifactCard } from '../components/artifact/ArtifactCard';
+import { InteractiveVillageMap } from '../components/home/InteractiveVillageMap';
 import { useLanguage } from '../contexts/LanguageContext';
 import { speechService } from '../services/speechService';
 
@@ -233,6 +234,9 @@ export const HomePage: React.FC = () => {
       <div className="max-w-5xl mx-auto px-6">
         <div className="cotu-pattern-divider rounded-full" />
       </div>
+
+      {/* 1.5 INTERACTIVE CIRCULAR VILLAGE SPATIAL & COSMOLOGICAL MAP */}
+      <InteractiveVillageMap />
 
       {/* 2. ALL 5 CULTURAL ARTIFACTS SHOWCASE (Không gian Trưng bày Bản làng) */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">

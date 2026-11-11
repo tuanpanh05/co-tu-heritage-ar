@@ -24,6 +24,7 @@ interface ModelViewer3DProps {
   artifactSlug: string;
   artifactName: string;
   modelStatus: 'available' | 'coming_soon' | 'missing';
+  cameraOrbit?: string;
 }
 
 export const ModelViewer3D: React.FC<ModelViewer3DProps> = ({
@@ -32,7 +33,8 @@ export const ModelViewer3D: React.FC<ModelViewer3DProps> = ({
   altText,
   artifactSlug,
   artifactName,
-  modelStatus
+  modelStatus,
+  cameraOrbit
 }) => {
   const [loading, setLoading] = useState<boolean>(true);
   const [loadError, setLoadError] = useState<boolean>(false);
@@ -50,6 +52,12 @@ export const ModelViewer3D: React.FC<ModelViewer3DProps> = ({
     );
     setIsMobileDevice(checkMobile);
   }, []);
+
+  useEffect(() => {
+    if (cameraOrbit && modelViewerRef.current) {
+      modelViewerRef.current.cameraOrbit = cameraOrbit;
+    }
+  }, [cameraOrbit]);
 
   useEffect(() => {
     const viewer = modelViewerRef.current;

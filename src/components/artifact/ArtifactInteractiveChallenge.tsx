@@ -3,6 +3,8 @@ import { Artifact } from '../../types';
 import { QUIZ_QUESTIONS } from '../../data/quizData';
 import { VOCABULARY_BANK } from '../../data/vocabularyBankData';
 import { VocabularyQuiz } from '../learning/VocabularyQuiz';
+import { VoiceShadowingSimulator } from '../learning/VoiceShadowingSimulator';
+import { ARTIFACT_ACADEMIC_PROFILES } from '../../data/academicAnatomyData';
 import { speechService } from '../../services/speechService';
 import { analyticsService } from '../../services/analyticsService';
 import { useLanguage } from '../../contexts/LanguageContext';
@@ -18,14 +20,15 @@ import {
   Flame,
   Headphones,
   X,
-  Puzzle
+  Puzzle,
+  Mic
 } from 'lucide-react';
 
 interface ArtifactInteractiveChallengeProps {
   artifact: Artifact;
   hasListenedAudio?: boolean;
-  externalModeRequest?: 'none' | 'quiz' | 'minigame';
-  onModeChange?: (mode: 'none' | 'quiz' | 'minigame') => void;
+  externalModeRequest?: 'none' | 'quiz' | 'minigame' | 'shadowing';
+  onModeChange?: (mode: 'none' | 'quiz' | 'minigame' | 'shadowing') => void;
 }
 
 interface MatchCardItem {
@@ -44,7 +47,7 @@ export const ArtifactInteractiveChallenge: React.FC<ArtifactInteractiveChallenge
   onModeChange
 }) => {
   const { t } = useLanguage();
-  const [activeMode, setActiveMode] = useState<'none' | 'quiz' | 'minigame'>('none');
+  const [activeMode, setActiveMode] = useState<'none' | 'quiz' | 'minigame' | 'shadowing'>('none');
 
   // Đồng bộ nếu người dùng bấm nút mở nhanh từ AudioGuidePlayer
   useEffect(() => {
@@ -58,12 +61,16 @@ export const ArtifactInteractiveChallenge: React.FC<ArtifactInteractiveChallenge
     setActiveMode('none');
   }, [artifact.slug]);
 
-  const handleSelectMode = (mode: 'none' | 'quiz' | 'minigame') => {
+  const handleSelectMode = (mode: 'none' | 'quiz' | 'minigame' | 'shadowing') => {
     setActiveMode(mode);
     if (onModeChange) {
       onModeChange(mode);
     }
   };
+
+  const shadowingScripts = useMemo(() => {
+    return ARTIFACT_ACADEMIC_PROFILES[artifact.slug]?.shadowingScripts || [];
+  }, [artifact.slug]);
 
   // Lấy bộ câu hỏi Quiz của riêng hiện vật này
   const artifactQuizQuestions = useMemo(() => {
@@ -253,11 +260,11 @@ export const ArtifactInteractiveChallenge: React.FC<ArtifactInteractiveChallenge
           </p>
         </div>
 
-        {/* 2 Choice Buttons */}
-        <div className="flex flex-wrap items-center gap-3 shrink-0">
+        {/* 3 Choice Buttons */}
+        <div className="flex flex-wrap items-center gap-2.5 shrink-0">
           <button
             onClick={() => handleSelectMode(activeMode === 'quiz' ? 'none' : 'quiz')}
-            className={`px-5 py-3 rounded-2xl text-xs sm:text-sm font-bold flex items-center space-x-2 transition-all min-h-[46px] ${
+            className={`px-4 py-3 rounded-2xl text-xs sm:text-sm font-bold flex items-center space-x-2 transition-all min-h-[46px] ${
               activeMode === 'quiz'
                 ? 'bg-emerald-400 text-slate-950 shadow-lg scale-[1.02]'
                 : 'bg-white/10 hover:bg-white/20 text-white border border-white/20'
@@ -274,15 +281,29 @@ export const ArtifactInteractiveChallenge: React.FC<ArtifactInteractiveChallenge
 
           <button
             onClick={() => handleSelectMode(activeMode === 'minigame' ? 'none' : 'minigame')}
-            className={`px-5 py-3 rounded-2xl text-xs sm:text-sm font-bold flex items-center space-x-2 transition-all min-h-[46px] ${
+            className={`px-4 py-3 rounded-2xl text-xs sm:text-sm font-bold flex items-center space-x-2 transition-all min-h-[46px] ${
               activeMode === 'minigame'
                 ? 'bg-amber-400 text-slate-950 shadow-lg scale-[1.02]'
                 : 'bg-amber-400/20 hover:bg-amber-400/30 text-amber-200 border border-amber-300/40'
             }`}
           >
             <Gamepad2 className="w-4 h-4" />
-            <span>{t('Mini-Game: Ghép Cặp Di Sản', 'Mini-Game: Heritage Match')}</span>
+            <span>{t('Mini-Game: Ghép Cặp', 'Mini-Game: Match')}</span>
           </button>
+
+          {shadowingScripts.length > 0 && (
+            <button
+              onClick={() => handleSelectMode(activeMode === 'shadowing' ? 'none' : 'shadowing')}
+              className={`px-4 py-3 rounded-2xl text-xs sm:text-sm font-bold flex items-center space-x-2 transition-all min-h-[46px] ${
+                activeMode === 'shadowing'
+                  ? 'bg-teal-300 text-slate-950 shadow-lg scale-[1.02]'
+                  : 'bg-teal-500/20 hover:bg-teal-500/30 text-teal-200 border border-teal-400/40'
+              }`}
+            >
+              <Mic className="w-4 h-4" />
+              <span>{t('Thử Giọng Thuyết Minh AI', 'AI Voice Shadowing')}</span>
+            </button>
+          )}
 
           {activeMode !== 'none' && (
             <button
@@ -295,6 +316,16 @@ export const ArtifactInteractiveChallenge: React.FC<ArtifactInteractiveChallenge
           )}
         </div>
       </div>
+
+      {/* MODE 3: AI VOICE SHADOWING SIMULATOR */}
+      {activeMode === 'shadowing' && shadowingScripts.length > 0 && (
+        <div className="mt-8 pt-6 border-t border-white/15 animate-in fade-in">
+          <VoiceShadowingSimulator
+            scripts={shadowingScripts}
+            artifactName={t(artifact.name.vi, artifact.name.en)}
+          />
+        </div>
+      )}
 
       {/* MODE 1: ARTIFACT-SPECIFIC QUIZ */}
       {activeMode === 'quiz' && (

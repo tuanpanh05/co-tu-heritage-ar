@@ -9,14 +9,29 @@ import {
   Layers,
   Sparkles,
   Globe,
-  BarChart3
+  BarChart3,
+  Music,
+  Volume2,
+  VolumeX,
+  SkipForward
 } from 'lucide-react';
 import { useLanguage } from '../../contexts/LanguageContext';
+import { forestSoundService, BG_MUSIC_TRACKS } from '../../services/forestSoundService';
 
 export const Header: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [forestSoundOn, setForestSoundOn] = useState(false);
+  const [trackIdx, setTrackIdx] = useState(0);
   const location = useLocation();
   const { lang, setLang, t } = useLanguage();
+
+  useEffect(() => {
+    const unsub = forestSoundService.subscribe((playing, idx) => {
+      setForestSoundOn(playing);
+      setTrackIdx(idx);
+    });
+    return () => unsub();
+  }, []);
 
   useEffect(() => {
     setMobileMenuOpen(false);
@@ -78,6 +93,46 @@ export const Header: React.FC = () => {
               })}
             </nav>
 
+            {/* Soothing Studio Background Music Toggle + Track Switcher */}
+            <div className="inline-flex items-center bg-heritage-cream/80 p-1 rounded-full border border-heritage-sand/90 shadow-xs">
+              <button
+                onClick={() => forestSoundService.toggle()}
+                className={`inline-flex items-center space-x-1.5 px-3 py-1 rounded-full text-xs font-semibold transition-all ${
+                  forestSoundOn
+                    ? 'bg-emerald-700 text-white shadow-xs'
+                    : 'text-heritage-woodLight hover:text-heritage-clay'
+                }`}
+                title={t(
+                  `Đang chọn: ${BG_MUSIC_TRACKS[trackIdx]?.titleVi} (Bấm để Bật/Tắt)`,
+                  `Current: ${BG_MUSIC_TRACKS[trackIdx]?.titleEn} (Click to Toggle)`
+                )}
+              >
+                <Music
+                  className={`w-3.5 h-3.5 ${
+                    forestSoundOn ? 'text-amber-300 animate-pulse' : 'text-heritage-clay'
+                  }`}
+                />
+                <span className="hidden xl:inline">
+                  {forestSoundOn
+                    ? t('Nhạc nền: Bật', 'Music: ON')
+                    : t('Nhạc nền: Tắt', 'Music: OFF')}
+                </span>
+                {forestSoundOn ? (
+                  <Volume2 className="w-3.5 h-3.5 text-emerald-200" />
+                ) : (
+                  <VolumeX className="w-3.5 h-3.5 opacity-60" />
+                )}
+              </button>
+
+              <button
+                onClick={() => forestSoundService.nextTrack()}
+                className="p-1.5 rounded-full text-heritage-woodLight hover:text-heritage-clay hover:bg-white/70 transition-colors ml-0.5"
+                title={t('Đổi bản nhạc nền khác', 'Switch background track')}
+              >
+                <SkipForward className="w-3.5 h-3.5" />
+              </button>
+            </div>
+
             {/* Global Language Switcher Pill */}
             <div
               className="inline-flex items-center bg-heritage-cream/80 p-1 rounded-full border border-heritage-sand/90 shadow-xs"
@@ -110,8 +165,20 @@ export const Header: React.FC = () => {
             </div>
           </div>
 
-          {/* Mobile controls: Language Switcher + Hamburger */}
+          {/* Mobile controls: Music Toggle + Language Switcher + Hamburger */}
           <div className="flex md:hidden items-center space-x-2">
+            <button
+              onClick={() => forestSoundService.toggle()}
+              className={`p-2 rounded-full border transition-all ${
+                forestSoundOn
+                  ? 'bg-emerald-700 text-white border-emerald-600'
+                  : 'bg-heritage-cream/80 text-heritage-clay border-heritage-sand'
+              }`}
+              title={t('Bật/tắt nhạc nền', 'Toggle background music')}
+            >
+              <Music className="w-4 h-4" />
+            </button>
+
             {/* Compact Mobile Language Toggle */}
             <div className="inline-flex items-center bg-heritage-cream/80 p-0.5 rounded-full border border-heritage-sand">
               <button

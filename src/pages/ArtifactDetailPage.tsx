@@ -7,6 +7,9 @@ import { LanguageSwitcher } from '../components/artifact/LanguageSwitcher';
 import { VocabularyPopup } from '../components/artifact/VocabularyPopup';
 import { AudioGuidePlayer } from '../components/artifact/AudioGuidePlayer';
 import { ArtifactInteractiveChallenge } from '../components/artifact/ArtifactInteractiveChallenge';
+import { ArtifactAnatomyInspector } from '../components/artifact/ArtifactAnatomyInspector';
+import { EthnographicDossierCard } from '../components/artifact/EthnographicDossierCard';
+import { ARTIFACT_ACADEMIC_PROFILES } from '../data/academicAnatomyData';
 import { ArtifactCard } from '../components/artifact/ArtifactCard';
 import { useLanguage } from '../contexts/LanguageContext';
 import { analyticsService } from '../services/analyticsService';
@@ -29,8 +32,9 @@ export const ArtifactDetailPage: React.FC = () => {
   const [langMode, setLangMode] = useState<LanguageMode>(lang);
   const [activeVocab, setActiveVocab] = useState<VocabularyItem | null>(null);
   const [hasListenedAudio, setHasListenedAudio] = useState<boolean>(false);
+  const [selectedCameraOrbit, setSelectedCameraOrbit] = useState<string | undefined>(undefined);
   const [challengeModeRequest, setChallengeModeRequest] = useState<
-    'none' | 'quiz' | 'minigame'
+    'none' | 'quiz' | 'minigame' | 'shadowing'
   >('none');
 
   useEffect(() => {
@@ -42,6 +46,7 @@ export const ArtifactDetailPage: React.FC = () => {
       const found = artifactService.getBySlug(slug);
       setArtifact(found || null);
       setHasListenedAudio(false);
+      setSelectedCameraOrbit(undefined);
       setChallengeModeRequest('none');
       if (found) {
         analyticsService.trackArtifactView(found.slug, found.name.vi, found.name.en);
@@ -97,6 +102,7 @@ export const ArtifactDetailPage: React.FC = () => {
   }
 
   const relatedArtifacts = artifactService.getRelated(artifact.slug, 3);
+  const academicProfile = ARTIFACT_ACADEMIC_PROFILES[artifact.slug];
 
   const renderBilingual = (textVi: string, textEn: string) => {
     if (langMode === 'vi') {
@@ -166,7 +172,15 @@ export const ArtifactDetailPage: React.FC = () => {
               artifactSlug={artifact.slug}
               artifactName={t(artifact.name.vi, artifact.name.en)}
               modelStatus={artifact.modelStatus}
+              cameraOrbit={selectedCameraOrbit}
             />
+
+            {academicProfile && (
+              <ArtifactAnatomyInspector
+                hotspots={academicProfile.anatomyHotspots}
+                onSelectCameraOrbit={(orbit) => setSelectedCameraOrbit(orbit)}
+              />
+            )}
 
             <AudioGuidePlayer
               audioFiles={artifact.audio}
@@ -292,6 +306,14 @@ export const ArtifactDetailPage: React.FC = () => {
               </div>
             ))}
           </div>
+
+          {/* ICOM Museum Cataloging & Ethnographic Dossier */}
+          {academicProfile && (
+            <EthnographicDossierCard
+              dossier={academicProfile.dossier}
+              artifactName={artifact.name}
+            />
+          )}
         </div>
       </div>
 
