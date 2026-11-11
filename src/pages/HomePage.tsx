@@ -1,13 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { 
-  Sparkles, 
-  ArrowRight, 
-  QrCode, 
-  Rotate3d, 
-  Smartphone, 
-  BookOpen, 
-  GraduationCap, 
+import {
+  Sparkles,
+  ArrowRight,
+  QrCode,
+  Rotate3d,
+  Smartphone,
+  BookOpen,
+  GraduationCap,
   ShieldCheck,
   Compass,
   MousePointerClick
@@ -51,15 +51,15 @@ export const HomePage: React.FC = () => {
 
   return (
     <div className="space-y-16 sm:space-y-24 pb-16">
-      
+
       {/* HERO SECTION - Mềm mại, thoáng đãng, kết hợp cùng nền hạt sương bay tương tác */}
       <section className="relative pt-10 sm:pt-16 pb-12 sm:pb-20 overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
-            
+
             {/* Left Column: Text & CTAs */}
             <div className="lg:col-span-7 space-y-6">
-              
+
               {/* Soft Pill Badge */}
               <div className="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-white/85 backdrop-blur-md border border-heritage-sand shadow-sm text-heritage-clay text-xs sm:text-sm font-semibold">
                 <Sparkles className="w-4 h-4 text-heritage-ochre" />
@@ -73,7 +73,7 @@ export const HomePage: React.FC = () => {
 
               {/* Subtitle */}
               <p className="text-base sm:text-lg text-heritage-woodMuted font-normal leading-relaxed max-w-2xl">
-                Hành trình số hóa trực quan các hiện vật tiêu biểu vùng núi rừng Tây Giang (Quảng Nam), đồng hành cùng học sinh THPT trau dồi tiếng Anh chuyên đề văn hóa và tự tin thuyết minh di sản quê hương.
+                Hành trình số hóa trực quan các hiện vật tiêu biểu vùng núi rừng Xã Tây Giang, Thành phố Đà Nẵng, đồng hành cùng học sinh THPT trau dồi tiếng Anh chuyên đề văn hóa và tự tin thuyết minh di sản quê hương.
               </p>
 
               {/* Soft Pill CTA Group */}
@@ -122,7 +122,7 @@ export const HomePage: React.FC = () => {
             <div className="lg:col-span-5">
               <div className="relative mx-auto max-w-md lg:max-w-none animate-float-slow">
                 <div className="absolute -inset-3 rounded-[2.5rem] bg-gradient-to-tr from-heritage-clay/20 via-heritage-clayLight/15 to-amber-200/25 blur-2xl pointer-events-none" />
-                
+
                 <div className="relative soft-glass-card rounded-3xl p-5 sm:p-6 shadow-heritage-lg space-y-4">
                   <div className="relative aspect-[4/3] rounded-2xl overflow-hidden bg-heritage-cream border border-heritage-sand/60">
                     <img
@@ -182,7 +182,7 @@ export const HomePage: React.FC = () => {
           {steps.map((st) => {
             const Icon = st.icon;
             return (
-              <div 
+              <div
                 key={st.step}
                 className="soft-glass-card rounded-3xl p-6 space-y-4 relative group hover:-translate-y-1"
               >
