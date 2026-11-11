@@ -7,7 +7,7 @@ export const qrService = {
     if (typeof window !== 'undefined') {
       return window.location.origin;
     }
-    return 'https://co-tu-heritage-ar.vercel.app';
+    return 'https://cotuheritage.vercel.app';
   },
 
   getArtifactUrl(slug: string): string {

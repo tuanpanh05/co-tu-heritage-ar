@@ -52,7 +52,7 @@ Tạo tệp `.env` ở thư mục gốc nếu muốn cấu hình tên miền s�
 
 ```env
 # URL website đã deploy (dùng để in mã QR chuẩn cho khách tham quan quét bằng điện thoại)
-VITE_PUBLIC_BASE_URL=https://co-tu-heritage-ar.vercel.app
+VITE_PUBLIC_BASE_URL=https://cotuheritage.vercel.app
 ```
 
 > **Lưu ý quan trọng về QR:** Nếu không cấu hình `VITE_PUBLIC_BASE_URL`, hệ thống sẽ lấy `window.location.origin`. Nếu bạn đang chạy trên `localhost`, trang `/qr-codes` sẽ hiển thị cảnh báo nổi bật để nhắc bạn không in nhãn có chứa địa chỉ localhost.
@@ -99,7 +99,7 @@ Hệ thống được thiết kế dạng Single Page Application (SPA) tĩnh, t
 2. Đăng nhập [Vercel](https://vercel.com/) và bấm **Add New Project**, chọn repo này.
 3. Trong phần **Environment Variables**, thêm:
    - Key: `VITE_PUBLIC_BASE_URL`
-   - Value: URL Vercel của bạn (ví dụ: `https://co-tu-heritage-ar.vercel.app`)
+   - Value: URL Vercel của bạn (ví dụ: `https://cotuheritage.vercel.app`)
 4. Bấm **Deploy**.
 5. Tệp `vercel.json` đã được tạo sẵn trong project để tự động xử lý chuyển hướng URL (SPA fallback rewrite), đảm bảo khi người dùng quét mã QR mở trực tiếp đường dẫn con như `/artifacts/guol-communal-house` hoặc bấm F5 sẽ không bao giờ bị lỗi 404.
 
