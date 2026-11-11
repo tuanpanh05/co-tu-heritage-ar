@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Play, Pause, Square, Volume2, Headphones } from 'lucide-react';
+import { Play, Pause, Square, Volume2, Headphones, Gamepad2, HelpCircle } from 'lucide-react';
 import { speechService } from '../../services/speechService';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { analyticsService } from '../../services/analyticsService';
@@ -14,16 +14,21 @@ interface AudioGuidePlayerProps {
     en: string;
   };
   artifactName?: string;
+  onAudioTriggered?: () => void;
+  onOpenChallenge?: (mode: 'quiz' | 'minigame') => void;
 }
 
 export const AudioGuidePlayer: React.FC<AudioGuidePlayerProps> = ({
   audioFiles,
   textToRead,
-  artifactName = 'Hiện vật Cơ Tu'
+  artifactName = 'Hiện vật Cơ Tu',
+  onAudioTriggered,
+  onOpenChallenge
 }) => {
   const { lang, t } = useLanguage();
   const [selectedLang, setSelectedLang] = useState<'vi' | 'en'>(lang);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
+  const [hasListened, setHasListened] = useState<boolean>(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
@@ -57,14 +62,21 @@ export const AudioGuidePlayer: React.FC<AudioGuidePlayerProps> = ({
       handleStop();
     } else {
       analyticsService.trackAudioPlay(artifactName, artifactName, selectedLang);
+      setHasListened(true);
+      if (onAudioTriggered) {
+        onAudioTriggered();
+      }
       if (activeAudioFile) {
         if (audioRef.current) {
-          audioRef.current.play().then(() => {
-            setIsPlaying(true);
-          }).catch((err) => {
-            console.warn('Lỗi audio file, chuyển sang Web Speech:', err);
-            fallbackTTS();
-          });
+          audioRef.current
+            .play()
+            .then(() => {
+              setIsPlaying(true);
+            })
+            .catch((err) => {
+              console.warn('Lỗi audio file, chuyển sang Web Speech:', err);
+              fallbackTTS();
+            });
         }
       } else {
         fallbackTTS();
@@ -155,7 +167,8 @@ export const AudioGuidePlayer: React.FC<AudioGuidePlayerProps> = ({
             <>
               <Play className="w-4 h-4" />
               <span>
-                {t('Nghe thuyết minh', 'Listen to Guide')} ({selectedLang === 'vi' ? 'Tiếng Việt' : 'English'})
+                {t('Nghe thuyết minh', 'Listen to Guide')} (
+                {selectedLang === 'vi' ? 'Tiếng Việt' : 'English'})
               </span>
             </>
           )}
@@ -180,6 +193,34 @@ export const AudioGuidePlayer: React.FC<AudioGuidePlayerProps> = ({
           </span>
         </div>
       </div>
+
+      {/* Post-Audio Interactive Prompt */}
+      {hasListened && onOpenChallenge && (
+        <div className="pt-3 border-t border-heritage-sand/80 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 animate-in fade-in">
+          <span className="text-xs font-medium text-heritage-wood">
+            {t(
+              '✨ Nghe xong thuyết minh? Thử tài về hiện vật này ngay:',
+              '✨ Listened to the guide? Try an interactive challenge:'
+            )}
+          </span>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => onOpenChallenge('quiz')}
+              className="px-3 py-1.5 rounded-xl bg-heritage-clay hover:bg-heritage-clayDark text-white text-xs font-semibold flex items-center gap-1 shadow-xs transition-all"
+            >
+              <HelpCircle className="w-3.5 h-3.5" />
+              <span>{t('Làm Quiz (4 câu)', 'Quick Quiz')}</span>
+            </button>
+            <button
+              onClick={() => onOpenChallenge('minigame')}
+              className="px-3 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white text-xs font-semibold flex items-center gap-1 shadow-xs transition-all"
+            >
+              <Gamepad2 className="w-3.5 h-3.5" />
+              <span>{t('Chơi Mini-Game', 'Mini-Game')}</span>
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

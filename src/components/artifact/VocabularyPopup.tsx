@@ -1,20 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  VocabularyItem, 
-  Artifact 
-} from '../../types';
-import { 
-  Volume2, 
-  BookMarked, 
-  BookmarkCheck, 
-  X, 
-  Info,
-  CheckCircle2
-} from 'lucide-react';
+import { VocabularyItem, Artifact } from '../../types';
+import { Volume2, X, Info } from 'lucide-react';
 import { speechService } from '../../services/speechService';
-import { notebookService } from '../../services/notebookService';
 import { useLanguage } from '../../contexts/LanguageContext';
-import { analyticsService } from '../../services/analyticsService';
 
 interface VocabularyPopupProps {
   item: VocabularyItem | null;
@@ -24,19 +12,10 @@ interface VocabularyPopupProps {
 
 export const VocabularyPopup: React.FC<VocabularyPopupProps> = ({
   item,
-  artifact,
   onClose
 }) => {
-  const [isSaved, setIsSaved] = useState<boolean>(false);
   const [isSpeaking, setIsSpeaking] = useState<boolean>(false);
-  const [saveSuccessMsg, setSaveSuccessMsg] = useState<boolean>(false);
   const { t } = useLanguage();
-
-  useEffect(() => {
-    if (item) {
-      setIsSaved(notebookService.isSaved(item.id));
-    }
-  }, [item]);
 
   useEffect(() => {
     const unsub = speechService.subscribe((speaking) => {
@@ -58,31 +37,19 @@ export const VocabularyPopup: React.FC<VocabularyPopupProps> = ({
     }
   };
 
-  const handleToggleSave = () => {
-    if (isSaved) {
-      notebookService.remove(item.id);
-      setIsSaved(false);
-    } else {
-      const success = notebookService.save(item, artifact);
-      if (success) {
-        analyticsService.trackVocabSave(item.term, artifact.name.vi, artifact.name.en);
-        setIsSaved(true);
-        setSaveSuccessMsg(true);
-        setTimeout(() => setSaveSuccessMsg(false), 2000);
-      }
+  const handlePronounceExample = () => {
+    if (item.exampleSentence?.en) {
+      speechService.speak(item.exampleSentence.en, 'en');
     }
   };
 
   return (
     <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4 animate-in fade-in">
-      
       {/* Backdrop click to close */}
       <div className="absolute inset-0" onClick={onClose} />
 
       {/* Sheet on mobile, centered modal on desktop */}
-      <div 
-        className="relative z-10 w-full sm:max-w-lg bg-heritage-ivory rounded-t-3xl sm:rounded-2xl shadow-2xl border border-heritage-sand overflow-hidden max-h-[90vh] flex flex-col animate-in slide-in-from-bottom sm:zoom-in-95"
-      >
+      <div className="relative z-10 w-full sm:max-w-lg bg-heritage-ivory rounded-t-3xl sm:rounded-2xl shadow-2xl border border-heritage-sand overflow-hidden max-h-[90vh] flex flex-col animate-in slide-in-from-bottom sm:zoom-in-95">
         {/* Header */}
         <div className="flex items-center justify-between p-4 sm:p-5 border-b border-heritage-sand bg-heritage-cream/60">
           <div className="flex items-center space-x-2">
@@ -106,7 +73,6 @@ export const VocabularyPopup: React.FC<VocabularyPopupProps> = ({
 
         {/* Content Body */}
         <div className="p-5 sm:p-6 space-y-4 overflow-y-auto">
-          
           {/* Main Term & Pronunciation */}
           <div className="flex items-start justify-between">
             <div>
@@ -147,7 +113,7 @@ export const VocabularyPopup: React.FC<VocabularyPopupProps> = ({
           {item.englishDefinition && (
             <div>
               <div className="text-[11px] uppercase tracking-wider font-semibold text-heritage-woodMuted mb-1">
-                English Definition (CLIL)
+                {t('Giải nghĩa tiếng Anh', 'English Definition')}
               </div>
               <p className="text-xs sm:text-sm text-heritage-woodLight leading-relaxed italic bg-white/70 p-3 rounded-lg border border-heritage-sand/40">
                 "{item.englishDefinition}"
@@ -160,7 +126,10 @@ export const VocabularyPopup: React.FC<VocabularyPopupProps> = ({
             <div className="flex items-start space-x-2 p-3 rounded-lg bg-amber-50/80 border border-amber-200/80 text-xs text-amber-900">
               <Info className="w-4 h-4 shrink-0 text-amber-700 mt-0.5" />
               <div>
-                <span className="font-semibold">{t('Ý nghĩa văn hóa:', 'Cultural Note:')}</span> {item.culturalNote}
+                <span className="font-semibold">
+                  {t('Ý nghĩa văn hóa:', 'Cultural Note:')}
+                </span>{' '}
+                {item.culturalNote}
               </div>
             </div>
           )}
@@ -172,59 +141,34 @@ export const VocabularyPopup: React.FC<VocabularyPopupProps> = ({
                 {t('Ví dụ trong ngữ cảnh hiện vật', 'Example in Artifact Context')}
               </div>
               <div className="p-3 rounded-xl bg-heritage-sand/20 border border-heritage-sand space-y-1 text-xs sm:text-sm">
-                <p className="font-medium text-heritage-wood">
-                  {item.exampleSentence.en}
-                </p>
-                <p className="text-heritage-woodMuted">
-                  {item.exampleSentence.vi}
-                </p>
+                <p className="font-medium text-heritage-wood">{item.exampleSentence.en}</p>
+                <p className="text-heritage-woodMuted">{item.exampleSentence.vi}</p>
               </div>
             </div>
           )}
-
-          {/* Success toast when saved */}
-          {saveSuccessMsg && (
-            <div className="flex items-center space-x-2 text-xs text-emerald-800 bg-emerald-50 border border-emerald-200 p-2.5 rounded-lg animate-in fade-in">
-              <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-              <span>
-                {t(
-                  'Đã lưu vào Sổ tay từ vựng của bạn trên thiết bị này!',
-                  'Saved to your Vocabulary Notebook on this device!'
-                )}
-              </span>
-            </div>
-          )}
-
         </div>
 
         {/* Footer Actions */}
-        <div className="p-4 sm:p-5 border-t border-heritage-sand bg-heritage-cream/40 flex items-center justify-between">
-          <div className="text-[11px] text-heritage-woodMuted">
-            <span>{t('Lưu cục bộ trên trình duyệt', 'Saved locally in browser')}</span>
-          </div>
+        <div className="p-4 sm:p-5 border-t border-heritage-sand bg-heritage-cream/40 flex items-center justify-between gap-2">
+          {item.exampleSentence?.en ? (
+            <button
+              onClick={handlePronounceExample}
+              className="flex items-center space-x-2 px-4 py-2.5 rounded-xl bg-heritage-clay hover:bg-heritage-clayDark text-white text-xs sm:text-sm font-semibold transition-all shadow-md min-h-[42px]"
+            >
+              <Volume2 className="w-4 h-4" />
+              <span>{t('Nghe đọc câu ví dụ', 'Listen to Example Sentence')}</span>
+            </button>
+          ) : (
+            <div />
+          )}
 
           <button
-            onClick={handleToggleSave}
-            className={`flex items-center space-x-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all min-h-[44px] ${
-              isSaved
-                ? 'bg-heritage-sand text-heritage-wood border border-heritage-sandDark'
-                : 'bg-heritage-clay hover:bg-heritage-clayDark text-white shadow-md'
-            }`}
+            onClick={onClose}
+            className="px-4 py-2.5 rounded-xl bg-heritage-sand/60 hover:bg-heritage-sand text-heritage-wood text-xs sm:text-sm font-semibold transition-colors min-h-[42px]"
           >
-            {isSaved ? (
-              <>
-                <BookmarkCheck className="w-4 h-4 text-heritage-clay" />
-                <span>{t('Đã lưu trong sổ tay', 'Saved in Notebook')}</span>
-              </>
-            ) : (
-              <>
-                <BookMarked className="w-4 h-4" />
-                <span>{t('Lưu vào sổ tay từ vựng', 'Save to Notebook')}</span>
-              </>
-            )}
+            {t('Đóng', 'Close')}
           </button>
         </div>
-
       </div>
     </div>
   );

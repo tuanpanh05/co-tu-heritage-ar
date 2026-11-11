@@ -7,7 +7,6 @@ import { HomePage } from './pages/HomePage';
 import { ArtifactsPage } from './pages/ArtifactsPage';
 import { ArtifactDetailPage } from './pages/ArtifactDetailPage';
 import { LearningPage } from './pages/LearningPage';
-import { NotebookPage } from './pages/NotebookPage';
 import { QRCodesPage } from './pages/QRCodesPage';
 import { DashboardPage } from './pages/DashboardPage';
 import { NotFoundPage } from './pages/NotFoundPage';
@@ -22,14 +21,14 @@ export const App: React.FC = () => {
             <Route path="artifacts" element={<ArtifactsPage />} />
             <Route path="artifacts/:slug" element={<ArtifactDetailPage />} />
             <Route path="learn" element={<LearningPage />} />
-            <Route path="learn/notebook" element={<NotebookPage />} />
             <Route path="qr-codes" element={<QRCodesPage />} />
             <Route path="dashboard" element={<DashboardPage />} />
-            
-            {/* Legacy redirect or aliases if any */}
-            <Route path="notebook" element={<Navigate to="/learn/notebook" replace />} />
+
+            {/* Legacy redirects */}
+            <Route path="learn/notebook" element={<Navigate to="/learn" replace />} />
+            <Route path="notebook" element={<Navigate to="/learn" replace />} />
             <Route path="analytics" element={<Navigate to="/dashboard" replace />} />
-            
+
             {/* 404 Fallback */}
             <Route path="*" element={<NotFoundPage />} />
           </Route>

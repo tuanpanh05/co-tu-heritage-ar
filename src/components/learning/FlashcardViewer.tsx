@@ -1,30 +1,28 @@
-import React, { useState } from 'react';
-import { SavedVocabularyItem, VocabularyItem } from '../../types';
-import { 
-  RotateCw, 
-  Volume2, 
-  CheckCircle2, 
-  Circle, 
-  ChevronLeft, 
+import React, { useState, useEffect } from 'react';
+import { VocabularyItem } from '../../types';
+import {
+  RotateCw,
+  Volume2,
+  ChevronLeft,
   ChevronRight,
   BookOpen
 } from 'lucide-react';
 import { speechService } from '../../services/speechService';
-import { notebookService } from '../../services/notebookService';
 import { useLanguage } from '../../contexts/LanguageContext';
 
 interface FlashcardViewerProps {
-  items: (VocabularyItem | SavedVocabularyItem)[];
-  onToggleLearned?: (id: string) => void;
+  items: VocabularyItem[];
 }
 
-export const FlashcardViewer: React.FC<FlashcardViewerProps> = ({
-  items,
-  onToggleLearned
-}) => {
+export const FlashcardViewer: React.FC<FlashcardViewerProps> = ({ items }) => {
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [isFlipped, setIsFlipped] = useState<boolean>(false);
   const { t } = useLanguage();
+
+  useEffect(() => {
+    setCurrentIndex(0);
+    setIsFlipped(false);
+  }, [items.length]);
 
   if (!items || items.length === 0) {
     return (
@@ -35,16 +33,16 @@ export const FlashcardViewer: React.FC<FlashcardViewerProps> = ({
         </h4>
         <p className="text-xs text-heritage-woodMuted mt-1">
           {t(
-            'Hãy khám phá các trang hiện vật và lưu từ mới vào sổ tay để ôn tập Flashcard.',
-            'Explore artifact pages and save new vocabulary terms to your notebook to practice with Flashcards.'
+            'Hãy thử chọn chủ đề khác hoặc xóa từ khóa tìm kiếm để xem toàn bộ kho từ vựng.',
+            'Try selecting another category or clearing your search query to view all vocabulary.'
           )}
         </p>
       </div>
     );
   }
 
-  const currentItem = items[currentIndex];
-  const isLearned = 'learned' in currentItem ? currentItem.learned : false;
+  const safeIndex = currentIndex < items.length ? currentIndex : 0;
+  const currentItem = items[safeIndex];
 
   const handleNext = () => {
     setIsFlipped(false);
@@ -58,16 +56,8 @@ export const FlashcardViewer: React.FC<FlashcardViewerProps> = ({
 
   const handleSpeak = (e: React.MouseEvent) => {
     e.stopPropagation();
-    speechService.speak(currentItem.term, 'en');
-  };
-
-  const handleLearnedClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    if (onToggleLearned) {
-      onToggleLearned(currentItem.id);
-    } else {
-      notebookService.toggleLearned(currentItem.id);
-    }
+    const cleanEnglish = currentItem.term.replace(/\s*\(.*?\)\s*/g, '').trim();
+    speechService.speak(cleanEnglish || currentItem.term, 'en');
   };
 
   return (
@@ -75,7 +65,7 @@ export const FlashcardViewer: React.FC<FlashcardViewerProps> = ({
       {/* Progress Counter */}
       <div className="flex items-center justify-between text-xs font-semibold text-heritage-woodMuted">
         <span>
-          {t('Thẻ', 'Card')} {currentIndex + 1} / {items.length}
+          {t('Thẻ', 'Card')} {safeIndex + 1} / {items.length}
         </span>
         <button
           onClick={() => setIsFlipped(!isFlipped)}
@@ -106,23 +96,11 @@ export const FlashcardViewer: React.FC<FlashcardViewerProps> = ({
               <span className="text-[11px] font-bold uppercase tracking-wider text-heritage-clay">
                 {t('Mặt trước · Thuật ngữ', 'Front · English Term')}
               </span>
-              <button
-                onClick={handleLearnedClick}
-                className="flex items-center space-x-1 text-xs text-heritage-woodMuted hover:text-emerald-700"
-                title={t('Đánh dấu đã học', 'Mark as learned')}
-              >
-                {isLearned ? (
-                  <>
-                    <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                    <span className="text-emerald-700 font-medium">{t('Đã thuộc', 'Mastered')}</span>
-                  </>
-                ) : (
-                  <>
-                    <Circle className="w-4 h-4" />
-                    <span>{t('Chưa thuộc', 'Learning')}</span>
-                  </>
-                )}
-              </button>
+              {currentItem.isCulturalSpecific && (
+                <span className="px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 border border-amber-300 text-[10px] font-semibold">
+                  {t('Bản sắc Cơ Tu', 'Cơ Tu Specific')}
+                </span>
+              )}
             </div>
 
             <div className="text-center space-y-2 my-auto">
@@ -163,7 +141,7 @@ export const FlashcardViewer: React.FC<FlashcardViewerProps> = ({
               <span className="text-[11px] font-bold uppercase tracking-wider text-heritage-clay">
                 {t('Mặt sau · Ý nghĩa & Ví dụ', 'Back · Meaning & Example')}
               </span>
-              <span className="text-xs font-semibold text-heritage-wood">
+              <span className="text-xs font-semibold text-heritage-wood truncate max-w-[160px]">
                 {currentItem.term}
               </span>
             </div>
@@ -179,17 +157,17 @@ export const FlashcardViewer: React.FC<FlashcardViewerProps> = ({
               </div>
 
               {currentItem.englishDefinition && (
-                <div className="text-xs text-heritage-woodLight italic text-center">
+                <div className="text-xs text-heritage-woodLight italic text-center line-clamp-2">
                   "{currentItem.englishDefinition}"
                 </div>
               )}
 
               {currentItem.exampleSentence && (
                 <div className="p-2.5 rounded-lg bg-heritage-sand/30 text-xs space-y-1">
-                  <p className="font-medium text-heritage-wood">
+                  <p className="font-medium text-heritage-wood line-clamp-2">
                     {currentItem.exampleSentence.en}
                   </p>
-                  <p className="text-heritage-woodMuted">
+                  <p className="text-heritage-woodMuted line-clamp-2">
                     {currentItem.exampleSentence.vi}
                   </p>
                 </div>
@@ -200,7 +178,6 @@ export const FlashcardViewer: React.FC<FlashcardViewerProps> = ({
               {t('Chạm để lật lại mặt trước', 'Tap to flip back')}
             </div>
           </div>
-
         </div>
       </div>
 
@@ -222,7 +199,6 @@ export const FlashcardViewer: React.FC<FlashcardViewerProps> = ({
           <ChevronRight className="w-4 h-4" />
         </button>
       </div>
-
     </div>
   );
 };

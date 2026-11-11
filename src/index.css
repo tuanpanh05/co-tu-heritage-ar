@@ -9,8 +9,8 @@
   }
   
   body {
-    background: linear-gradient(135deg, #F6FAF8 0%, #EDF6F2 50%, #F4F7F4 100%);
-    color: #1E332C;
+    background: linear-gradient(180deg, #EAF3EE 0%, #F3F8F5 38%, #EDF5F0 75%, #E4F0EA 100%);
+    color: #162A22;
     @apply font-sans;
     font-size: 15.5px;
     line-height: 1.65;
@@ -20,63 +20,84 @@
     font-feature-settings: 'kern' 1;
   }
 
-  /* Tiêu đề: Lora mềm mại, đậm vừa phải, khoảng dòng thoáng để dấu tiếng Việt không bị chạm nhau */
   h1, h2, h3, h4, .font-serif {
     font-variant-numeric: lining-nums;
     letter-spacing: -0.005em;
   }
 
   h1, h2 {
-    line-height: 1.28;
+    line-height: 1.25;
   }
 
   h3, h4 {
-    line-height: 1.4;
+    line-height: 1.38;
   }
 }
 
-/* Hiệu ứng kính mờ mềm mại (Soft Glassmorphism) */
+/* Hiệu ứng kính sương núi rừng (Misty Forest Glassmorphism) */
 .soft-glass {
-  background: rgba(255, 255, 255, 0.78);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(179, 206, 196, 0.45);
+  background: rgba(255, 255, 255, 0.76);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgba(179, 206, 196, 0.5);
 }
 
 .soft-glass-card {
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(213, 229, 223, 0.8);
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(198, 222, 212, 0.85);
+  box-shadow: 0 12px 32px -8px rgba(22, 42, 34, 0.06), 0 4px 12px -2px rgba(35, 122, 99, 0.04);
   transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .soft-glass-card:hover {
-  background: rgba(255, 255, 255, 0.96);
-  border-color: rgba(82, 183, 154, 0.55);
-  box-shadow: 0 20px 40px -12px rgba(35, 122, 99, 0.12);
+  background: rgba(255, 255, 255, 0.95);
+  border-color: rgba(35, 122, 99, 0.45);
+  box-shadow: 0 22px 44px -12px rgba(22, 42, 34, 0.12), 0 0 24px -4px rgba(82, 183, 154, 0.18);
 }
 
-/* 3D Model Viewer Element Styling - Dịu mắt, sáng sủa */
+/* Sân khấu trưng bày 3D rừng sương đậm chất chiều sâu */
+.forest-stage-dark {
+  background: radial-gradient(circle at 50% 35%, #244B3E 0%, #163329 58%, #0E221B 100%);
+  border: 1px solid rgba(82, 183, 154, 0.32);
+  box-shadow: 0 25px 50px -12px rgba(14, 34, 27, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+/* Đường diềm thổ cẩm Cơ Tu tinh tế (Geometric Brocade Accent) */
+.cotu-pattern-divider {
+  height: 10px;
+  width: 100%;
+  background-image: radial-gradient(#237A63 1.2px, transparent 1.2px), radial-gradient(#D4A359 1.2px, transparent 1.2px);
+  background-size: 16px 10px;
+  background-position: 0 0, 8px 5px;
+  opacity: 0.35;
+}
+
+/* 3D Model Viewer Element Styling */
 model-viewer {
   width: 100%;
   height: 100%;
-  background: radial-gradient(circle at 50% 45%, #F2F8F5 0%, #DCECE6 65%, #CBE0D8 100%);
+  background: radial-gradient(circle at 50% 42%, #265344 0%, #17362C 62%, #0F241D 100%);
   --poster-color: transparent;
-  --progress-bar-color: #237A63;
+  --progress-bar-color: #52B79A;
   --progress-bar-height: 4px;
 }
 
-/* Custom Scrollbar mềm mại */
+model-viewer.hero-viewer {
+  background: transparent;
+}
+
+/* Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: #EDF5F2;
+  background: #EAF3EE;
 }
 ::-webkit-scrollbar-thumb {
-  background: #B3CEC4;
+  background: #A7C7BC;
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
@@ -91,39 +112,45 @@ model-viewer {
   scrollbar-width: none;
 }
 
-/* In ấn nhãn QR Code chuyên dụng */
+/* Flashcard 3D Flip Utilities */
+.perspective-1000 {
+  perspective: 1000px;
+}
+.transform-style-3d {
+  transform-style: preserve-3d;
+}
+.backface-hidden {
+  backface-visibility: hidden;
+}
+.rotate-y-180 {
+  transform: rotateY(180deg);
+}
+
+/* PRINT STYLESHEET FOR QR LABELS */
 @media print {
   body {
-    background: white !important;
-    color: black !important;
+    background: #FFFFFF !important;
+    color: #000000 !important;
   }
 
-  header,
-  footer,
-  nav,
-  .no-print,
-  button,
-  .print-controls,
-  .interactive-bg-canvas {
+  .no-print {
     display: none !important;
   }
 
   .printable-qr-grid {
     display: grid !important;
     grid-template-columns: repeat(2, 1fr) !important;
-    gap: 24px !important;
+    gap: 16px !important;
     padding: 0 !important;
     margin: 0 !important;
-    width: 100% !important;
   }
 
   .qr-label-card {
-    page-break-inside: avoid;
-    break-inside: avoid;
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
     border: 2px solid #1E332C !important;
-    border-radius: 16px !important;
-    padding: 20px !important;
-    background: white !important;
     box-shadow: none !important;
+    background: #FFFFFF !important;
+    padding: 16px !important;
   }
 }

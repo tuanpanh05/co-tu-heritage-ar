@@ -1,27 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { artifactService } from '../services/artifactService';
-import { 
-  Artifact, 
-  LanguageMode, 
-  VocabularyItem 
-} from '../types';
+import { Artifact, LanguageMode, VocabularyItem } from '../types';
 import { ModelViewer3D } from '../components/ar/ModelViewer3D';
 import { LanguageSwitcher } from '../components/artifact/LanguageSwitcher';
 import { VocabularyPopup } from '../components/artifact/VocabularyPopup';
 import { AudioGuidePlayer } from '../components/artifact/AudioGuidePlayer';
+import { ArtifactInteractiveChallenge } from '../components/artifact/ArtifactInteractiveChallenge';
 import { ArtifactCard } from '../components/artifact/ArtifactCard';
 import { useLanguage } from '../contexts/LanguageContext';
 import { analyticsService } from '../services/analyticsService';
-import { 
-  ChevronRight, 
-  MapPin, 
-  Hammer, 
-  Ruler, 
-  ShieldAlert, 
-  Sparkles, 
+import {
+  ChevronRight,
+  MapPin,
+  Hammer,
+  Ruler,
+  ShieldAlert,
+  Sparkles,
   ArrowLeft,
-  BookOpen
+  BookOpen,
+  Volume2
 } from 'lucide-react';
 
 export const ArtifactDetailPage: React.FC = () => {
@@ -30,6 +28,10 @@ export const ArtifactDetailPage: React.FC = () => {
   const [artifact, setArtifact] = useState<Artifact | null>(null);
   const [langMode, setLangMode] = useState<LanguageMode>(lang);
   const [activeVocab, setActiveVocab] = useState<VocabularyItem | null>(null);
+  const [hasListenedAudio, setHasListenedAudio] = useState<boolean>(false);
+  const [challengeModeRequest, setChallengeModeRequest] = useState<
+    'none' | 'quiz' | 'minigame'
+  >('none');
 
   useEffect(() => {
     setLangMode(lang);
@@ -39,6 +41,8 @@ export const ArtifactDetailPage: React.FC = () => {
     if (slug) {
       const found = artifactService.getBySlug(slug);
       setArtifact(found || null);
+      setHasListenedAudio(false);
+      setChallengeModeRequest('none');
       if (found) {
         analyticsService.trackArtifactView(found.slug, found.name.vi, found.name.en);
       }
@@ -50,6 +54,14 @@ export const ArtifactDetailPage: React.FC = () => {
     setLangMode(mode);
     if (mode === 'vi' || mode === 'en') {
       setLang(mode);
+    }
+  };
+
+  const handleOpenChallengeFromAudio = (mode: 'quiz' | 'minigame') => {
+    setChallengeModeRequest(mode);
+    const el = document.getElementById('artifact-challenge-section');
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   };
 
@@ -65,7 +77,9 @@ export const ArtifactDetailPage: React.FC = () => {
           </h2>
           <p className="text-sm text-heritage-woodMuted">
             {t('Mã định danh', 'Artifact slug')}{' '}
-            <code className="bg-heritage-cream px-2 py-1 rounded font-mono text-heritage-clay">{slug}</code>{' '}
+            <code className="bg-heritage-cream px-2 py-1 rounded font-mono text-heritage-clay">
+              {slug}
+            </code>{' '}
             {t('không tồn tại trong hệ thống.', 'does not exist in the system.')}
           </p>
         </div>
@@ -92,7 +106,7 @@ export const ArtifactDetailPage: React.FC = () => {
       return <p className="leading-relaxed text-heritage-wood">{textEn}</p>;
     }
     return (
-      <div className="space-y-2 border-l-2 border-heritage-clay/40 pl-3">
+      <div className="space-y-2 border-l-2 border-heritage-clay/40 pl-3.5">
         <p className="leading-relaxed text-heritage-wood font-medium">{textVi}</p>
         <p className="leading-relaxed text-heritage-woodMuted italic text-sm">{textEn}</p>
       </div>
@@ -101,7 +115,6 @@ export const ArtifactDetailPage: React.FC = () => {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10 space-y-8">
-      
       {/* 1. BREADCRUMB */}
       <nav className="flex items-center space-x-1.5 text-xs text-heritage-woodMuted overflow-x-auto whitespace-nowrap pb-1">
         <Link to="/" className="hover:text-heritage-wood transition-colors">
@@ -121,11 +134,8 @@ export const ArtifactDetailPage: React.FC = () => {
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-heritage-sand/80 pb-6">
         <div className="space-y-1.5">
           <div className="flex items-center space-x-2">
-            <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-heritage-clay/10 text-heritage-clay border border-heritage-clay/20">
+            <span className="px-3 py-0.5 rounded-full text-xs font-semibold bg-heritage-clay/10 text-heritage-clay border border-heritage-clay/20">
               {t(artifact.categoryName.vi, artifact.categoryName.en)}
-            </span>
-            <span className="text-xs text-heritage-woodMuted italic font-serif">
-              ({t(artifact.categoryName.en, artifact.categoryName.vi)})
             </span>
           </div>
 
@@ -146,10 +156,9 @@ export const ArtifactDetailPage: React.FC = () => {
 
       {/* 3. MAIN SECTION: 3D VIEWER + CONTENT */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-        
-        {/* LEFT COLUMN: 3D / AR VIEWER */}
-        <div className="lg:col-span-7 space-y-6">
-          <div className="sticky top-24 space-y-4">
+        {/* LEFT COLUMN: 3D / AR VIEWER + AUDIO GUIDE + SPECS */}
+        <div className="lg:col-span-7 space-y-5">
+          <div className="lg:sticky lg:top-24 space-y-5">
             <ModelViewer3D
               modelUrl={artifact.model3D}
               posterUrl={artifact.thumbnail}
@@ -166,99 +175,76 @@ export const ArtifactDetailPage: React.FC = () => {
                 en: `${artifact.name.en}. ${artifact.description.en}`
               }}
               artifactName={t(artifact.name.vi, artifact.name.en)}
+              onAudioTriggered={() => setHasListenedAudio(true)}
+              onOpenChallenge={handleOpenChallengeFromAudio}
             />
 
-            <div className="p-4 rounded-xl bg-amber-50/90 border border-amber-200/80 text-amber-900 text-xs space-y-1">
-              <div className="flex items-center space-x-1.5 font-semibold">
-                <ShieldAlert className="w-4 h-4 text-amber-700 shrink-0" />
-                <span>{t('Trạng thái kiểm chứng nội dung', 'Content Verification Status')}</span>
-              </div>
-              <p className="text-amber-800 leading-relaxed">
-                {t(
-                  artifact.verificationNote,
-                  'Illustrative educational content for competition & pilot testing — awaiting formal verification by Tây Giang village elders and museum specialists.'
-                )}
-              </p>
+            {/* Compact Heritage Specs Strip */}
+            <div className="soft-glass-card rounded-2xl p-4 sm:p-5 grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
+              {artifact.dimensions && (
+                <div className="space-y-1">
+                  <span className="text-heritage-woodMuted flex items-center space-x-1.5 font-medium">
+                    <Ruler className="w-3.5 h-3.5 text-heritage-clay" />
+                    <span>{t('Quy mô / Kích thước', 'Dimensions')}</span>
+                  </span>
+                  <div className="font-semibold text-heritage-wood">{artifact.dimensions}</div>
+                </div>
+              )}
+              {artifact.materials && (
+                <div className="space-y-1">
+                  <span className="text-heritage-woodMuted flex items-center space-x-1.5 font-medium">
+                    <Hammer className="w-3.5 h-3.5 text-heritage-clay" />
+                    <span>{t('Chất liệu rừng già', 'Natural Materials')}</span>
+                  </span>
+                  <div className="font-semibold text-heritage-wood">
+                    {langMode === 'en' ? artifact.materials.en : artifact.materials.vi}
+                  </div>
+                </div>
+              )}
+              {artifact.origin && (
+                <div className="space-y-1">
+                  <span className="text-heritage-woodMuted flex items-center space-x-1.5 font-medium">
+                    <MapPin className="w-3.5 h-3.5 text-heritage-clay" />
+                    <span>{t('Không gian văn hóa', 'Cultural Origin')}</span>
+                  </span>
+                  <div className="font-semibold text-heritage-wood">
+                    {langMode === 'en' ? artifact.origin.en : artifact.origin.vi}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
 
-        {/* RIGHT COLUMN: EDUCATIONAL CONTENT & VOCABULARY */}
+        {/* RIGHT COLUMN: STORYTELLING & VOCABULARY */}
         <div className="lg:col-span-5 space-y-6">
-          
-          <div className="bg-heritage-cream/60 rounded-2xl border border-heritage-sand p-5 sm:p-6 space-y-3">
-            <h3 className="font-serif font-semibold text-base text-heritage-wood flex items-center space-x-2">
-              <Sparkles className="w-4 h-4 text-heritage-clay" />
-              <span>{t('Tổng quan hiện vật', 'Artifact Overview')}</span>
+          {/* Story Overview */}
+          <div className="soft-glass-card rounded-3xl p-5 sm:p-6 space-y-3">
+            <h3 className="font-serif font-semibold text-base sm:text-lg text-heritage-wood flex items-center space-x-2">
+              <Sparkles className="w-4 h-4 text-heritage-ochre" />
+              <span>{t('Câu Chuyện Hiện Vật', 'The Artifact’s Story')}</span>
             </h3>
             <div className="text-xs sm:text-sm leading-relaxed">
               {renderBilingual(artifact.description.vi, artifact.description.en)}
             </div>
           </div>
 
-          <div className="bg-heritage-ivory rounded-2xl border border-heritage-sand p-5 space-y-3">
-            <h4 className="text-xs font-semibold uppercase tracking-wider text-heritage-woodMuted font-serif">
-              {t('Đặc điểm quy chuẩn', 'Key Specifications')}
-            </h4>
-            <div className="divide-y divide-heritage-sand/60 text-xs sm:text-sm">
-              {artifact.dimensions && (
-                <div className="py-2.5 flex items-start justify-between">
-                  <span className="text-heritage-woodMuted flex items-center space-x-1.5">
-                    <Ruler className="w-3.5 h-3.5 text-heritage-clay" />
-                    <span>{t('Kích thước:', 'Dimensions:')}</span>
-                  </span>
-                  <span className="font-medium text-heritage-wood text-right max-w-[60%]">
-                    {artifact.dimensions}
-                  </span>
-                </div>
-              )}
-              {artifact.materials && (
-                <div className="py-2.5 flex items-start justify-between">
-                  <span className="text-heritage-woodMuted flex items-center space-x-1.5">
-                    <Hammer className="w-3.5 h-3.5 text-heritage-clay" />
-                    <span>{t('Chất liệu:', 'Materials:')}</span>
-                  </span>
-                  <span className="font-medium text-heritage-wood text-right max-w-[60%]">
-                    {langMode === 'en' ? artifact.materials.en : artifact.materials.vi}
-                  </span>
-                </div>
-              )}
-              {artifact.origin && (
-                <div className="py-2.5 flex items-start justify-between">
-                  <span className="text-heritage-woodMuted flex items-center space-x-1.5">
-                    <MapPin className="w-3.5 h-3.5 text-heritage-clay" />
-                    <span>{t('Xuất xứ địa bàn:', 'Origin:')}</span>
-                  </span>
-                  <span className="font-medium text-heritage-wood text-right max-w-[60%]">
-                    {langMode === 'en' ? artifact.origin.en : artifact.origin.vi}
-                  </span>
-                </div>
-              )}
-            </div>
-          </div>
-
+          {/* Interactive Vocabulary Chips in Dark Forest Theme */}
           {artifact.vocabulary && artifact.vocabulary.length > 0 && (
-            <div className="bg-heritage-cream/80 rounded-2xl border-2 border-heritage-clay/30 p-5 space-y-3">
+            <div className="forest-stage-dark rounded-3xl p-5 sm:p-6 space-y-3.5 text-white">
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-2">
-                  <BookOpen className="w-4 h-4 text-heritage-clay" />
-                  <h3 className="font-serif font-semibold text-sm sm:text-base text-heritage-wood">
-                    {t('Thuật Ngữ Trong Ngữ Cảnh (CLIL)', 'Vocabulary in Context (CLIL)')}
+                  <BookOpen className="w-4 h-4 text-amber-300" />
+                  <h3 className="font-serif font-semibold text-sm sm:text-base text-white">
+                    {t('Từ Vựng Di Sản Trong Ngữ Cảnh', 'Heritage Vocabulary in Context')}
                   </h3>
                 </div>
-                <span className="text-[11px] text-heritage-woodMuted font-medium">
-                  {t('Chạm để tra nghĩa & nghe', 'Tap to view & listen')}
+                <span className="text-[11px] text-emerald-200/80 font-medium">
+                  {t('Chạm để nghe & xem nghĩa', 'Tap to listen & inspect')}
                 </span>
               </div>
 
-              <p className="text-xs text-heritage-woodMuted">
-                {t(
-                  'Nhấp vào thuật ngữ tiếng Anh dưới đây để xem giải thích chi tiết, phiên âm và lưu vào Sổ tay:',
-                  'Click any English term below to view its definition, IPA pronunciation, and save it to your Notebook:'
-                )}
-              </p>
-
-              <div className="flex flex-wrap gap-2 pt-1">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
                 {artifact.vocabulary.map((vocab) => (
                   <button
                     key={vocab.id}
@@ -271,26 +257,27 @@ export const ArtifactDetailPage: React.FC = () => {
                         artifact.name.en
                       );
                     }}
-                    className="inline-flex items-center space-x-1.5 px-3 py-2 rounded-xl bg-white hover:bg-heritage-clay hover:text-white border border-heritage-sand text-heritage-wood text-xs font-semibold shadow-xs transition-all transform active:scale-95 min-h-[40px]"
+                    className="group text-left p-3 rounded-2xl bg-white/10 hover:bg-white/20 border border-white/15 hover:border-emerald-300/60 transition-all flex items-center justify-between"
                   >
-                    <span>{vocab.term}</span>
-                    {vocab.ipa && (
-                      <span className="text-[10px] opacity-75 font-mono">
-                        {vocab.ipa}
-                      </span>
-                    )}
+                    <div className="min-w-0 pr-2">
+                      <div className="text-xs sm:text-sm font-semibold text-white group-hover:text-emerald-200 truncate">
+                        {vocab.term}
+                      </div>
+                      <div className="text-[11px] text-amber-200/90 truncate">
+                        {vocab.vietnameseMeaning}
+                      </div>
+                    </div>
+                    <Volume2 className="w-4 h-4 text-emerald-300 shrink-0 opacity-80 group-hover:opacity-100" />
                   </button>
                 ))}
               </div>
             </div>
           )}
 
+          {/* Deep-Dive Cultural Sections */}
           <div className="space-y-4">
             {artifact.sections.map((sec) => (
-              <div 
-                key={sec.id}
-                className="bg-white rounded-2xl border border-heritage-sand p-5 space-y-2 shadow-xs"
-              >
+              <div key={sec.id} className="soft-glass-card rounded-3xl p-5 sm:p-6 space-y-2">
                 <h4 className="font-serif font-semibold text-sm sm:text-base text-heritage-wood">
                   {langMode === 'en' ? sec.title.en : sec.title.vi}
                 </h4>
@@ -305,29 +292,25 @@ export const ArtifactDetailPage: React.FC = () => {
               </div>
             ))}
           </div>
-
-          {artifact.sources && artifact.sources.length > 0 && (
-            <div className="p-4 rounded-xl bg-heritage-cream/40 border border-heritage-sand/60 text-xs text-heritage-woodMuted space-y-1.5">
-              <div className="font-semibold text-heritage-wood">
-                {t('Tài liệu tham khảo:', 'References:')}
-              </div>
-              <ul className="list-disc list-inside space-y-1">
-                {artifact.sources.map((src, idx) => (
-                  <li key={idx} className="italic">{src}</li>
-                ))}
-              </ul>
-            </div>
-          )}
-
         </div>
-
       </div>
 
+      {/* 4. POST-EXPLORATION & AUDIO INTERACTIVE QUIZ / MINI-GAME SECTION */}
+      <div className="pt-4">
+        <ArtifactInteractiveChallenge
+          artifact={artifact}
+          hasListenedAudio={hasListenedAudio}
+          externalModeRequest={challengeModeRequest}
+          onModeChange={setChallengeModeRequest}
+        />
+      </div>
+
+      {/* 5. RELATED ARTIFACTS */}
       {relatedArtifacts.length > 0 && (
-        <div className="pt-12 border-t border-heritage-sand/80 space-y-6">
+        <div className="pt-10 border-t border-heritage-sand/80 space-y-6">
           <div className="flex items-center justify-between">
             <h3 className="font-serif font-semibold text-xl text-heritage-wood">
-              {t('Hiện Vật Cùng Chuyên Đề', 'Related Cultural Artifacts')}
+              {t('Khám Phá Tiếp Hiện Vật Khác', 'Continue Exploring Other Artifacts')}
             </h3>
             <Link
               to="/artifacts"
@@ -350,7 +333,6 @@ export const ArtifactDetailPage: React.FC = () => {
         artifact={artifact}
         onClose={() => setActiveVocab(null)}
       />
-
     </div>
   );
 };

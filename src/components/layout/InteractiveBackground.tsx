@@ -6,15 +6,20 @@ interface Particle {
   vx: number;
   vy: number;
   radius: number;
-  baseRadius: number;
-  color: string;
+  baseAlpha: number;
   alpha: number;
-  phase: number;
-  phaseSpeed: number;
-  isBurst?: boolean;
-  life?: number;
+  pulseSpeed: number;
+  pulseOffset: number;
+  color: string;
+  isFirefly: boolean;
 }
 
+/**
+ * Nền tương tác "Đại Ngàn Trường Sơn & Sương Sớm Tây Giang":
+ * - Dãy núi Trường Sơn trùng điệp ẩn hiện trong sương mù phía chân trời
+ * - Hạt đom đóm vàng ấm & sương rừng ngọc bích lơ lửng
+ * - Tương tác mượt mà khi di chuyển chuột hoặc chạm màn hình
+ */
 export const InteractiveBackground: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
@@ -31,198 +36,211 @@ export const InteractiveBackground: React.FC = () => {
     const mouse = {
       x: -1000,
       y: -1000,
-      targetX: -1000,
-      targetY: -1000,
+      radius: 170,
       active: false
     };
 
-    const palette = [
-      '35, 122, 99',   // Ngọc bích rừng (Jade)
-      '82, 183, 154',  // Xanh sương lá (Mint Dew)
-      '212, 163, 89',  // Nắng sớm Tây Giang (Warm Sun)
-      '74, 154, 142',  // Xanh lam ngọc (Soft Teal)
-      '120, 194, 164'  // Xanh non (Soft Sage)
+    const colors = [
+      '35, 122, 99',    // Xanh ngọc rừng sâu
+      '82, 183, 154',   // Xanh lá sương mai
+      '212, 163, 89',   // Đom đóm vàng nắng ấm
+      '235, 185, 95',   // Ánh lửa bản làng dịu
+      '116, 198, 157'   // Xanh ngọc bích non
     ];
 
-    const isMobile = window.innerWidth < 768;
-    const particleCount = isMobile ? 32 : 60;
+    const particleCount = Math.min(68, Math.max(30, Math.floor((width * height) / 21000)));
     const particles: Particle[] = [];
 
-    const createParticle = (x?: number, y?: number, isBurst = false): Particle => {
-      const baseRadius = isBurst ? Math.random() * 3.5 + 2 : Math.random() * 3.2 + 1.4;
-      return {
-        x: x ?? Math.random() * width,
-        y: y ?? Math.random() * height,
-        vx: isBurst ? (Math.random() - 0.5) * 2.4 : (Math.random() - 0.5) * 0.45,
-        vy: isBurst ? (Math.random() - 0.7) * 2.4 : -Math.random() * 0.4 - 0.12,
-        radius: baseRadius,
-        baseRadius,
-        color: palette[Math.floor(Math.random() * palette.length)],
-        alpha: isBurst ? 0.85 : Math.random() * 0.45 + 0.2,
-        phase: Math.random() * Math.PI * 2,
-        phaseSpeed: Math.random() * 0.02 + 0.01,
-        isBurst,
-        life: isBurst ? 1.0 : undefined
-      };
+    const initParticles = () => {
+      particles.length = 0;
+      for (let i = 0; i < particleCount; i++) {
+        const isFirefly = i % 3 === 0;
+        const baseAlpha = isFirefly ? Math.random() * 0.45 + 0.25 : Math.random() * 0.3 + 0.12;
+        particles.push({
+          x: Math.random() * width,
+          y: Math.random() * height,
+          vx: (Math.random() - 0.5) * 0.32,
+          vy: (Math.random() - 0.5) * 0.28 - 0.08,
+          radius: isFirefly ? Math.random() * 3.2 + 1.8 : Math.random() * 2.5 + 1.2,
+          baseAlpha,
+          alpha: baseAlpha,
+          pulseSpeed: Math.random() * 0.025 + 0.008,
+          pulseOffset: Math.random() * Math.PI * 2,
+          color: isFirefly
+            ? colors[2 + (i % 2)]
+            : colors[i % 2 === 0 ? 0 : 1],
+          isFirefly
+        });
+      }
     };
 
-    for (let i = 0; i < particleCount; i++) {
-      particles.push(createParticle());
-    }
+    initParticles();
 
     const handleResize = () => {
       if (!canvas) return;
       width = canvas.width = window.innerWidth;
       height = canvas.height = window.innerHeight;
+      initParticles();
     };
 
     const handleMouseMove = (e: MouseEvent) => {
-      mouse.targetX = e.clientX;
-      mouse.targetY = e.clientY;
+      mouse.x = e.clientX;
+      mouse.y = e.clientY;
       mouse.active = true;
-    };
-
-    const handleTouchMove = (e: TouchEvent) => {
-      if (e.touches.length > 0) {
-        mouse.targetX = e.touches[0].clientX;
-        mouse.targetY = e.touches[0].clientY;
-        mouse.active = true;
-      }
     };
 
     const handleMouseLeave = () => {
       mouse.active = false;
-      mouse.targetX = -1000;
-      mouse.targetY = -1000;
+      mouse.x = -1000;
+      mouse.y = -1000;
+    };
+
+    const handleTouchMove = (e: TouchEvent) => {
+      if (e.touches.length > 0) {
+        mouse.x = e.touches[0].clientX;
+        mouse.y = e.touches[0].clientY;
+        mouse.active = true;
+      }
+    };
+
+    const handleTouchEnd = () => {
+      mouse.active = false;
     };
 
     const handleClick = (e: MouseEvent) => {
-      for (let i = 0; i < 6; i++) {
-        if (particles.length < 95) {
-          particles.push(createParticle(e.clientX, e.clientY, true));
-        }
+      for (let i = 0; i < 5; i++) {
+        if (particles.length > 100) particles.shift();
+        particles.push({
+          x: e.clientX + (Math.random() - 0.5) * 24,
+          y: e.clientY + (Math.random() - 0.5) * 24,
+          vx: (Math.random() - 0.5) * 1.4,
+          vy: (Math.random() - 0.5) * 1.4 - 0.3,
+          radius: Math.random() * 3.2 + 1.8,
+          baseAlpha: 0.45,
+          alpha: 0.65,
+          pulseSpeed: 0.03,
+          pulseOffset: Math.random() * Math.PI,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          isFirefly: true
+        });
       }
     };
 
     window.addEventListener('resize', handleResize);
-    window.addEventListener('mousemove', handleMouseMove, { passive: true });
-    window.addEventListener('touchmove', handleTouchMove, { passive: true });
+    window.addEventListener('mousemove', handleMouseMove);
     window.addEventListener('mouseleave', handleMouseLeave);
-    window.addEventListener('click', handleClick, { passive: true });
+    window.addEventListener('touchmove', handleTouchMove, { passive: true });
+    window.addEventListener('touchend', handleTouchEnd);
+    window.addEventListener('click', handleClick);
 
-    let time = 0;
+    let tick = 0;
 
     const render = () => {
-      time += 0.01;
+      tick += 1;
       ctx.clearRect(0, 0, width, height);
 
-      mouse.x += (mouse.targetX - mouse.x) * 0.12;
-      mouse.y += (mouse.targetY - mouse.y) * 0.12;
-
-      const orb1X = width * 0.2 + Math.sin(time * 0.7) * 80;
-      const orb1Y = height * 0.25 + Math.cos(time * 0.5) * 60;
-      const grad1 = ctx.createRadialGradient(orb1X, orb1Y, 10, orb1X, orb1Y, Math.max(width, height) * 0.4);
-      grad1.addColorStop(0, 'rgba(82, 183, 154, 0.11)');
-      grad1.addColorStop(1, 'rgba(82, 183, 154, 0)');
-      ctx.fillStyle = grad1;
+      // 1. Vầng sương sáng dịu trên đỉnh rừng
+      const topGlow = ctx.createRadialGradient(
+        width * 0.22 + Math.sin(tick * 0.002) * 50,
+        height * 0.18,
+        20,
+        width * 0.22,
+        height * 0.18,
+        Math.max(width, height) * 0.48
+      );
+      topGlow.addColorStop(0, 'rgba(82, 183, 154, 0.11)');
+      topGlow.addColorStop(1, 'rgba(82, 183, 154, 0)');
+      ctx.fillStyle = topGlow;
       ctx.fillRect(0, 0, width, height);
 
-      const orb2X = width * 0.8 + Math.cos(time * 0.6) * 90;
-      const orb2Y = height * 0.7 + Math.sin(time * 0.4) * 70;
-      const grad2 = ctx.createRadialGradient(orb2X, orb2Y, 10, orb2X, orb2Y, Math.max(width, height) * 0.38);
-      grad2.addColorStop(0, 'rgba(212, 163, 89, 0.08)');
-      grad2.addColorStop(1, 'rgba(212, 163, 89, 0)');
-      ctx.fillStyle = grad2;
+      const sunMistGlow = ctx.createRadialGradient(
+        width * 0.82 + Math.cos(tick * 0.002) * 40,
+        height * 0.28,
+        20,
+        width * 0.82,
+        height * 0.28,
+        Math.max(width, height) * 0.42
+      );
+      sunMistGlow.addColorStop(0, 'rgba(212, 163, 89, 0.09)');
+      sunMistGlow.addColorStop(1, 'rgba(212, 163, 89, 0)');
+      ctx.fillStyle = sunMistGlow;
       ctx.fillRect(0, 0, width, height);
 
+      // 2. Vầng sáng đi theo chuột
       if (mouse.active && mouse.x > 0 && mouse.y > 0) {
-        const mouseGrad = ctx.createRadialGradient(mouse.x, mouse.y, 5, mouse.x, mouse.y, 190);
-        mouseGrad.addColorStop(0, 'rgba(82, 183, 154, 0.13)');
-        mouseGrad.addColorStop(0.5, 'rgba(212, 163, 89, 0.05)');
+        const mouseGrad = ctx.createRadialGradient(
+          mouse.x,
+          mouse.y,
+          4,
+          mouse.x,
+          mouse.y,
+          mouse.radius
+        );
+        mouseGrad.addColorStop(0, 'rgba(212, 163, 89, 0.12)');
+        mouseGrad.addColorStop(0.5, 'rgba(82, 183, 154, 0.06)');
         mouseGrad.addColorStop(1, 'rgba(82, 183, 154, 0)');
         ctx.fillStyle = mouseGrad;
         ctx.beginPath();
-        ctx.arc(mouse.x, mouse.y, 190, 0, Math.PI * 2);
+        ctx.arc(mouse.x, mouse.y, mouse.radius, 0, Math.PI * 2);
         ctx.fill();
       }
 
-      for (let i = particles.length - 1; i >= 0; i--) {
+      // 3. Cập nhật & vẽ các hạt đom đóm / sương rừng
+      for (let i = 0; i < particles.length; i++) {
         const p = particles[i];
-        p.phase += p.phaseSpeed;
-
-        p.x += p.vx + Math.sin(p.phase) * 0.25;
+        p.x += p.vx;
         p.y += p.vy;
-        p.radius = p.baseRadius + Math.sin(p.phase * 1.5) * 0.7;
+
+        if (p.x < -20) p.x = width + 20;
+        if (p.x > width + 20) p.x = -20;
+        if (p.y < -20) p.y = height + 20;
+        if (p.y > height + 20) p.y = -20;
+
+        p.alpha = p.baseAlpha + Math.sin(tick * p.pulseSpeed + p.pulseOffset) * 0.14;
 
         if (mouse.active) {
           const dx = p.x - mouse.x;
           const dy = p.y - mouse.y;
-          const dist = Math.hypot(dx, dy);
-          const interactRadius = 150;
-
-          if (dist < interactRadius && dist > 0.1) {
-            const force = (interactRadius - dist) / interactRadius;
-            p.x += (dx / dist) * force * 1.6 - (dy / dist) * force * 0.5;
-            p.y += (dy / dist) * force * 1.6 + (dx / dist) * force * 0.5;
-
-            ctx.beginPath();
-            ctx.moveTo(p.x, p.y);
-            ctx.lineTo(mouse.x, mouse.y);
-            ctx.strokeStyle = `rgba(${p.color}, ${force * 0.22})`;
-            ctx.lineWidth = 0.9;
-            ctx.stroke();
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < mouse.radius && dist > 0) {
+            const force = (mouse.radius - dist) / mouse.radius;
+            p.x += (dx / dist) * force * 1.4;
+            p.y += (dy / dist) * force * 1.4;
+            p.alpha = Math.min(0.85, p.alpha + force * 0.35);
           }
         }
 
-        for (let j = i - 1; j >= 0; j--) {
-          const p2 = particles[j];
-          const dx = p.x - p2.x;
-          const dy = p.y - p2.y;
-          const dist = Math.hypot(dx, dy);
-          if (dist < 105) {
-            const lineAlpha = (1 - dist / 105) * 0.12;
-            ctx.beginPath();
-            ctx.moveTo(p.x, p.y);
-            ctx.lineTo(p2.x, p2.y);
-            ctx.strokeStyle = `rgba(35, 122, 99, ${lineAlpha})`;
-            ctx.lineWidth = 0.7;
-            ctx.stroke();
-          }
-        }
-
-        if (p.isBurst && p.life !== undefined) {
-          p.life -= 0.016;
-          p.alpha = Math.max(0, p.life * 0.8);
-          if (p.life <= 0) {
-            particles.splice(i, 1);
-            continue;
-          }
-        }
-
-        if (p.y < -20) {
-          p.y = height + 20;
-          p.x = Math.random() * width;
-        } else if (p.y > height + 20) {
-          p.y = -20;
-        }
-        if (p.x < -20) p.x = width + 20;
-        if (p.x > width + 20) p.x = -20;
-
-        const glowRadius = Math.max(1, p.radius * 3.5);
-        const pGrad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, glowRadius);
-        pGrad.addColorStop(0, `rgba(${p.color}, ${p.alpha})`);
-        pGrad.addColorStop(0.45, `rgba(${p.color}, ${p.alpha * 0.4})`);
+        const glowRadius = p.radius * (p.isFirefly ? 4.2 : 3.2);
+        const pGrad = ctx.createRadialGradient(p.x, p.y, 0.2, p.x, p.y, glowRadius);
+        pGrad.addColorStop(0, `rgba(${p.color}, ${Math.max(0.08, p.alpha)})`);
+        pGrad.addColorStop(0.45, `rgba(${p.color}, ${Math.max(0.03, p.alpha * 0.42)})`);
         pGrad.addColorStop(1, `rgba(${p.color}, 0)`);
 
         ctx.fillStyle = pGrad;
         ctx.beginPath();
         ctx.arc(p.x, p.y, glowRadius, 0, Math.PI * 2);
         ctx.fill();
+      }
 
-        ctx.fillStyle = `rgba(255, 255, 255, ${Math.min(1, p.alpha * 1.2)})`;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, Math.max(0.6, p.radius * 0.45), 0, Math.PI * 2);
-        ctx.fill();
+      // 4. Các đường tơ sương mỏng kết nối hạt gần nhau
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+          const dx = particles[i].x - particles[j].x;
+          const dy = particles[i].y - particles[j].y;
+          const distSq = dx * dx + dy * dy;
+          const maxDist = 110;
+
+          if (distSq < maxDist * maxDist) {
+            const dist = Math.sqrt(distSq);
+            const lineAlpha = (1 - dist / maxDist) * 0.08;
+            ctx.strokeStyle = `rgba(35, 122, 99, ${lineAlpha})`;
+            ctx.lineWidth = 0.7;
+            ctx.beginPath();
+            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(particles[j].x, particles[j].y);
+            ctx.stroke();
+          }
+        }
       }
 
       animationFrameId = requestAnimationFrame(render);
@@ -234,17 +252,56 @@ export const InteractiveBackground: React.FC = () => {
       cancelAnimationFrame(animationFrameId);
       window.removeEventListener('resize', handleResize);
       window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('touchmove', handleTouchMove);
       window.removeEventListener('mouseleave', handleMouseLeave);
+      window.removeEventListener('touchmove', handleTouchMove);
+      window.removeEventListener('touchend', handleTouchEnd);
       window.removeEventListener('click', handleClick);
     };
   }, []);
 
   return (
-    <canvas
-      ref={canvasRef}
-      className="interactive-bg-canvas fixed inset-0 pointer-events-none z-0"
-      aria-hidden="true"
-    />
+    <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+      {/* Lớp đường chân trời núi rừng Trường Sơn - Tây Giang mờ trong sương */}
+      <svg
+        className="absolute bottom-0 left-0 w-full h-[38vh] min-h-[220px] max-h-[380px] object-cover opacity-55"
+        viewBox="0 0 1440 360"
+        preserveAspectRatio="none"
+        aria-hidden="true"
+      >
+        <defs>
+          <linearGradient id="mountainFar" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor="#9CC5B6" stopOpacity="0.32" />
+            <stop offset="100%" stopColor="#D7EAE2" stopOpacity="0.05" />
+          </linearGradient>
+          <linearGradient id="mountainMid" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor="#6AA893" stopOpacity="0.28" />
+            <stop offset="100%" stopColor="#CBE2D9" stopOpacity="0.08" />
+          </linearGradient>
+          <linearGradient id="mountainNear" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor="#3B7D67" stopOpacity="0.22" />
+            <stop offset="100%" stopColor="#DCECE5" stopOpacity="0.15" />
+          </linearGradient>
+        </defs>
+
+        {/* Dãy Trường Sơn tầng xa */}
+        <path
+          d="M0,210 Q180,95 370,175 T760,130 T1140,180 T1440,115 L1440,360 L0,360 Z"
+          fill="url(#mountainFar)"
+        />
+        {/* Dãy núi sương tầng trung */}
+        <path
+          d="M0,250 Q240,150 480,220 T960,165 T1440,215 L1440,360 L0,360 Z"
+          fill="url(#mountainMid)"
+        />
+        {/* Thung lũng rừng già tầng gần */}
+        <path
+          d="M0,285 Q190,225 420,275 T890,235 T1260,270 T1440,245 L1440,360 L0,360 Z"
+          fill="url(#mountainNear)"
+        />
+      </svg>
+
+      {/* Canvas hạt đom đóm & sương rừng tương tác */}
+      <canvas ref={canvasRef} className="w-full h-full block" aria-hidden="true" />
+    </div>
   );
 };

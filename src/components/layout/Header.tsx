@@ -1,34 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { 
-  Menu, 
-  X, 
-  Compass, 
-  BookMarked, 
-  QrCode, 
-  GraduationCap, 
+import {
+  Menu,
+  X,
+  Compass,
+  QrCode,
+  GraduationCap,
   Layers,
   Sparkles,
   Globe,
   BarChart3
 } from 'lucide-react';
-import { notebookService } from '../../services/notebookService';
 import { useLanguage } from '../../contexts/LanguageContext';
 
 export const Header: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [savedCount, setSavedCount] = useState<number>(0);
   const location = useLocation();
   const { lang, setLang, t } = useLanguage();
-
-  useEffect(() => {
-    const updateCount = () => {
-      setSavedCount(notebookService.getAll().length);
-    };
-    updateCount();
-    window.addEventListener('cotu_notebook_updated', updateCount);
-    return () => window.removeEventListener('cotu_notebook_updated', updateCount);
-  }, []);
 
   useEffect(() => {
     setMobileMenuOpen(false);
@@ -38,13 +26,6 @@ export const Header: React.FC = () => {
     { to: '/', label: 'Trang chủ', en: 'Home', icon: Compass },
     { to: '/artifacts', label: 'Hiện vật', en: 'Artifacts', icon: Layers },
     { to: '/learn', label: 'Học tập', en: 'Learning Hub', icon: GraduationCap },
-    { 
-      to: '/learn/notebook', 
-      label: 'Sổ tay', 
-      en: 'Notebook', 
-      icon: BookMarked,
-      badge: savedCount > 0 ? savedCount : null
-    },
     { to: '/qr-codes', label: 'Mã QR', en: 'QR Labels', icon: QrCode },
     { to: '/dashboard', label: 'Thống kê', en: 'Analytics', icon: BarChart3 }
   ];
@@ -53,10 +34,9 @@ export const Header: React.FC = () => {
     <header className="sticky top-0 z-40 bg-white/75 backdrop-blur-xl border-b border-heritage-sand/70 transition-all shadow-[0_4px_24px_-6px_rgba(35,122,99,0.06)]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 sm:h-20 gap-3">
-          
           {/* Logo & Brand */}
-          <Link 
-            to="/" 
+          <Link
+            to="/"
             className="flex items-center space-x-3.5 group py-2 focus:outline-none rounded-2xl shrink-0"
           >
             <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-gradient-to-br from-heritage-clay to-heritage-forest flex items-center justify-center text-white shadow-md group-hover:shadow-glow group-hover:scale-105 transition-all duration-300">
@@ -93,13 +73,6 @@ export const Header: React.FC = () => {
                   >
                     <Icon className={`w-4 h-4 ${isActive ? 'text-white' : 'text-heritage-clay'}`} />
                     <span>{t(link.label, link.en)}</span>
-                    {link.badge !== null && link.badge !== undefined && (
-                      <span className={`ml-1 px-1.5 py-0.5 text-[11px] font-bold rounded-full leading-none ${
-                        isActive ? 'bg-white text-heritage-clay' : 'bg-heritage-clay text-white'
-                      }`}>
-                        {link.badge}
-                      </span>
-                    )}
                   </Link>
                 );
               })}
@@ -137,16 +110,14 @@ export const Header: React.FC = () => {
             </div>
           </div>
 
-          {/* Mobile controls: Language Switcher + Notebook + Hamburger */}
+          {/* Mobile controls: Language Switcher + Hamburger */}
           <div className="flex md:hidden items-center space-x-2">
             {/* Compact Mobile Language Toggle */}
             <div className="inline-flex items-center bg-heritage-cream/80 p-0.5 rounded-full border border-heritage-sand">
               <button
                 onClick={() => setLang('vi')}
                 className={`px-2.5 py-1 rounded-full text-xs font-semibold transition-all ${
-                  lang === 'vi'
-                    ? 'bg-heritage-clay text-white'
-                    : 'text-heritage-woodLight'
+                  lang === 'vi' ? 'bg-heritage-clay text-white' : 'text-heritage-woodLight'
                 }`}
               >
                 VI
@@ -154,27 +125,13 @@ export const Header: React.FC = () => {
               <button
                 onClick={() => setLang('en')}
                 className={`px-2.5 py-1 rounded-full text-xs font-semibold transition-all ${
-                  lang === 'en'
-                    ? 'bg-heritage-clay text-white'
-                    : 'text-heritage-woodLight'
+                  lang === 'en' ? 'bg-heritage-clay text-white' : 'text-heritage-woodLight'
                 }`}
               >
                 EN
               </button>
             </div>
 
-            {savedCount > 0 && (
-              <Link
-                to="/learn/notebook"
-                className="relative p-2.5 text-heritage-wood bg-heritage-cream/80 rounded-full border border-heritage-sand"
-                title={t('Sổ tay từ vựng', 'Vocabulary Notebook')}
-              >
-                <BookMarked className="w-5 h-5 text-heritage-clay" />
-                <span className="absolute -top-0.5 -right-0.5 w-4 h-4 flex items-center justify-center text-[10px] font-bold bg-heritage-clay text-white rounded-full">
-                  {savedCount}
-                </span>
-              </Link>
-            )}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="p-2.5 rounded-2xl text-heritage-wood bg-heritage-cream/70 hover:bg-heritage-cream border border-heritage-sand/80 min-w-[44px] min-h-[44px] flex items-center justify-center transition-colors"
@@ -206,21 +163,20 @@ export const Header: React.FC = () => {
                 }`}
               >
                 <div className="flex items-center space-x-3">
-                  <div className={`w-9 h-9 rounded-xl flex items-center justify-center ${
-                    isActive ? 'bg-heritage-clay text-white' : 'bg-heritage-cream text-heritage-clay'
-                  }`}>
+                  <div
+                    className={`w-9 h-9 rounded-xl flex items-center justify-center ${
+                      isActive ? 'bg-heritage-clay text-white' : 'bg-heritage-cream text-heritage-clay'
+                    }`}
+                  >
                     <Icon className="w-4 h-4" />
                   </div>
                   <div>
                     <div className="text-sm font-semibold">{t(link.label, link.en)}</div>
-                    <div className="text-xs text-heritage-woodMuted font-normal">{t(link.en, link.label)}</div>
+                    <div className="text-xs text-heritage-woodMuted font-normal">
+                      {t(link.en, link.label)}
+                    </div>
                   </div>
                 </div>
-                {link.badge !== null && link.badge !== undefined && (
-                  <span className="px-2.5 py-0.5 text-xs font-bold bg-heritage-clay text-white rounded-full">
-                    {link.badge} {t('từ', 'words')}
-                  </span>
-                )}
               </Link>
             );
           })}

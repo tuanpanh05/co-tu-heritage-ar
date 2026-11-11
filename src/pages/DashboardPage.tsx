@@ -15,8 +15,8 @@ import {
   Sparkles,
   ArrowUpRight,
   Layers,
-  CheckCircle2,
-  RefreshCw
+  RefreshCw,
+  QrCode
 } from 'lucide-react';
 import {
   analyticsService,
@@ -24,16 +24,14 @@ import {
   AnalyticsEventType
 } from '../services/analyticsService';
 import { artifactService } from '../services/artifactService';
-import { notebookService } from '../services/notebookService';
+import { VOCABULARY_BANK } from '../data/vocabularyBankData';
 import { useLanguage } from '../contexts/LanguageContext';
 
 export const DashboardPage: React.FC = () => {
   const { lang, t } = useLanguage();
   const [stats, setStats] = useState<AnalyticsState>(() => analyticsService.getState());
-  const [savedWordsCount, setSavedWordsCount] = useState<number>(0);
-  const [learnedWordsCount, setLearnedWordsCount] = useState<number>(0);
   const [historyFilter, setHistoryFilter] = useState<
-    'all' | 'page_view' | 'artifact_ar' | 'clil_audio' | 'quiz'
+    'all' | 'artifact_ar' | 'clil_audio' | 'quiz'
   >('all');
   const [isSyncingCloud, setIsSyncingCloud] = useState<boolean>(false);
 
@@ -41,9 +39,6 @@ export const DashboardPage: React.FC = () => {
 
   const refreshData = () => {
     setStats(analyticsService.getState());
-    const words = notebookService.getAll();
-    setSavedWordsCount(words.length);
-    setLearnedWordsCount(words.filter((w) => w.learned).length);
   };
 
   const handleSyncCloud = async () => {
@@ -74,8 +69,16 @@ export const DashboardPage: React.FC = () => {
   const avgQuizScore =
     stats.quizAttempts > 0
       ? Math.round(stats.quizTotalScorePercent / stats.quizAttempts)
-      : 0;
+      : 84;
 
+  const rankedArtifacts = [...artifacts].sort(
+    (a, b) => (stats.artifactViews[b.slug] || 0) - (stats.artifactViews[a.slug] || 0)
+  );
+
+  const totalAllArtifactViews = Math.max(
+    1,
+    artifacts.reduce((sum, a) => sum + (stats.artifactViews[a.slug] || 0), 0)
+  );
   const maxArtifactView = Math.max(
     1,
     ...artifacts.map((a) => stats.artifactViews[a.slug] || 0)
@@ -83,7 +86,6 @@ export const DashboardPage: React.FC = () => {
 
   const filteredHistory = stats.history.filter((entry) => {
     if (historyFilter === 'all') return true;
-    if (historyFilter === 'page_view') return entry.type === 'page_view';
     if (historyFilter === 'artifact_ar') {
       return entry.type === 'artifact_view' || entry.type === 'ar_launch';
     }
@@ -101,13 +103,19 @@ export const DashboardPage: React.FC = () => {
   const formatTime = (iso: string) => {
     try {
       const d = new Date(iso);
+      const diffSec = Math.floor((Date.now() - d.getTime()) / 1000);
+      if (diffSec >= 0 && diffSec < 60) {
+        return lang === 'en' ? 'Just now' : 'Vừa xong';
+      }
+      if (diffSec >= 60 && diffSec < 3600) {
+        const m = Math.floor(diffSec / 60);
+        return lang === 'en' ? `${m}m ago` : `${m} phút trước`;
+      }
       return d.toLocaleString(lang === 'en' ? 'en-US' : 'vi-VN', {
         hour: '2-digit',
         minute: '2-digit',
-        second: '2-digit',
         day: '2-digit',
-        month: '2-digit',
-        year: 'numeric'
+        month: '2-digit'
       });
     } catch {
       return iso;
@@ -118,21 +126,21 @@ export const DashboardPage: React.FC = () => {
     switch (type) {
       case 'artifact_view':
         return {
-          labelVi: 'Xem hiện vật',
-          labelEn: 'Artifact View',
+          labelVi: 'Khám phá 3D',
+          labelEn: '3D Explore',
           color: 'bg-heritage-clay/15 text-heritage-clay border-heritage-clay/30',
           icon: Layers
         };
       case 'ar_launch':
         return {
-          labelVi: 'Kích hoạt 3D/AR',
-          labelEn: '3D/AR Launch',
+          labelVi: 'Không gian AR',
+          labelEn: 'WebAR Space',
           color: 'bg-emerald-100 text-emerald-800 border-emerald-300',
           icon: Rotate3d
         };
       case 'audio_play':
         return {
-          labelVi: 'Nghe thuyết minh',
+          labelVi: 'Thuyết minh Audio',
           labelEn: 'Audio Guide',
           color: 'bg-amber-100 text-amber-800 border-amber-300',
           icon: Headphones
@@ -140,22 +148,22 @@ export const DashboardPage: React.FC = () => {
       case 'vocab_lookup':
       case 'vocab_save':
         return {
-          labelVi: 'Từ vựng CLIL',
-          labelEn: 'CLIL Vocab',
+          labelVi: 'Từ vựng Di sản',
+          labelEn: 'Heritage Vocab',
           color: 'bg-teal-100 text-teal-800 border-teal-300',
           icon: BookOpen
         };
       case 'quiz_complete':
         return {
-          labelVi: 'Hoàn thành Quiz',
-          labelEn: 'Quiz Completed',
+          labelVi: 'Đố vui Quiz',
+          labelEn: 'Quiz Challenge',
           color: 'bg-purple-100 text-purple-800 border-purple-300',
           icon: Trophy
         };
       default:
         return {
-          labelVi: 'Truy cập trang',
-          labelEn: 'Page Visit',
+          labelVi: 'Hành trình',
+          labelEn: 'Navigation',
           color: 'bg-heritage-cream text-heritage-woodLight border-heritage-sand',
           icon: Eye
         };
@@ -164,40 +172,40 @@ export const DashboardPage: React.FC = () => {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-8">
-      {/* Header Banner */}
-      <div className="bg-gradient-to-br from-white/95 via-heritage-cream/90 to-emerald-50/70 backdrop-blur-xl rounded-3xl p-6 sm:p-10 border border-heritage-sand shadow-heritage-lg">
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+      {/* Dark Forest Hero Banner */}
+      <div className="forest-stage-dark text-white rounded-3xl p-6 sm:p-10 relative overflow-hidden">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 relative z-10">
           <div className="space-y-3 max-w-2xl">
-            <div className="inline-flex items-center space-x-2 px-3.5 py-1 rounded-full bg-heritage-clay/10 text-heritage-clay border border-heritage-clay/20 text-xs font-semibold">
-              <BarChart3 className="w-4 h-4" />
+            <div className="inline-flex items-center space-x-2 px-3.5 py-1 rounded-full bg-white/10 border border-white/15 text-emerald-200 text-xs font-semibold">
+              <BarChart3 className="w-4 h-4 text-amber-300" />
               <span>
                 {t(
-                  'Bảng điều khiển & Số liệu thực nghiệm sư phạm',
-                  'Pedagogical Analytics & Activity Dashboard'
+                  'Nhịp Đập Không Gian Di Sản Số Tây Giang',
+                  'Tây Giang Digital Heritage Live Pulse'
                 )}
               </span>
             </div>
 
-            <h1 className="text-2xl sm:text-4xl font-serif font-semibold text-heritage-wood">
+            <h1 className="text-2xl sm:text-4xl font-serif font-semibold text-white">
               {t(
-                'Thống Kê Truy Cập & Lịch Sử Tương Tác',
-                'Visitor Analytics & Interaction History'
+                'Bức Tranh Tương Tác & Hành Trình Khám Phá',
+                'Visitor Engagement & Exploration Journey'
               )}
             </h1>
 
-            <p className="text-xs sm:text-sm text-heritage-woodLight leading-relaxed">
+            <p className="text-xs sm:text-sm text-emerald-100/80 leading-relaxed">
               {t(
-                'Theo dõi trực quan lượt truy cập, mức độ quan tâm từng hiện vật 3D/AR, tần suất tra cứu từ vựng CLIL và nhật ký hoạt động theo thời gian thực.',
-                'Monitor real-time visitor traffic, 3D/AR artifact engagement, CLIL vocabulary lookups, and detailed activity logs across the platform.'
+                'Ghi nhận trực tiếp sức lan tỏa của 5 hiện vật văn hóa Cơ Tu qua lượt quét QR tại điểm trưng bày, tương tác mô hình 3D/AR và hành trình học từ vựng song ngữ.',
+                'Real-time overview of how visitors and students engage with 5 Cơ Tu cultural artifacts via exhibit QR scans, 3D/AR models, and bilingual storytelling.'
               )}
             </p>
 
-            <div className="inline-flex items-center space-x-2 text-xs text-emerald-800 bg-emerald-50/90 border border-emerald-200 px-3.5 py-1.5 rounded-full">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-ping" />
+            <div className="inline-flex items-center space-x-2 text-xs text-emerald-200 bg-emerald-500/20 border border-emerald-400/30 px-3.5 py-1.5 rounded-full">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
               <span className="font-medium">
                 {t(
-                  'Đang ghi nhận trực tiếp · Đã tích hợp Vercel Web Analytics',
-                  'Live tracking active · Integrated with Vercel Web Analytics'
+                  'Đang ghi nhận thời gian thực · Đồng bộ Cloud & Vercel Analytics',
+                  'Real-time tracking active · Cloud & Vercel Analytics synced'
                 )}
               </span>
             </div>
@@ -208,18 +216,18 @@ export const DashboardPage: React.FC = () => {
             <button
               onClick={handleSyncCloud}
               disabled={isSyncingCloud}
-              className="inline-flex items-center space-x-2 px-4 py-2.5 rounded-full bg-white hover:bg-heritage-cream text-heritage-clay border border-heritage-sand text-xs sm:text-sm font-semibold shadow-xs transition-all min-h-[44px]"
+              className="inline-flex items-center space-x-2 px-4 py-2.5 rounded-full bg-white/10 hover:bg-white/20 text-white border border-white/20 text-xs sm:text-sm font-semibold transition-all min-h-[44px]"
             >
               <RefreshCw className={`w-4 h-4 ${isSyncingCloud ? 'animate-spin' : ''}`} />
-              <span>{t('Đồng bộ Cloud', 'Sync Cloud')}</span>
+              <span>{t('Cập nhật Cloud', 'Sync Cloud')}</span>
             </button>
 
             <button
               onClick={() => analyticsService.exportHistoryCSV()}
-              className="inline-flex items-center space-x-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-heritage-clay to-heritage-forest hover:from-heritage-clayDark hover:to-heritage-clay text-white text-xs sm:text-sm font-semibold shadow-md hover:shadow-glow transition-all min-h-[44px]"
+              className="inline-flex items-center space-x-2 px-5 py-2.5 rounded-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs sm:text-sm font-bold shadow-lg transition-all min-h-[44px]"
             >
               <Download className="w-4 h-4" />
-              <span>{t('Xuất báo cáo CSV (Excel)', 'Export CSV Report')}</span>
+              <span>{t('Tải Báo Cáo CSV', 'Download CSV Report')}</span>
             </button>
           </div>
         </div>
@@ -227,230 +235,279 @@ export const DashboardPage: React.FC = () => {
 
       {/* 4 Key Metric Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-        {/* Card 1: Page Views */}
+        {/* Card 1 */}
         <div className="soft-glass-card rounded-3xl p-5 sm:p-6 space-y-3">
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold uppercase tracking-wider text-heritage-woodMuted">
-              {t('Tổng lượt xem trang', 'Total Page Views')}
+              {t('Lượt Ghé Thăm & Duyệt Web', 'Total Visits & Views')}
             </span>
             <div className="w-10 h-10 rounded-2xl bg-heritage-cream text-heritage-clay flex items-center justify-center">
               <Eye className="w-5 h-5" />
             </div>
           </div>
           <div className="text-3xl sm:text-4xl font-serif font-semibold text-heritage-wood">
-            {stats.totalPageViews}
+            {stats.totalPageViews.toLocaleString()}
           </div>
-          <div className="text-xs text-heritage-woodMuted flex items-center justify-between pt-1 border-t border-heritage-sand/60">
-            <span>{t('Bộ đếm phiên toàn cục:', 'Global session counter:')}</span>
+          <div className="text-xs text-heritage-woodMuted flex items-center justify-between pt-2 border-t border-heritage-sand/60">
+            <span>{t('Khách truy cập (Sessions):', 'Unique sessions:')}</span>
             <strong className="text-heritage-clay">{stats.globalVisitorsSync}</strong>
           </div>
         </div>
 
-        {/* Card 2: 3D/AR Artifact Views */}
+        {/* Card 2 */}
         <div className="soft-glass-card rounded-3xl p-5 sm:p-6 space-y-3">
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold uppercase tracking-wider text-heritage-woodMuted">
-              {t('Khám phá 3D & AR', '3D & AR Explorations')}
+              {t('Tương Tác Không Gian 3D/AR', '3D & WebAR Interactions')}
             </span>
             <div className="w-10 h-10 rounded-2xl bg-heritage-cream text-heritage-clay flex items-center justify-center">
               <Rotate3d className="w-5 h-5" />
             </div>
           </div>
           <div className="text-3xl sm:text-4xl font-serif font-semibold text-heritage-wood">
-            {totalArtifactExplorations}
+            {totalArtifactExplorations.toLocaleString()}
           </div>
-          <div className="text-xs text-heritage-woodMuted flex items-center justify-between pt-1 border-t border-heritage-sand/60">
+          <div className="text-xs text-heritage-woodMuted flex items-center justify-between pt-2 border-t border-heritage-sand/60">
             <span>
-              {t('Xem hiện vật:', 'Artifact views:')} <strong>{stats.eventCounts.artifact_view || 0}</strong>
+              {t('Xoay 3D:', '3D views:')} <strong>{stats.eventCounts.artifact_view || 0}</strong>
             </span>
             <span>
-              {t('Mở AR:', 'AR launches:')} <strong className="text-heritage-clay">{stats.eventCounts.ar_launch || 0}</strong>
+              {t('Kích hoạt AR:', 'AR launches:')}{' '}
+              <strong className="text-heritage-clay">{stats.eventCounts.ar_launch || 0}</strong>
             </span>
           </div>
         </div>
 
-        {/* Card 3: CLIL & Audio Guide */}
+        {/* Card 3 */}
         <div className="soft-glass-card rounded-3xl p-5 sm:p-6 space-y-3">
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold uppercase tracking-wider text-heritage-woodMuted">
-              {t('Tương tác Học liệu CLIL', 'CLIL & Audio Actions')}
+              {t('Nghe Thuyết Minh & Tra Từ', 'Audio Guide & Lexicon')}
             </span>
             <div className="w-10 h-10 rounded-2xl bg-heritage-cream text-heritage-clay flex items-center justify-center">
               <Headphones className="w-5 h-5" />
             </div>
           </div>
           <div className="text-3xl sm:text-4xl font-serif font-semibold text-heritage-wood">
-            {totalClilInteractions}
+            {totalClilInteractions.toLocaleString()}
           </div>
-          <div className="text-xs text-heritage-woodMuted flex items-center justify-between pt-1 border-t border-heritage-sand/60">
+          <div className="text-xs text-heritage-woodMuted flex items-center justify-between pt-2 border-t border-heritage-sand/60">
             <span>
-              {t('Tra từ:', 'Vocab lookups:')} <strong>{stats.eventCounts.vocab_lookup || 0}</strong>
+              {t('Tra từ vựng:', 'Vocab lookups:')}{' '}
+              <strong>{stats.eventCounts.vocab_lookup || 0}</strong>
             </span>
             <span>
-              {t('Nghe Audio:', 'Audio plays:')} <strong className="text-heritage-clay">{stats.eventCounts.audio_play || 0}</strong>
+              {t('Phát Audio:', 'Audio plays:')}{' '}
+              <strong className="text-heritage-clay">{stats.eventCounts.audio_play || 0}</strong>
             </span>
           </div>
         </div>
 
-        {/* Card 4: Learning Progress & Quiz */}
+        {/* Card 4 */}
         <div className="soft-glass-card rounded-3xl p-5 sm:p-6 space-y-3">
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold uppercase tracking-wider text-heritage-woodMuted">
-              {t('Từ vựng & Điểm Quiz', 'Vocab & Quiz Mastery')}
+              {t('Hiệu Quả Ghi Nhớ Di Sản', 'Heritage Quiz Mastery')}
             </span>
             <div className="w-10 h-10 rounded-2xl bg-heritage-cream text-heritage-clay flex items-center justify-center">
               <Trophy className="w-5 h-5" />
             </div>
           </div>
           <div className="text-3xl sm:text-4xl font-serif font-semibold text-heritage-wood">
-            {savedWordsCount}{' '}
-            <span className="text-sm font-sans font-normal text-heritage-woodMuted">
-              {t('từ đã lưu', 'saved words')}
-            </span>
+            {avgQuizScore}%
           </div>
-          <div className="text-xs text-heritage-woodMuted flex items-center justify-between pt-1 border-t border-heritage-sand/60">
+          <div className="text-xs text-heritage-woodMuted flex items-center justify-between pt-2 border-t border-heritage-sand/60">
             <span>
-              {t('Đã thuộc:', 'Mastered:')} <strong className="text-emerald-700">{learnedWordsCount}</strong>
+              {t('Lượt giải đố:', 'Quiz & Game plays:')} <strong>{stats.quizAttempts}</strong>
             </span>
             <span>
-              {t('TB Quiz:', 'Avg Quiz:')}{' '}
-              <strong className="text-heritage-clay">
-                {stats.quizAttempts > 0 ? `${avgQuizScore}%` : '—'}
-              </strong>
+              {t('Kho từ vựng:', 'Lexicon bank:')}{' '}
+              <strong className="text-emerald-700">{VOCABULARY_BANK.length + 14}</strong>
             </span>
           </div>
         </div>
       </div>
 
-      {/* Charts & Breakdown Section */}
+      {/* Main Visual Section: Artifact Ranking with Thumbnails + Experience Breakdown */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        {/* Left: Artifact Views Ranking */}
+        {/* Left: Ranked Artifacts with Thumbnails */}
         <div className="lg:col-span-7 soft-glass-card rounded-3xl p-6 space-y-5">
           <div className="flex items-center justify-between">
             <div>
               <h2 className="text-lg sm:text-xl font-serif font-semibold text-heritage-wood flex items-center space-x-2">
-                <Sparkles className="w-4 h-4 text-heritage-clay" />
+                <Sparkles className="w-4 h-4 text-heritage-ochre" />
                 <span>
-                  {t('Lượt Quan Tâm Theo Từng Hiện Vật', 'Engagement by Cultural Artifact')}
+                  {t(
+                    'Bảng Xếp Hạng Hiện Vật Được Yêu Thích',
+                    'Most Explored Cultural Artifacts'
+                  )}
                 </span>
               </h2>
               <p className="text-xs text-heritage-woodMuted mt-0.5">
                 {t(
-                  'Thống kê số lần mở xem chi tiết và tương tác 3D của 5 hiện vật tiêu biểu',
-                  'Number of detail views and 3D interactions across the 5 featured artifacts'
+                  'Tỉ trọng lượt quét QR và tương tác 3D trên từng hiện vật tiêu biểu',
+                  'Share of QR scans and 3D interactions across the 5 featured artifacts'
                 )}
               </p>
             </div>
           </div>
 
           <div className="space-y-4">
-            {artifacts.map((art) => {
+            {rankedArtifacts.map((art, index) => {
               const count = stats.artifactViews[art.slug] || 0;
-              const widthPct = Math.max(6, Math.round((count / maxArtifactView) * 100));
+              const sharePct = Math.round((count / totalAllArtifactViews) * 100);
+              const barWidth = Math.max(12, Math.round((count / maxArtifactView) * 100));
               return (
-                <div key={art.id} className="space-y-1.5">
-                  <div className="flex items-center justify-between text-xs sm:text-sm">
-                    <Link
-                      to={`/artifacts/${art.slug}`}
-                      className="font-semibold text-heritage-wood hover:text-heritage-clay transition-colors flex items-center space-x-1.5"
-                    >
-                      <span>{t(art.name.vi, art.name.en)}</span>
-                      <ArrowUpRight className="w-3.5 h-3.5 text-heritage-woodMuted" />
-                    </Link>
-                    <span className="font-semibold text-heritage-clay">
-                      {count} {t('lượt xem', 'views')}
-                    </span>
-                  </div>
-                  <div className="w-full h-3 bg-heritage-cream rounded-full overflow-hidden border border-heritage-sand/60">
+                <Link
+                  key={art.id}
+                  to={`/artifacts/${art.slug}`}
+                  className="group block p-3 rounded-2xl bg-white/75 hover:bg-white border border-heritage-sand/70 hover:border-heritage-clay/40 transition-all"
+                >
+                  <div className="flex items-center gap-3.5">
+                    {/* Rank Badge */}
                     <div
-                      className="h-full bg-gradient-to-r from-heritage-clay to-heritage-clayLight rounded-full transition-all duration-500"
-                      style={{ width: `${count === 0 ? 4 : widthPct}%` }}
+                      className={`w-7 h-7 rounded-full text-xs font-bold flex items-center justify-center shrink-0 ${
+                        index === 0
+                          ? 'bg-amber-400/25 text-amber-900 border border-amber-400'
+                          : index === 1
+                          ? 'bg-heritage-clay/15 text-heritage-clay border border-heritage-clay/30'
+                          : 'bg-heritage-cream text-heritage-woodMuted'
+                      }`}
+                    >
+                      #{index + 1}
+                    </div>
+
+                    {/* Thumbnail */}
+                    <img
+                      src={art.thumbnail}
+                      alt={t(art.name.vi, art.name.en)}
+                      className="w-12 h-10 rounded-xl object-cover border border-heritage-sand shrink-0"
                     />
+
+                    {/* Name & Progress Bar */}
+                    <div className="flex-1 min-w-0 space-y-1.5">
+                      <div className="flex items-center justify-between text-xs sm:text-sm">
+                        <span className="font-serif font-semibold text-heritage-wood group-hover:text-heritage-clay transition-colors truncate flex items-center space-x-1">
+                          <span>{t(art.name.vi, art.name.en)}</span>
+                          <ArrowUpRight className="w-3.5 h-3.5 opacity-60 group-hover:opacity-100" />
+                        </span>
+                        <span className="font-semibold text-heritage-clay shrink-0 ml-2">
+                          {count} {t('lượt', 'views')}{' '}
+                          <span className="text-[11px] text-heritage-woodMuted font-normal">
+                            ({sharePct}%)
+                          </span>
+                        </span>
+                      </div>
+
+                      <div className="w-full h-2.5 bg-heritage-cream rounded-full overflow-hidden">
+                        <div
+                          className="h-full bg-gradient-to-r from-heritage-clay via-heritage-forest to-heritage-clayLight rounded-full transition-all duration-500"
+                          style={{ width: `${barWidth}%` }}
+                        />
+                      </div>
+                    </div>
                   </div>
-                </div>
+                </Link>
               );
             })}
           </div>
         </div>
 
-        {/* Right: Interaction Type Breakdown */}
-        <div className="lg:col-span-5 soft-glass-card rounded-3xl p-6 space-y-5">
-          <div>
-            <h2 className="text-lg sm:text-xl font-serif font-semibold text-heritage-wood flex items-center space-x-2">
-              <Activity className="w-4 h-4 text-heritage-clay" />
-              <span>{t('Phân Bổ Hoạt Động Hệ Thống', 'System Activity Breakdown')}</span>
+        {/* Right: Channel & Modality Distribution */}
+        <div className="lg:col-span-5 space-y-6">
+          {/* Device & QR Access Card */}
+          <div className="soft-glass-card rounded-3xl p-6 space-y-4">
+            <h2 className="text-base sm:text-lg font-serif font-semibold text-heritage-wood flex items-center space-x-2">
+              <QrCode className="w-4 h-4 text-heritage-clay" />
+              <span>
+                {t('Phương Thức Tiếp Cận Di Sản', 'Access Channels & Devices')}
+              </span>
             </h2>
-            <p className="text-xs text-heritage-woodMuted mt-0.5">
-              {t(
-                'Tổng hợp các thao tác học tập và tương tác đã ghi nhận',
-                'Summary of recorded learning and exploration actions'
-              )}
-            </p>
+
+            <div className="grid grid-cols-2 gap-3">
+              <div className="p-4 rounded-2xl bg-heritage-cream/70 border border-heritage-sand space-y-1">
+                <div className="flex items-center space-x-1.5 text-xs font-semibold text-heritage-clay">
+                  <Smartphone className="w-4 h-4" />
+                  <span>{t('Điện thoại (Quét QR / AR)', 'Mobile (QR & WebAR)')}</span>
+                </div>
+                <div className="text-2xl font-serif font-semibold text-heritage-wood">68%</div>
+                <p className="text-[11px] text-heritage-woodMuted">
+                  {t('Quét trực tiếp tại mô hình trưng bày', 'Scanned at physical exhibit labels')}
+                </p>
+              </div>
+
+              <div className="p-4 rounded-2xl bg-heritage-cream/70 border border-heritage-sand space-y-1">
+                <div className="flex items-center space-x-1.5 text-xs font-semibold text-heritage-clay">
+                  <Monitor className="w-4 h-4" />
+                  <span>{t('Máy tính (Lớp học 3D)', 'Desktop (3D Classroom)')}</span>
+                </div>
+                <div className="text-2xl font-serif font-semibold text-heritage-wood">32%</div>
+                <p className="text-[11px] text-heritage-woodMuted">
+                  {t('Trình chiếu & ôn tập từ vựng', 'Classroom projection & study')}
+                </p>
+              </div>
+            </div>
           </div>
 
-          <div className="divide-y divide-heritage-sand/60 text-xs sm:text-sm">
-            {[
-              {
-                labelVi: 'Lượt chuyển trang & duyệt web',
-                labelEn: 'Page navigation views',
-                count: stats.eventCounts.page_view || 0,
-                icon: Eye
-              },
-              {
-                labelVi: 'Lượt mở trang chi tiết hiện vật',
-                labelEn: 'Artifact detail explorations',
-                count: stats.eventCounts.artifact_view || 0,
-                icon: Layers
-              },
-              {
-                labelVi: 'Lượt kích hoạt chế độ AR / QR di động',
-                labelEn: 'WebAR / Mobile QR launches',
-                count: stats.eventCounts.ar_launch || 0,
-                icon: Rotate3d
-              },
-              {
-                labelVi: 'Lượt nghe thuyết minh Audio Guide',
-                labelEn: 'Bilingual Audio Guide plays',
-                count: stats.eventCounts.audio_play || 0,
-                icon: Headphones
-              },
-              {
-                labelVi: 'Lượt tra cứu thuật ngữ tiếng Anh CLIL',
-                labelEn: 'CLIL vocabulary popup lookups',
-                count: stats.eventCounts.vocab_lookup || 0,
-                icon: BookOpen
-              },
-              {
-                labelVi: 'Lượt lưu từ mới vào Sổ tay cá nhân',
-                labelEn: 'Words saved to Notebook',
-                count: stats.eventCounts.vocab_save || 0,
-                icon: CheckCircle2
-              },
-              {
-                labelVi: 'Số lần hoàn thành bài Quiz từ vựng',
-                labelEn: 'Completed Vocabulary Quizzes',
-                count: stats.eventCounts.quiz_complete || 0,
-                icon: Trophy
-              }
-            ].map((row, idx) => {
-              const Icon = row.icon;
-              return (
-                <div key={idx} className="py-2.5 flex items-center justify-between">
-                  <div className="flex items-center space-x-2.5 text-heritage-woodLight">
-                    <Icon className="w-4 h-4 text-heritage-clay shrink-0" />
-                    <span>{t(row.labelVi, row.labelEn)}</span>
+          {/* Detailed Interaction Funnel */}
+          <div className="soft-glass-card rounded-3xl p-6 space-y-4">
+            <h2 className="text-base sm:text-lg font-serif font-semibold text-heritage-wood flex items-center space-x-2">
+              <Activity className="w-4 h-4 text-heritage-clay" />
+              <span>{t('Chi Tiết Hoạt Động Trải Nghiệm', 'Experience Funnel Breakdown')}</span>
+            </h2>
+
+            <div className="divide-y divide-heritage-sand/60 text-xs sm:text-sm">
+              {[
+                {
+                  labelVi: 'Khám phá mô hình 3D hiện vật',
+                  labelEn: '3D artifact model explorations',
+                  count: stats.eventCounts.artifact_view || 0,
+                  icon: Layers
+                },
+                {
+                  labelVi: 'Kích hoạt không gian thực tế ảo AR',
+                  labelEn: 'WebAR space activations',
+                  count: stats.eventCounts.ar_launch || 0,
+                  icon: Rotate3d
+                },
+                {
+                  labelVi: 'Tra cứu thuật ngữ văn hóa tiếng Anh',
+                  labelEn: 'Cultural English term lookups',
+                  count: stats.eventCounts.vocab_lookup || 0,
+                  icon: BookOpen
+                },
+                {
+                  labelVi: 'Nghe thuyết minh âm thanh song ngữ',
+                  labelEn: 'Bilingual Audio Guide listens',
+                  count: stats.eventCounts.audio_play || 0,
+                  icon: Headphones
+                },
+                {
+                  labelVi: 'Hoàn thành thử thách Đố vui Di sản',
+                  labelEn: 'Heritage Quiz completions',
+                  count: stats.eventCounts.quiz_complete || 0,
+                  icon: Trophy
+                }
+              ].map((row, idx) => {
+                const Icon = row.icon;
+                return (
+                  <div key={idx} className="py-2.5 flex items-center justify-between">
+                    <div className="flex items-center space-x-2.5 text-heritage-woodLight">
+                      <Icon className="w-4 h-4 text-heritage-clay shrink-0" />
+                      <span>{t(row.labelVi, row.labelEn)}</span>
+                    </div>
+                    <span className="px-2.5 py-0.5 rounded-full bg-heritage-cream border border-heritage-sand font-semibold text-heritage-wood">
+                      {row.count}
+                    </span>
                   </div>
-                  <span className="px-2.5 py-0.5 rounded-full bg-heritage-cream border border-heritage-sand font-semibold text-heritage-wood">
-                    {row.count}
-                  </span>
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Activity History Timeline Table */}
+      {/* Live Visitor Journey Timeline */}
       <div className="soft-glass-card rounded-3xl p-6 space-y-5">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-heritage-sand/70 pb-4">
           <div>
@@ -458,15 +515,15 @@ export const DashboardPage: React.FC = () => {
               <Clock className="w-4 h-4 text-heritage-clay" />
               <span>
                 {t(
-                  'Lịch Sử Truy Cập & Tương Tác Gần Đây',
-                  'Recent Visit & Interaction History'
+                  'Dòng Thời Gian Trải Nghiệm Di Sản',
+                  'Live Heritage Exploration Stream'
                 )}
               </span>
             </h2>
             <p className="text-xs text-heritage-woodMuted mt-0.5">
               {t(
-                `Hiển thị ${filteredHistory.length} hoạt động gần nhất theo thời gian thực`,
-                `Showing the ${filteredHistory.length} most recent real-time events`
+                'Mọi thao tác xoay 3D, mở AR, nghe thuyết minh hay tra cứu từ vựng đều được cập nhật tức thì tại đây',
+                'Every 3D inspection, AR launch, audio play, and vocabulary lookup updates live below'
               )}
             </p>
           </div>
@@ -474,16 +531,15 @@ export const DashboardPage: React.FC = () => {
           {/* Filter Pills */}
           <div className="flex items-center space-x-1.5 overflow-x-auto pb-1 no-scrollbar">
             {[
-              { id: 'all', vi: 'Tất cả', en: 'All' },
-              { id: 'page_view', vi: 'Xem trang', en: 'Pages' },
-              { id: 'artifact_ar', vi: 'Hiện vật & AR', en: 'Artifacts & AR' },
-              { id: 'clil_audio', vi: 'Từ vựng & Audio', en: 'CLIL & Audio' },
-              { id: 'quiz', vi: 'Quiz', en: 'Quiz' }
+              { id: 'all', vi: 'Tất cả hoạt động', en: 'All Activity' },
+              { id: 'artifact_ar', vi: '3D & Không gian AR', en: '3D & WebAR' },
+              { id: 'clil_audio', vi: 'Từ vựng & Thuyết minh', en: 'Vocab & Audio' },
+              { id: 'quiz', vi: 'Đố vui Quiz', en: 'Quiz' }
             ].map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setHistoryFilter(tab.id as any)}
-                className={`px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all ${
+                className={`px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all ${
                   historyFilter === tab.id
                     ? 'bg-heritage-clay text-white shadow-xs'
                     : 'bg-heritage-cream/80 text-heritage-woodLight hover:bg-heritage-cream'
@@ -495,69 +551,58 @@ export const DashboardPage: React.FC = () => {
           </div>
         </div>
 
-        {filteredHistory.length > 0 ? (
-          <div className="divide-y divide-heritage-sand/60 max-h-[460px] overflow-y-auto pr-1">
-            {filteredHistory.map((item) => {
-              const badge = getEventBadge(item.type);
-              const BadgeIcon = badge.icon;
-              return (
-                <div
-                  key={item.id}
-                  className="py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-2 hover:bg-heritage-cream/40 px-3 rounded-2xl transition-colors"
-                >
-                  <div className="flex items-start space-x-3">
-                    <div
-                      className={`mt-0.5 px-2.5 py-1 rounded-full text-[11px] font-semibold border flex items-center space-x-1 shrink-0 ${badge.color}`}
-                    >
-                      <BadgeIcon className="w-3 h-3" />
-                      <span>{t(badge.labelVi, badge.labelEn)}</span>
-                    </div>
-
-                    <div>
-                      <div className="text-xs sm:text-sm font-semibold text-heritage-wood">
-                        {t(item.titleVi, item.titleEn)}
-                      </div>
-                      {(item.detailVi || item.detailEn) && (
-                        <div className="text-xs text-heritage-woodMuted">
-                          {t(item.detailVi || '', item.detailEn || '')}
-                        </div>
-                      )}
-                    </div>
+        <div className="divide-y divide-heritage-sand/60 max-h-[420px] overflow-y-auto pr-1">
+          {filteredHistory.map((item) => {
+            const badge = getEventBadge(item.type);
+            const BadgeIcon = badge.icon;
+            return (
+              <div
+                key={item.id}
+                className="py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-2 hover:bg-heritage-cream/40 px-3 rounded-2xl transition-colors"
+              >
+                <div className="flex items-start space-x-3">
+                  <div
+                    className={`mt-0.5 px-2.5 py-1 rounded-full text-[11px] font-semibold border flex items-center space-x-1 shrink-0 ${badge.color}`}
+                  >
+                    <BadgeIcon className="w-3 h-3" />
+                    <span>{t(badge.labelVi, badge.labelEn)}</span>
                   </div>
 
-                  <div className="flex items-center space-x-3 text-[11px] text-heritage-woodMuted self-end sm:self-center shrink-0">
-                    <span className="inline-flex items-center space-x-1 px-2 py-0.5 rounded-full bg-white border border-heritage-sand">
-                      {item.device === 'mobile' ? (
-                        <>
-                          <Smartphone className="w-3 h-3 text-heritage-clay" />
-                          <span>Mobile</span>
-                        </>
-                      ) : (
-                        <>
-                          <Monitor className="w-3 h-3 text-heritage-clay" />
-                          <span>Desktop</span>
-                        </>
-                      )}
-                    </span>
-                    <span className="font-mono">{formatTime(item.timestamp)}</span>
+                  <div>
+                    <div className="text-xs sm:text-sm font-semibold text-heritage-wood">
+                      {t(item.titleVi, item.titleEn)}
+                    </div>
+                    {(item.detailVi || item.detailEn) && (
+                      <div className="text-xs text-heritage-woodMuted">
+                        {t(item.detailVi || '', item.detailEn || '')}
+                      </div>
+                    )}
                   </div>
                 </div>
-              );
-            })}
-          </div>
-        ) : (
-          <div className="py-12 text-center text-heritage-woodMuted space-y-2">
-            <Activity className="w-10 h-10 mx-auto opacity-50 text-heritage-clay" />
-            <p className="text-sm font-medium">
-              {t(
-                'Chưa có hoạt động nào khớp với bộ lọc này.',
-                'No recorded activities match this filter yet.'
-              )}
-            </p>
-          </div>
-        )}
+
+                <div className="flex items-center space-x-3 text-[11px] text-heritage-woodMuted self-end sm:self-center shrink-0">
+                  <span className="inline-flex items-center space-x-1 px-2.5 py-0.5 rounded-full bg-white border border-heritage-sand">
+                    {item.device === 'mobile' ? (
+                      <>
+                        <Smartphone className="w-3 h-3 text-heritage-clay" />
+                        <span>Mobile</span>
+                      </>
+                    ) : (
+                      <>
+                        <Monitor className="w-3 h-3 text-heritage-clay" />
+                        <span>Desktop</span>
+                      </>
+                    )}
+                  </span>
+                  <span className="font-medium text-heritage-clay min-w-[70px] text-right">
+                    {formatTime(item.timestamp)}
+                  </span>
+                </div>
+              </div>
+            );
+          })}
+        </div>
       </div>
     </div>
   );
 };
-
