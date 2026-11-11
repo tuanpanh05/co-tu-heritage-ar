@@ -20,14 +20,14 @@ import { forestSoundService, BG_MUSIC_TRACKS } from '../../services/forestSoundS
 
 export const Header: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [forestSoundOn, setForestSoundOn] = useState(false);
+  const [forestSoundOn, setForestSoundOn] = useState(true);
   const [trackIdx, setTrackIdx] = useState(0);
   const location = useLocation();
   const { lang, setLang, t } = useLanguage();
 
   useEffect(() => {
-    const unsub = forestSoundService.subscribe((playing, idx) => {
-      setForestSoundOn(playing);
+    const unsub = forestSoundService.subscribe((enabled, _actuallyPlaying, idx) => {
+      setForestSoundOn(enabled);
       setTrackIdx(idx);
     });
     return () => unsub();
@@ -94,7 +94,10 @@ export const Header: React.FC = () => {
             </nav>
 
             {/* Soothing Studio Background Music Toggle + Track Switcher */}
-            <div className="inline-flex items-center bg-heritage-cream/80 p-1 rounded-full border border-heritage-sand/90 shadow-xs">
+            <div
+              data-music-control="true"
+              className="inline-flex items-center bg-heritage-cream/80 p-1 rounded-full border border-heritage-sand/90 shadow-xs"
+            >
               <button
                 onClick={() => forestSoundService.toggle()}
                 className={`inline-flex items-center space-x-1.5 px-3 py-1 rounded-full text-xs font-semibold transition-all ${
@@ -168,6 +171,7 @@ export const Header: React.FC = () => {
           {/* Mobile controls: Music Toggle + Language Switcher + Hamburger */}
           <div className="flex md:hidden items-center space-x-2">
             <button
+              data-music-control="true"
               onClick={() => forestSoundService.toggle()}
               className={`p-2 rounded-full border transition-all ${
                 forestSoundOn

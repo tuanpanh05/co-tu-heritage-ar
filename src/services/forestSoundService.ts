@@ -1,8 +1,7 @@
 // Dịch vụ Nhạc Nền Chủ Đạo (Vết Mưa Piano Cover & Hòa Tấu Rừng Xanh)
-// Sử dụng file MP3 chất lượng cao tại /audio/vet-mua-piano.mp3
-// Mặc định tự động phát ngay khi mở trang web
+// Mặc định BẬT (Auto-ON) ngay khi vào trang web
 
-type Listener = (isPlaying: boolean, trackIndex: number) => void;
+type Listener = (isEnabled: boolean, isActuallyPlaying: boolean, trackIndex: number) => void;
 
 export interface BgTrack {
   id: string;
@@ -34,11 +33,12 @@ export const BG_MUSIC_TRACKS: BgTrack[] = [
 
 class ForestSoundService {
   private audio: HTMLAudioElement | null = null;
-  private isPlaying: boolean = false;
-  private userMuted: boolean = false;
+  // Mặc định luôn là BẬT (true) khi mở web
+  private isEnabled: boolean = true;
+  private isActuallyPlaying: boolean = false;
   private currentTrackIndex: number = 0;
   private listeners: Set<Listener> = new Set();
-  private unlockBound: (() => void) | null = null;
+  private unlockBound: ((e: Event) => void) | null = null;
 
   constructor() {
     if (typeof window !== 'undefined') {
@@ -52,139 +52,141 @@ class ForestSoundService {
     const track = BG_MUSIC_TRACKS[this.currentTrackIndex];
     this.audio = new Audio(track.src);
     this.audio.loop = true;
-    this.audio.volume = 0.45;
+    this.audio.volume = 0.48;
     this.audio.preload = 'auto';
+    this.audio.autoplay = true;
 
     this.audio.addEventListener('play', () => {
-      this.isPlaying = true;
+      this.isActuallyPlaying = true;
+      this.notify();
+    });
+
+    this.audio.addEventListener('playing', () => {
+      this.isActuallyPlaying = true;
       this.notify();
     });
 
     this.audio.addEventListener('pause', () => {
-      this.isPlaying = false;
+      this.isActuallyPlaying = false;
       this.notify();
     });
 
-    this.audio.addEventListener('error', () => {
-      // Nếu bài hiện tại gặp lỗi đường dẫn, chuyển sang bài tiếp theo
-      this.currentTrackIndex = (this.currentTrackIndex + 1) % BG_MUSIC_TRACKS.length;
-      if (this.audio) {
-        this.audio.src = BG_MUSIC_TRACKS[this.currentTrackIndex].src;
+    // Ngay khi file tải đủ dữ liệu đầu tiên, nếu đang ở chế độ Bật thì phát luôn
+    this.audio.addEventListener('canplay', () => {
+      if (this.isEnabled && this.audio && this.audio.paused) {
+        this.tryPlay();
       }
     });
   }
 
-  private initAutoPlay(): void {
-    // 1. Thử phát ngay lập tức khi mở web
-    setTimeout(() => {
-      if (!this.userMuted) {
-        this.start();
-      }
-    }, 100);
+  private tryPlay(): void {
+    if (!this.audio || !this.isEnabled) return;
+    const playPromise = this.audio.play();
+    if (playPromise !== undefined) {
+      playPromise
+        .then(() => {
+          this.isActuallyPlaying = true;
+          this.notify();
+          this.removeUnlockListeners();
+        })
+        .catch(() => {
+          // Trình duyệt yêu cầu tương tác đầu tiên sau khi F5
+          this.isActuallyPlaying = false;
+          this.notify();
+        });
+    }
+  }
 
-    // 2. Nếu trình duyệt tạm giữ Autoplay cho đến thao tác đầu tiên,
-    // tự động phát ngay khi người dùng chạm/nhấp/cuộn trang
-    this.unlockBound = () => {
-      if (this.userMuted) {
+  private initAutoPlay(): void {
+    // 1. Thử phát ngay lập tức khi khởi tạo
+    this.tryPlay();
+    setTimeout(() => this.tryPlay(), 250);
+    setTimeout(() => this.tryPlay(), 800);
+
+    // 2. Bắt mọi thao tác đầu tiên trên trang để mở khóa âm thanh tức thì
+    // (Bỏ qua nếu người dùng đang bấm trực tiếp vào nút Tắt nhạc để tránh xung đột)
+    this.unlockBound = (e: Event) => {
+      if (!this.isEnabled) {
         this.removeUnlockListeners();
         return;
       }
-      if (!this.isPlaying && this.audio) {
-        this.audio
-          .play()
-          .then(() => {
-            this.isPlaying = true;
-            this.notify();
-            this.removeUnlockListeners();
-          })
-          .catch(() => {
-            // Tiếp tục chờ thao tác click/touch/keydown
-          });
-      } else if (this.isPlaying) {
+      const target = e.target as HTMLElement | null;
+      if (target && target.closest && target.closest('[data-music-control="true"]')) {
+        return;
+      }
+      if (this.audio && this.audio.paused) {
+        this.tryPlay();
+      } else if (this.audio && !this.audio.paused) {
         this.removeUnlockListeners();
       }
     };
 
-    window.addEventListener('pointerdown', this.unlockBound, { passive: true });
-    window.addEventListener('keydown', this.unlockBound, { passive: true });
-    window.addEventListener('touchstart', this.unlockBound, { passive: true });
-    window.addEventListener('click', this.unlockBound, { passive: true });
+    const events = ['pointerdown', 'mousedown', 'touchstart', 'keydown', 'wheel', 'scroll', 'mousemove'];
+    events.forEach((ev) => {
+      window.addEventListener(ev, this.unlockBound!, { passive: true });
+    });
   }
 
   private removeUnlockListeners(): void {
     if (!this.unlockBound) return;
-    window.removeEventListener('pointerdown', this.unlockBound);
-    window.removeEventListener('keydown', this.unlockBound);
-    window.removeEventListener('touchstart', this.unlockBound);
-    window.removeEventListener('click', this.unlockBound);
+    const events = ['pointerdown', 'mousedown', 'touchstart', 'keydown', 'wheel', 'scroll', 'mousemove'];
+    events.forEach((ev) => {
+      window.removeEventListener(ev, this.unlockBound!);
+    });
     this.unlockBound = null;
-  }
-
-  public getStatus(): boolean {
-    return this.isPlaying;
-  }
-
-  public getCurrentTrack(): BgTrack {
-    return BG_MUSIC_TRACKS[this.currentTrackIndex];
   }
 
   public subscribe(listener: Listener): () => void {
     this.listeners.add(listener);
-    listener(this.isPlaying, this.currentTrackIndex);
+    listener(this.isEnabled, this.isActuallyPlaying, this.currentTrackIndex);
     return () => {
       this.listeners.delete(listener);
     };
   }
 
   private notify(): void {
-    this.listeners.forEach((fn) => fn(this.isPlaying, this.currentTrackIndex));
+    this.listeners.forEach((fn) =>
+      fn(this.isEnabled, this.isActuallyPlaying, this.currentTrackIndex)
+    );
   }
 
   public toggle(): boolean {
-    if (this.isPlaying) {
-      this.userMuted = true;
+    this.setupAudio();
+    // Nếu đang ở trạng thái Bật nhưng trình duyệt chưa kịp phát (audio.paused),
+    // bấm vào nút sẽ phát nhạc ngay thay vì tắt!
+    if (this.isEnabled && this.audio && this.audio.paused) {
+      this.tryPlay();
+      return true;
+    }
+
+    if (this.isEnabled) {
+      this.isEnabled = false;
       this.stop();
     } else {
-      this.userMuted = false;
-      this.start();
+      this.isEnabled = true;
+      this.tryPlay();
+      this.notify();
     }
-    return this.isPlaying;
+    return this.isEnabled;
   }
 
   public nextTrack(): void {
     this.currentTrackIndex = (this.currentTrackIndex + 1) % BG_MUSIC_TRACKS.length;
-    this.userMuted = false;
-    if (!this.audio) {
-      this.setupAudio();
-    }
+    this.isEnabled = true;
+    this.setupAudio();
     if (this.audio) {
       this.audio.src = BG_MUSIC_TRACKS[this.currentTrackIndex].src;
       this.audio.load();
-      this.start();
+      this.tryPlay();
     }
     this.notify();
-  }
-
-  public start(): void {
-    this.setupAudio();
-    if (!this.audio) return;
-
-    this.audio
-      .play()
-      .then(() => {
-        this.isPlaying = true;
-        this.notify();
-      })
-      .catch(() => {
-        // Chờ tương tác đầu tiên để phát
-      });
   }
 
   public stop(): void {
     if (this.audio) {
       this.audio.pause();
     }
-    this.isPlaying = false;
+    this.isActuallyPlaying = false;
     this.notify();
   }
 }
