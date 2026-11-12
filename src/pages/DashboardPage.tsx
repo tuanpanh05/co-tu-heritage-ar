@@ -128,21 +128,21 @@ export const DashboardPage: React.FC = () => {
         return {
           labelVi: 'Khám phá 3D',
           labelEn: '3D Explore',
-          color: 'bg-heritage-clay/15 text-heritage-clay border-heritage-clay/30',
+          color: 'bg-heritage-ochre/15 text-heritage-ochre border-heritage-ochre/30',
           icon: Layers
         };
       case 'ar_launch':
         return {
           labelVi: 'Không gian AR',
           labelEn: 'WebAR Space',
-          color: 'bg-emerald-100 text-emerald-800 border-emerald-300',
+          color: 'bg-[#14221A] text-heritage-clay border-heritage-clay/30',
           icon: Rotate3d
         };
       case 'audio_play':
         return {
           labelVi: 'Thuyết minh Audio',
           labelEn: 'Audio Guide',
-          color: 'bg-amber-100 text-amber-800 border-amber-300',
+          color: 'bg-[#1A1408] text-amber-400 border-amber-700/40',
           icon: Headphones
         };
       case 'vocab_lookup':
@@ -150,21 +150,21 @@ export const DashboardPage: React.FC = () => {
         return {
           labelVi: 'Từ vựng Di sản',
           labelEn: 'Heritage Vocab',
-          color: 'bg-teal-100 text-teal-800 border-teal-300',
+          color: 'bg-[#0E1A18] text-heritage-clay border-heritage-clay/30',
           icon: BookOpen
         };
       case 'quiz_complete':
         return {
           labelVi: 'Đố vui Quiz',
           labelEn: 'Quiz Challenge',
-          color: 'bg-purple-100 text-purple-800 border-purple-300',
+          color: 'bg-[#180E20] text-purple-400 border-purple-700/40',
           icon: Trophy
         };
       default:
         return {
           labelVi: 'Hành trình',
           labelEn: 'Navigation',
-          color: 'bg-heritage-cream text-heritage-woodLight border-heritage-sand',
+          color: 'bg-[#0A120E] text-heritage-woodMuted border-[#1E3029]',
           icon: Eye
         };
     }
@@ -176,8 +176,8 @@ export const DashboardPage: React.FC = () => {
       <div className="forest-stage-dark text-white rounded-3xl p-6 sm:p-10 relative overflow-hidden">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 relative z-10">
           <div className="space-y-3 max-w-2xl">
-            <div className="inline-flex items-center space-x-2 px-3.5 py-1 rounded-full bg-white/10 border border-white/15 text-emerald-200 text-xs font-semibold">
-              <BarChart3 className="w-4 h-4 text-amber-300" />
+            <div className="inline-flex items-center space-x-2 px-3.5 py-1 rounded-full bg-heritage-ochre/15 border border-heritage-ochre/30 text-heritage-ochre text-xs font-semibold">
+              <BarChart3 className="w-4 h-4 text-heritage-ochre" />
               <span>
                 {t(
                   'Nhịp Đập Không Gian Di Sản Số Tây Giang',
@@ -193,15 +193,15 @@ export const DashboardPage: React.FC = () => {
               )}
             </h1>
 
-            <p className="text-xs sm:text-sm text-emerald-100/80 leading-relaxed">
+            <p className="text-xs sm:text-sm text-heritage-wood/80 leading-relaxed">
               {t(
                 'Ghi nhận trực tiếp sức lan tỏa của 5 hiện vật văn hóa Cơ Tu qua lượt quét QR tại điểm trưng bày, tương tác mô hình 3D/AR và hành trình học từ vựng song ngữ.',
                 'Real-time overview of how visitors and students engage with 5 Cơ Tu cultural artifacts via exhibit QR scans, 3D/AR models, and bilingual storytelling.'
               )}
             </p>
 
-            <div className="inline-flex items-center space-x-2 text-xs text-emerald-200 bg-emerald-500/20 border border-emerald-400/30 px-3.5 py-1.5 rounded-full">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+            <div className="inline-flex items-center space-x-2 text-xs text-heritage-ochre bg-heritage-ochre/15 border border-heritage-ochre/30 px-3.5 py-1.5 rounded-full">
+              <span className="w-2 h-2 rounded-full bg-heritage-ochre animate-ping" />
               <span className="font-medium">
                 {t(
                   'Đang ghi nhận thời gian thực · Đồng bộ Cloud & Vercel Analytics',
@@ -224,7 +224,7 @@ export const DashboardPage: React.FC = () => {
 
             <button
               onClick={() => analyticsService.exportHistoryCSV()}
-              className="inline-flex items-center space-x-2 px-5 py-2.5 rounded-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs sm:text-sm font-bold shadow-lg transition-all min-h-[44px]"
+              className="inline-flex items-center space-x-2 px-5 py-2.5 rounded-full bg-heritage-ochre hover:bg-heritage-ochreLight text-slate-950 text-xs sm:text-sm font-bold shadow-lg transition-all min-h-[44px]"
             >
               <Download className="w-4 h-4" />
               <span>{t('Tải Báo Cáo CSV', 'Download CSV Report')}</span>
@@ -241,16 +241,16 @@ export const DashboardPage: React.FC = () => {
             <span className="text-xs font-semibold uppercase tracking-wider text-heritage-woodMuted">
               {t('Lượt Ghé Thăm & Duyệt Web', 'Total Visits & Views')}
             </span>
-            <div className="w-10 h-10 rounded-2xl bg-heritage-cream text-heritage-clay flex items-center justify-center">
+            <div className="w-10 h-10 rounded-2xl bg-[#14221A] text-heritage-ochre flex items-center justify-center">
               <Eye className="w-5 h-5" />
             </div>
           </div>
           <div className="text-3xl sm:text-4xl font-serif font-semibold text-heritage-wood">
             {stats.totalPageViews.toLocaleString()}
           </div>
-          <div className="text-xs text-heritage-woodMuted flex items-center justify-between pt-2 border-t border-heritage-sand/60">
+          <div className="text-xs text-heritage-woodMuted flex items-center justify-between pt-2 border-t border-[#1E3029]">
             <span>{t('Khách truy cập (Sessions):', 'Unique sessions:')}</span>
-            <strong className="text-heritage-clay">{stats.globalVisitorsSync}</strong>
+            <strong className="text-heritage-ochre">{stats.globalVisitorsSync}</strong>
           </div>
         </div>
 
@@ -260,20 +260,20 @@ export const DashboardPage: React.FC = () => {
             <span className="text-xs font-semibold uppercase tracking-wider text-heritage-woodMuted">
               {t('Tương Tác Không Gian 3D/AR', '3D & WebAR Interactions')}
             </span>
-            <div className="w-10 h-10 rounded-2xl bg-heritage-cream text-heritage-clay flex items-center justify-center">
+            <div className="w-10 h-10 rounded-2xl bg-[#14221A] text-heritage-ochre flex items-center justify-center">
               <Rotate3d className="w-5 h-5" />
             </div>
           </div>
           <div className="text-3xl sm:text-4xl font-serif font-semibold text-heritage-wood">
             {totalArtifactExplorations.toLocaleString()}
           </div>
-          <div className="text-xs text-heritage-woodMuted flex items-center justify-between pt-2 border-t border-heritage-sand/60">
+          <div className="text-xs text-heritage-woodMuted flex items-center justify-between pt-2 border-t border-[#1E3029]">
             <span>
               {t('Xoay 3D:', '3D views:')} <strong>{stats.eventCounts.artifact_view || 0}</strong>
             </span>
             <span>
               {t('Kích hoạt AR:', 'AR launches:')}{' '}
-              <strong className="text-heritage-clay">{stats.eventCounts.ar_launch || 0}</strong>
+              <strong className="text-heritage-ochre">{stats.eventCounts.ar_launch || 0}</strong>
             </span>
           </div>
         </div>
@@ -284,21 +284,21 @@ export const DashboardPage: React.FC = () => {
             <span className="text-xs font-semibold uppercase tracking-wider text-heritage-woodMuted">
               {t('Nghe Thuyết Minh & Tra Từ', 'Audio Guide & Lexicon')}
             </span>
-            <div className="w-10 h-10 rounded-2xl bg-heritage-cream text-heritage-clay flex items-center justify-center">
+            <div className="w-10 h-10 rounded-2xl bg-[#14221A] text-heritage-ochre flex items-center justify-center">
               <Headphones className="w-5 h-5" />
             </div>
           </div>
           <div className="text-3xl sm:text-4xl font-serif font-semibold text-heritage-wood">
             {totalClilInteractions.toLocaleString()}
           </div>
-          <div className="text-xs text-heritage-woodMuted flex items-center justify-between pt-2 border-t border-heritage-sand/60">
+          <div className="text-xs text-heritage-woodMuted flex items-center justify-between pt-2 border-t border-[#1E3029]">
             <span>
               {t('Tra từ vựng:', 'Vocab lookups:')}{' '}
               <strong>{stats.eventCounts.vocab_lookup || 0}</strong>
             </span>
             <span>
               {t('Phát Audio:', 'Audio plays:')}{' '}
-              <strong className="text-heritage-clay">{stats.eventCounts.audio_play || 0}</strong>
+              <strong className="text-heritage-ochre">{stats.eventCounts.audio_play || 0}</strong>
             </span>
           </div>
         </div>
@@ -309,20 +309,20 @@ export const DashboardPage: React.FC = () => {
             <span className="text-xs font-semibold uppercase tracking-wider text-heritage-woodMuted">
               {t('Hiệu Quả Ghi Nhớ Di Sản', 'Heritage Quiz Mastery')}
             </span>
-            <div className="w-10 h-10 rounded-2xl bg-heritage-cream text-heritage-clay flex items-center justify-center">
+            <div className="w-10 h-10 rounded-2xl bg-[#14221A] text-heritage-ochre flex items-center justify-center">
               <Trophy className="w-5 h-5" />
             </div>
           </div>
           <div className="text-3xl sm:text-4xl font-serif font-semibold text-heritage-wood">
             {avgQuizScore}%
           </div>
-          <div className="text-xs text-heritage-woodMuted flex items-center justify-between pt-2 border-t border-heritage-sand/60">
+          <div className="text-xs text-heritage-woodMuted flex items-center justify-between pt-2 border-t border-[#1E3029]">
             <span>
               {t('Lượt giải đố:', 'Quiz & Game plays:')} <strong>{stats.quizAttempts}</strong>
             </span>
             <span>
               {t('Kho từ vựng:', 'Lexicon bank:')}{' '}
-              <strong className="text-emerald-700">{VOCABULARY_BANK.length + 14}</strong>
+              <strong className="text-heritage-ochre">{VOCABULARY_BANK.length + 14}</strong>
             </span>
           </div>
         </div>
@@ -361,17 +361,17 @@ export const DashboardPage: React.FC = () => {
                 <Link
                   key={art.id}
                   to={`/artifacts/${art.slug}`}
-                  className="group block p-3 rounded-2xl bg-white/75 hover:bg-white border border-heritage-sand/70 hover:border-heritage-clay/40 transition-all"
+                  className="group block p-3 rounded-2xl bg-[#0A120E]/80 hover:bg-[#111D17] border border-[#1E3029] hover:border-heritage-ochre/40 transition-all"
                 >
                   <div className="flex items-center gap-3.5">
                     {/* Rank Badge */}
                     <div
                       className={`w-7 h-7 rounded-full text-xs font-bold flex items-center justify-center shrink-0 ${
                         index === 0
-                          ? 'bg-amber-400/25 text-amber-900 border border-amber-400'
+                          ? 'bg-heritage-ochre/20 text-heritage-ochre border border-heritage-ochre/50'
                           : index === 1
-                          ? 'bg-heritage-clay/15 text-heritage-clay border border-heritage-clay/30'
-                          : 'bg-heritage-cream text-heritage-woodMuted'
+                          ? 'bg-[#14221A] text-heritage-wood border border-heritage-ochre/20'
+                          : 'bg-[#0A120E] text-heritage-woodMuted border border-[#1E3029]'
                       }`}
                     >
                       #{index + 1}
@@ -381,17 +381,17 @@ export const DashboardPage: React.FC = () => {
                     <img
                       src={art.thumbnail}
                       alt={t(art.name.vi, art.name.en)}
-                      className="w-12 h-10 rounded-xl object-cover border border-heritage-sand shrink-0"
+                      className="w-12 h-10 rounded-xl object-cover border border-[#1E3029] shrink-0"
                     />
 
                     {/* Name & Progress Bar */}
                     <div className="flex-1 min-w-0 space-y-1.5">
                       <div className="flex items-center justify-between text-xs sm:text-sm">
-                        <span className="font-serif font-semibold text-heritage-wood group-hover:text-heritage-clay transition-colors truncate flex items-center space-x-1">
+                        <span className="font-serif font-semibold text-heritage-wood group-hover:text-heritage-ochre transition-colors truncate flex items-center space-x-1">
                           <span>{t(art.name.vi, art.name.en)}</span>
                           <ArrowUpRight className="w-3.5 h-3.5 opacity-60 group-hover:opacity-100" />
                         </span>
-                        <span className="font-semibold text-heritage-clay shrink-0 ml-2">
+                        <span className="font-semibold text-heritage-ochre shrink-0 ml-2">
                           {count} {t('lượt', 'views')}{' '}
                           <span className="text-[11px] text-heritage-woodMuted font-normal">
                             ({sharePct}%)
@@ -399,9 +399,9 @@ export const DashboardPage: React.FC = () => {
                         </span>
                       </div>
 
-                      <div className="w-full h-2.5 bg-heritage-cream rounded-full overflow-hidden">
+                      <div className="w-full h-2.5 bg-[#0A120E] rounded-full overflow-hidden">
                         <div
-                          className="h-full bg-gradient-to-r from-heritage-clay via-heritage-forest to-heritage-clayLight rounded-full transition-all duration-500"
+                          className="h-full bg-gradient-to-r from-heritage-ochre via-heritage-terracotta to-heritage-ochreLight rounded-full transition-all duration-500"
                           style={{ width: `${barWidth}%` }}
                         />
                       </div>
@@ -425,8 +425,8 @@ export const DashboardPage: React.FC = () => {
             </h2>
 
             <div className="grid grid-cols-2 gap-3">
-              <div className="p-4 rounded-2xl bg-heritage-cream/70 border border-heritage-sand space-y-1">
-                <div className="flex items-center space-x-1.5 text-xs font-semibold text-heritage-clay">
+              <div className="p-4 rounded-2xl bg-[#0D1813]/80 border border-[#1E3029] space-y-1">
+                <div className="flex items-center space-x-1.5 text-xs font-semibold text-heritage-ochre">
                   <Smartphone className="w-4 h-4" />
                   <span>{t('Điện thoại (Quét QR / AR)', 'Mobile (QR & WebAR)')}</span>
                 </div>
@@ -436,8 +436,8 @@ export const DashboardPage: React.FC = () => {
                 </p>
               </div>
 
-              <div className="p-4 rounded-2xl bg-heritage-cream/70 border border-heritage-sand space-y-1">
-                <div className="flex items-center space-x-1.5 text-xs font-semibold text-heritage-clay">
+              <div className="p-4 rounded-2xl bg-[#0D1813]/80 border border-[#1E3029] space-y-1">
+                <div className="flex items-center space-x-1.5 text-xs font-semibold text-heritage-ochre">
                   <Monitor className="w-4 h-4" />
                   <span>{t('Máy tính (Lớp học 3D)', 'Desktop (3D Classroom)')}</span>
                 </div>
@@ -452,11 +452,11 @@ export const DashboardPage: React.FC = () => {
           {/* Detailed Interaction Funnel */}
           <div className="soft-glass-card rounded-3xl p-6 space-y-4">
             <h2 className="text-base sm:text-lg font-serif font-semibold text-heritage-wood flex items-center space-x-2">
-              <Activity className="w-4 h-4 text-heritage-clay" />
+              <Activity className="w-4 h-4 text-heritage-ochre" />
               <span>{t('Chi Tiết Hoạt Động Trải Nghiệm', 'Experience Funnel Breakdown')}</span>
             </h2>
 
-            <div className="divide-y divide-heritage-sand/60 text-xs sm:text-sm">
+            <div className="divide-y divide-[#1E3029] text-xs sm:text-sm">
               {[
                 {
                   labelVi: 'Khám phá mô hình 3D hiện vật',
@@ -492,11 +492,11 @@ export const DashboardPage: React.FC = () => {
                 const Icon = row.icon;
                 return (
                   <div key={idx} className="py-2.5 flex items-center justify-between">
-                    <div className="flex items-center space-x-2.5 text-heritage-woodLight">
-                      <Icon className="w-4 h-4 text-heritage-clay shrink-0" />
+                    <div className="flex items-center space-x-2.5 text-heritage-wood/85">
+                      <Icon className="w-4 h-4 text-heritage-ochre shrink-0" />
                       <span>{t(row.labelVi, row.labelEn)}</span>
                     </div>
-                    <span className="px-2.5 py-0.5 rounded-full bg-heritage-cream border border-heritage-sand font-semibold text-heritage-wood">
+                    <span className="px-2.5 py-0.5 rounded-full bg-[#0D1813] border border-[#1E3029] font-semibold text-heritage-wood">
                       {row.count}
                     </span>
                   </div>
@@ -509,10 +509,10 @@ export const DashboardPage: React.FC = () => {
 
       {/* Live Visitor Journey Timeline */}
       <div className="soft-glass-card rounded-3xl p-6 space-y-5">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-heritage-sand/70 pb-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#1E3029] pb-4">
           <div>
             <h2 className="text-lg sm:text-xl font-serif font-semibold text-heritage-wood flex items-center space-x-2">
-              <Clock className="w-4 h-4 text-heritage-clay" />
+              <Clock className="w-4 h-4 text-heritage-ochre" />
               <span>
                 {t(
                   'Dòng Thời Gian Trải Nghiệm Di Sản',
@@ -541,8 +541,8 @@ export const DashboardPage: React.FC = () => {
                 onClick={() => setHistoryFilter(tab.id as any)}
                 className={`px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all ${
                   historyFilter === tab.id
-                    ? 'bg-heritage-clay text-white shadow-xs'
-                    : 'bg-heritage-cream/80 text-heritage-woodLight hover:bg-heritage-cream'
+                    ? 'bg-heritage-ochre text-slate-950 font-bold shadow-xs'
+                    : 'bg-[#0A120E] text-heritage-wood/70 border border-[#1E3029] hover:bg-[#14221A] hover:text-heritage-wood'
                 }`}
               >
                 {t(tab.vi, tab.en)}
@@ -551,14 +551,14 @@ export const DashboardPage: React.FC = () => {
           </div>
         </div>
 
-        <div className="divide-y divide-heritage-sand/60 max-h-[420px] overflow-y-auto pr-1">
+        <div className="divide-y divide-[#1E3029] max-h-[420px] overflow-y-auto pr-1">
           {filteredHistory.map((item) => {
             const badge = getEventBadge(item.type);
             const BadgeIcon = badge.icon;
             return (
               <div
                 key={item.id}
-                className="py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-2 hover:bg-heritage-cream/40 px-3 rounded-2xl transition-colors"
+                className="py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-2 hover:bg-[#14221A]/60 px-3 rounded-2xl transition-colors"
               >
                 <div className="flex items-start space-x-3">
                   <div
@@ -581,20 +581,20 @@ export const DashboardPage: React.FC = () => {
                 </div>
 
                 <div className="flex items-center space-x-3 text-[11px] text-heritage-woodMuted self-end sm:self-center shrink-0">
-                  <span className="inline-flex items-center space-x-1 px-2.5 py-0.5 rounded-full bg-white border border-heritage-sand">
+                  <span className="inline-flex items-center space-x-1 px-2.5 py-0.5 rounded-full bg-[#0D1813] border border-[#1E3029]">
                     {item.device === 'mobile' ? (
                       <>
-                        <Smartphone className="w-3 h-3 text-heritage-clay" />
+                        <Smartphone className="w-3 h-3 text-heritage-ochre" />
                         <span>Mobile</span>
                       </>
                     ) : (
                       <>
-                        <Monitor className="w-3 h-3 text-heritage-clay" />
+                        <Monitor className="w-3 h-3 text-heritage-ochre" />
                         <span>Desktop</span>
                       </>
                     )}
                   </span>
-                  <span className="font-medium text-heritage-clay min-w-[70px] text-right">
+                  <span className="font-medium text-heritage-ochre min-w-[70px] text-right">
                     {formatTime(item.timestamp)}
                   </span>
                 </div>

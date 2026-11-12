@@ -28,7 +28,7 @@ export const QRCodesPage: React.FC = () => {
       <div className="no-print space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-heritage-sand/80 pb-6">
           <div className="space-y-2">
-            <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-heritage-clay/10 text-heritage-clay text-xs font-semibold">
+            <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-heritage-ochre/15 border border-heritage-ochre/30 text-heritage-ochre text-xs font-semibold">
               <QrCode className="w-3.5 h-3.5" />
               <span>{t('Nhãn trưng bày bảo tàng số', 'Digital Museum Exhibit Labels')}</span>
             </div>
@@ -45,7 +45,7 @@ export const QRCodesPage: React.FC = () => {
 
           <button
             onClick={handlePrintAll}
-            className="self-start sm:self-auto inline-flex items-center space-x-2 px-5 py-3 rounded-xl bg-heritage-clay hover:bg-heritage-clayDark text-white text-xs sm:text-sm font-semibold shadow-heritage hover:shadow-lg transition-all min-h-[44px]"
+            className="self-start sm:self-auto inline-flex items-center space-x-2 px-5 py-3 rounded-xl bg-heritage-ochre hover:bg-heritage-ochreLight text-slate-950 text-xs sm:text-sm font-bold shadow-heritage hover:shadow-lg transition-all min-h-[44px]"
           >
             <Printer className="w-4 h-4" />
             <span>{t('In toàn bộ nhãn trưng bày', 'Print All Exhibit Labels')}</span>
@@ -95,14 +95,14 @@ export const QRCodesPage: React.FC = () => {
             </div>
           </div>
         ) : (
-          <div className="p-4 rounded-xl bg-emerald-50 border border-emerald-300 text-emerald-900 text-xs flex items-center space-x-2">
-            <Sparkles className="w-4 h-4 text-emerald-600 shrink-0" />
+          <div className="p-4 rounded-xl bg-[#0D1813] border border-heritage-ochre/40 text-heritage-wood text-xs flex items-center space-x-2">
+            <Sparkles className="w-4 h-4 text-heritage-ochre shrink-0" />
             <span>
               {t(
                 'Mã QR đang sử dụng tên miền trực tuyến chuẩn:',
                 'QR codes are using the live production domain:'
               )}{' '}
-              <code className="font-mono font-bold text-emerald-800 ml-1">{baseUrl}</code>.{' '}
+              <code className="font-mono font-bold text-heritage-ochre ml-1">{baseUrl}</code>.{' '}
               {t(
                 'Khách tham quan có thể quét từ mọi điện thoại có kết nối Internet!',
                 'Visitors can scan from any smartphone with Internet access!'
@@ -112,8 +112,8 @@ export const QRCodesPage: React.FC = () => {
         )}
 
         {/* Guidance for Exhibition Setup */}
-        <div className="bg-heritage-cream/60 rounded-xl border border-heritage-sand p-4 text-xs text-heritage-woodMuted flex items-start space-x-2">
-          <Info className="w-4 h-4 text-heritage-clay shrink-0 mt-0.5" />
+        <div className="bg-[#0D1813]/80 rounded-xl border border-[#1E3029] p-4 text-xs text-heritage-wood/80 flex items-start space-x-2">
+          <Info className="w-4 h-4 text-heritage-ochre shrink-0 mt-0.5" />
           <p className="leading-relaxed">
             <strong>{t('Mẹo in ấn:', 'Printing Tip:')}</strong>{' '}
             {t(

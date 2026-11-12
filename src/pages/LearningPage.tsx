@@ -112,8 +112,8 @@ export const LearningPage: React.FC = () => {
       <div className="forest-stage-dark text-white rounded-3xl p-6 sm:p-10 relative overflow-hidden shadow-xl">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 relative z-10">
           <div className="max-w-2xl space-y-3">
-            <div className="inline-flex items-center space-x-2 px-3.5 py-1 rounded-full bg-white/10 border border-white/15 text-emerald-200 text-xs font-semibold">
-              <Compass className="w-4 h-4 text-amber-300" />
+            <div className="inline-flex items-center space-x-2 px-3.5 py-1 rounded-full bg-heritage-ochre/15 border border-heritage-ochre/30 text-heritage-ochre text-xs font-semibold">
+              <Compass className="w-4 h-4 text-heritage-ochre" />
               <span>
                 {t('Hành trang Đại sứ Văn hóa Tây Giang', 'Cultural Ambassador Vocabulary Hub')}
               </span>
@@ -124,7 +124,7 @@ export const LearningPage: React.FC = () => {
                 'Cơ Tu Heritage Vocabulary & Lexicon Library'
               )}
             </h1>
-            <p className="text-xs sm:text-sm text-emerald-100/85 leading-relaxed">
+            <p className="text-xs sm:text-sm text-heritage-wood/85 leading-relaxed">
               {t(
                 `Khám phá trọn bộ ${fullVocabularyList.length} thuật ngữ tiếng Anh chuyên sâu về kiến trúc Nhà Gươl, nhạc cụ núi rừng, nghề đan lát, thổ cẩm, ẩm thực đại ngàn và mẫu câu thuyết minh du lịch.`,
                 `Explore all ${fullVocabularyList.length} curated English terms covering Gươl architecture, mountain instruments, rattan basketry, brocade weaving, forest cuisine, and tour guiding.`
@@ -134,27 +134,27 @@ export const LearningPage: React.FC = () => {
 
           <div className="flex flex-col sm:flex-row lg:flex-col gap-3 shrink-0">
             <div className="grid grid-cols-3 gap-2 text-xs">
-              <div className="px-3.5 py-2.5 rounded-2xl bg-white/10 border border-white/15 text-emerald-100 text-center">
-                <span className="block text-[10px] uppercase tracking-wider text-emerald-200/70">
+              <div className="px-3.5 py-2.5 rounded-2xl bg-[#0D1813]/80 border border-heritage-ochre/20 text-heritage-wood text-center">
+                <span className="block text-[10px] uppercase tracking-wider text-heritage-ochre/70">
                   {t('Thuật ngữ', 'Total Terms')}
                 </span>
-                <strong className="text-white text-base sm:text-lg font-bold">
+                <strong className="text-heritage-wood text-base sm:text-lg font-bold">
                   {fullVocabularyList.length}
                 </strong>
               </div>
-              <div className="px-3.5 py-2.5 rounded-2xl bg-white/10 border border-white/15 text-emerald-100 text-center">
-                <span className="block text-[10px] uppercase tracking-wider text-emerald-200/70">
+              <div className="px-3.5 py-2.5 rounded-2xl bg-[#0D1813]/80 border border-heritage-ochre/20 text-heritage-wood text-center">
+                <span className="block text-[10px] uppercase tracking-wider text-heritage-ochre/70">
                   {t('Chủ đề', 'Themes')}
                 </span>
-                <strong className="text-amber-300 text-base sm:text-lg font-bold">
+                <strong className="text-heritage-ochre text-base sm:text-lg font-bold">
                   {VOCABULARY_THEMES.length}
                 </strong>
               </div>
-              <div className="px-3.5 py-2.5 rounded-2xl bg-white/10 border border-white/15 text-emerald-100 text-center">
-                <span className="block text-[10px] uppercase tracking-wider text-emerald-200/70">
+              <div className="px-3.5 py-2.5 rounded-2xl bg-[#0D1813]/80 border border-heritage-ochre/20 text-heritage-wood text-center">
+                <span className="block text-[10px] uppercase tracking-wider text-heritage-ochre/70">
                   {t('Câu hỏi Quiz', 'Quiz Qs')}
                 </span>
-                <strong className="text-emerald-300 text-base sm:text-lg font-bold">
+                <strong className="text-heritage-ochre text-base sm:text-lg font-bold">
                   {QUIZ_QUESTIONS.length}
                 </strong>
               </div>
@@ -162,7 +162,7 @@ export const LearningPage: React.FC = () => {
 
             <Link
               to="/artifacts"
-              className="px-4 py-2.5 rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs font-bold flex items-center justify-center space-x-1.5 shadow-md transition-all"
+              className="px-4 py-2.5 rounded-2xl bg-heritage-ochre hover:bg-heritage-ochreLight text-slate-950 text-xs font-bold flex items-center justify-center space-x-1.5 shadow-md transition-all"
             >
               <Layers className="w-4 h-4" />
               <span>
@@ -178,7 +178,7 @@ export const LearningPage: React.FC = () => {
       </div>
 
       {/* Optional Fun Exercise / Quiz Opt-in Bar */}
-      <div className="rounded-2xl bg-gradient-to-r from-emerald-950/90 via-teal-900/90 to-emerald-950/90 border border-emerald-700/40 p-4 sm:p-5 text-white shadow-md">
+      <div className="rounded-2xl bg-gradient-to-r from-[#0A150E]/95 via-[#0E1E16]/95 to-[#0A150E]/95 border border-heritage-ochre/25 p-4 sm:p-5 text-white shadow-md">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="flex items-start sm:items-center gap-3.5">
             <div className="w-10 h-10 rounded-xl bg-amber-400/20 border border-amber-300/30 flex items-center justify-center shrink-0 text-amber-300">
@@ -191,7 +191,7 @@ export const LearningPage: React.FC = () => {
                   'Would you like to take the optional Fun Practice Quiz?'
                 )}
               </h2>
-              <p className="text-xs text-emerald-100/80 mt-0.5">
+              <p className="text-xs text-heritage-wood/80 mt-0.5">
                 {t(
                   'Hoàn toàn tự chọn! Ngoài ra, khi vào xem và nghe thuyết minh từng Hiện vật 3D, bạn còn có Mini-Game Ghép Cặp riêng của hiện vật đó.',
                   'Completely optional! Also, whenever you view or listen to any 3D Artifact, you can play its dedicated Matching Mini-Game.'
@@ -206,7 +206,7 @@ export const LearningPage: React.FC = () => {
               className={`px-4 py-2.5 rounded-xl text-xs font-bold flex items-center space-x-1.5 transition-all ${
                 showFunQuiz
                   ? 'bg-white/15 hover:bg-white/25 text-white border border-white/20'
-                  : 'bg-amber-400 hover:bg-amber-300 text-slate-950 shadow-sm'
+                  : 'bg-heritage-ochre hover:bg-heritage-ochreLight text-slate-950 shadow-sm'
               }`}
             >
               <Gamepad2 className="w-4 h-4" />
@@ -229,7 +229,7 @@ export const LearningPage: React.FC = () => {
               </span>
               <button
                 onClick={() => setShowFunQuiz(false)}
-                className="text-xs text-emerald-200 hover:text-white flex items-center gap-1"
+                className="text-xs text-heritage-ochre hover:text-heritage-wood flex items-center gap-1"
               >
                 <X className="w-3.5 h-3.5" />
                 <span>{t('Thu gọn', 'Close')}</span>
@@ -241,7 +241,7 @@ export const LearningPage: React.FC = () => {
       </div>
 
       {/* Search & Theme Filter Controls */}
-      <div className="bg-white/90 backdrop-blur-md rounded-3xl border border-heritage-sand p-5 sm:p-6 shadow-xs space-y-5">
+      <div className="bg-[#0A120E]/90 backdrop-blur-md rounded-3xl border border-[#23352C] p-5 sm:p-6 shadow-xs space-y-5">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           {/* Search Input */}
           <div className="relative flex-1">
@@ -254,7 +254,7 @@ export const LearningPage: React.FC = () => {
                 `Tìm kiếm trong ${fullVocabularyList.length} từ vựng (tiếng Anh, nghĩa tiếng Việt, câu ví dụ)...`,
                 `Search across ${fullVocabularyList.length} terms (English term, Vietnamese meaning, or example)...`
               )}
-              className="w-full pl-11 pr-10 py-3 rounded-2xl bg-heritage-cream/60 border border-heritage-sand text-xs sm:text-sm text-heritage-wood placeholder:text-heritage-woodMuted focus:outline-none focus:border-heritage-clay transition-colors"
+              className="w-full pl-11 pr-10 py-3 rounded-2xl bg-[#0D1813]/80 border border-[#23352C] text-xs sm:text-sm text-heritage-wood placeholder:text-heritage-woodMuted focus:outline-none focus:border-heritage-ochre transition-colors"
             />
             {searchQuery && (
               <button
@@ -270,9 +270,9 @@ export const LearningPage: React.FC = () => {
           <div className="flex flex-wrap items-center gap-2 shrink-0">
             <button
               onClick={() => setShowFlashcardDeck(!showFlashcardDeck)}
-              className="px-4 py-2.5 rounded-2xl border border-heritage-sand bg-heritage-cream/70 hover:bg-heritage-sand/50 text-heritage-wood text-xs font-semibold flex items-center space-x-1.5 transition-colors"
+              className="px-4 py-2.5 rounded-2xl border border-[#23352C] bg-[#0D1813]/80 hover:bg-[#14221A] text-heritage-wood text-xs font-semibold flex items-center space-x-1.5 transition-colors"
             >
-              <Layers className="w-4 h-4 text-heritage-clay" />
+              <Layers className="w-4 h-4 text-heritage-ochre" />
               <span>
                 {showFlashcardDeck
                   ? t('Thu gọn Thẻ lật 3D', 'Hide 3D Flashcard Deck')
@@ -293,8 +293,8 @@ export const LearningPage: React.FC = () => {
             onClick={() => setSelectedTheme('all')}
             className={`px-3.5 py-2 rounded-xl text-xs font-semibold transition-all flex items-center gap-1.5 ${
               selectedTheme === 'all'
-                ? 'bg-heritage-clay text-white shadow-xs'
-                : 'bg-heritage-cream text-heritage-woodLight hover:bg-heritage-sand/60'
+                ? 'bg-heritage-ochre text-slate-950 shadow-xs'
+                : 'bg-[#0A120E] text-heritage-woodMuted border border-[#1E3029] hover:bg-[#14221A] hover:text-heritage-wood'
             }`}
           >
             <span>{t('Tất cả chủ đề', 'All Themes')}</span>
@@ -312,8 +312,8 @@ export const LearningPage: React.FC = () => {
                 onClick={() => setSelectedTheme(theme.id)}
                 className={`px-3.5 py-2 rounded-xl text-xs font-semibold transition-all flex items-center gap-1.5 ${
                   isActive
-                    ? 'bg-heritage-clay text-white shadow-xs'
-                    : 'bg-heritage-cream text-heritage-woodLight hover:bg-heritage-sand/60'
+                    ? 'bg-heritage-ochre text-slate-950 shadow-xs'
+                    : 'bg-[#0A120E] text-heritage-woodMuted border border-[#1E3029] hover:bg-[#14221A] hover:text-heritage-wood'
                 }`}
               >
                 <span>{t(theme.name.vi, theme.name.en)}</span>
@@ -326,10 +326,10 @@ export const LearningPage: React.FC = () => {
 
       {/* Collapsible 3D Flashcard Deck Section */}
       {showFlashcardDeck && (
-        <div className="bg-white/80 backdrop-blur-md rounded-3xl border border-heritage-sand p-6 sm:p-8 shadow-xs space-y-4">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-heritage-sand/60 pb-4">
+        <div className="bg-[#0D1813]/90 backdrop-blur-md rounded-3xl border border-[#23352C] p-6 sm:p-8 shadow-xs space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[#23352C] pb-4">
             <div>
-              <span className="text-[11px] font-bold uppercase tracking-wider text-heritage-clay flex items-center gap-1.5">
+              <span className="text-[11px] font-bold uppercase tracking-wider text-heritage-ochre flex items-center gap-1.5">
                 <Sparkles className="w-3.5 h-3.5" />
                 {t('Luyện Tập Phản Xạ Thẻ Lật 3D', 'Interactive 3D Flashcard Deck')}
               </span>
@@ -351,7 +351,7 @@ export const LearningPage: React.FC = () => {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
           <div>
             <h2 className="text-lg sm:text-2xl font-serif font-semibold text-heritage-wood flex items-center gap-2">
-              <BookOpen className="w-5 h-5 text-heritage-clay" />
+              <BookOpen className="w-5 h-5 text-heritage-ochre" />
               <span>
                 {t(
                   `Danh mục Chi tiết (${filteredWords.length} thuật ngữ)`,
@@ -369,8 +369,8 @@ export const LearningPage: React.FC = () => {
         </div>
 
         {filteredWords.length === 0 ? (
-          <div className="bg-white/80 rounded-3xl border border-heritage-sand p-10 text-center space-y-3">
-            <BookOpen className="w-10 h-10 text-heritage-clay mx-auto" />
+          <div className="bg-[#0D1813]/80 rounded-3xl border border-[#23352C] p-10 text-center space-y-3">
+            <BookOpen className="w-10 h-10 text-heritage-ochre mx-auto" />
             <h3 className="text-base font-serif font-semibold text-heritage-wood">
               {t('Không tìm thấy từ vựng phù hợp', 'No matching vocabulary found')}
             </h3>
@@ -385,7 +385,7 @@ export const LearningPage: React.FC = () => {
                 setSelectedTheme('all');
                 setSearchQuery('');
               }}
-              className="px-4 py-2 rounded-xl bg-heritage-clay text-white text-xs font-semibold"
+              className="px-4 py-2 rounded-xl bg-heritage-ochre text-slate-950 text-xs font-semibold"
             >
               {t('Xem tất cả từ vựng', 'Show all vocabulary')}
             </button>
@@ -395,18 +395,18 @@ export const LearningPage: React.FC = () => {
             {filteredWords.map((word, index) => (
               <div
                 key={word.id}
-                className="bg-white/95 rounded-2xl border border-heritage-sand hover:border-heritage-clay/60 p-5 shadow-xs hover:shadow-heritage transition-all flex flex-col justify-between space-y-4"
+                className="bg-[#0D1813]/90 rounded-2xl border border-[#23352C] hover:border-heritage-ochre/50 p-5 shadow-xs hover:shadow-heritage transition-all flex flex-col justify-between space-y-4"
               >
                 <div className="space-y-3">
                   {/* Top row: Index + Theme Badge + Audio */}
                   <div className="flex items-center justify-between gap-2">
-                    <span className="px-2.5 py-1 rounded-full bg-heritage-cream border border-heritage-sand text-[10px] font-semibold text-heritage-clay truncate">
+                    <span className="px-2.5 py-1 rounded-full bg-[#14221A] border border-heritage-ochre/25 text-[10px] font-semibold text-heritage-ochre truncate">
                       #{index + 1} · {t(word.themeName.vi, word.themeName.en)}
                     </span>
 
                     <button
                       onClick={() => handleSpeakTerm(word)}
-                      className="px-2.5 py-1.5 rounded-xl bg-heritage-cream hover:bg-heritage-clay hover:text-white text-heritage-clay text-[11px] font-semibold transition-colors flex items-center gap-1 shrink-0"
+                      className="px-2.5 py-1.5 rounded-xl bg-[#14221A] hover:bg-heritage-ochre hover:text-slate-950 text-heritage-ochre text-[11px] font-semibold transition-colors flex items-center gap-1 shrink-0"
                       title={t('Nghe phát âm tiếng Anh', 'Listen to pronunciation')}
                     >
                       <Volume2 className="w-3.5 h-3.5" />
@@ -425,7 +425,7 @@ export const LearningPage: React.FC = () => {
                   </div>
 
                   {/* Vietnamese Meaning */}
-                  <div className="p-3 rounded-xl bg-heritage-cream/80 border border-heritage-sand/80">
+                  <div className="p-3 rounded-xl bg-[#15231B] border border-[#23352C]">
                     <span className="text-[10px] font-bold uppercase tracking-wider text-heritage-woodMuted block">
                       {t('Nghĩa tiếng Việt', 'Vietnamese Meaning')}
                     </span>
@@ -443,14 +443,14 @@ export const LearningPage: React.FC = () => {
 
                   {/* Example Sentence */}
                   {word.exampleSentence && (
-                    <div className="p-3 rounded-xl bg-heritage-sand/25 border border-heritage-sand/60 text-xs space-y-1">
+                    <div className="p-3 rounded-xl bg-[#0A120E] border border-[#23352C] text-xs space-y-1">
                       <div className="flex items-center justify-between">
-                        <span className="text-[10px] font-bold uppercase tracking-wider text-heritage-clay">
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-heritage-ochre">
                           {t('Câu ví dụ thuyết minh', 'Example in Context')}
                         </span>
                         <button
                           onClick={() => handleSpeakSentence(word.exampleSentence!.en)}
-                          className="text-[10px] font-semibold text-heritage-clay hover:underline flex items-center gap-0.5"
+                          className="text-[10px] font-semibold text-heritage-ochre hover:underline flex items-center gap-0.5"
                           title={t('Nghe đọc cả câu', 'Listen to full sentence')}
                         >
                           <Volume2 className="w-3 h-3" />
@@ -477,7 +477,7 @@ export const LearningPage: React.FC = () => {
                   </span>
                   <Link
                     to={`/artifacts/${word.relatedArtifactSlug}`}
-                    className="text-heritage-clay hover:underline font-semibold shrink-0 ml-2 flex items-center gap-0.5"
+                    className="text-heritage-ochre hover:underline font-semibold shrink-0 ml-2 flex items-center gap-0.5"
                   >
                     <span>{t('Xem 3D & Mini-Game', '3D & Mini-Game')}</span>
                     <ArrowRight className="w-3 h-3" />

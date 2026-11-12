@@ -9,8 +9,9 @@
   }
   
   body {
-    background: linear-gradient(180deg, #EAF3EE 0%, #F3F8F5 38%, #EDF5F0 75%, #E4F0EA 100%);
-    color: #162A22;
+    background: radial-gradient(circle at 50% 0%, #14231B 0%, #0C1511 42%, #060A08 100%);
+    background-attachment: fixed;
+    color: #F5EFE6;
     @apply font-sans;
     font-size: 15.5px;
     line-height: 1.65;
@@ -22,7 +23,7 @@
 
   h1, h2, h3, h4, .font-serif {
     font-variant-numeric: lining-nums;
-    letter-spacing: -0.005em;
+    letter-spacing: -0.01em;
   }
 
   h1, h2 {
@@ -34,53 +35,65 @@
   }
 }
 
-/* Hiệu ứng kính sương núi rừng (Misty Forest Glassmorphism) */
+/* Không gian Trưng bày Bảo tàng Số (Digital Museum Glassmorphism) */
 .soft-glass {
-  background: rgba(255, 255, 255, 0.76);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-  border: 1px solid rgba(179, 206, 196, 0.5);
+  background: rgba(14, 23, 18, 0.82);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(212, 163, 89, 0.16);
 }
 
 .soft-glass-card {
-  background: rgba(255, 255, 255, 0.82);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border: 1px solid rgba(198, 222, 212, 0.85);
-  box-shadow: 0 12px 32px -8px rgba(22, 42, 34, 0.06), 0 4px 12px -2px rgba(35, 122, 99, 0.04);
+  background: linear-gradient(145deg, rgba(20, 32, 25, 0.88) 0%, rgba(12, 20, 16, 0.94) 100%);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(212, 163, 89, 0.18);
+  box-shadow: 0 16px 36px -10px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.05);
   transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .soft-glass-card:hover {
-  background: rgba(255, 255, 255, 0.95);
-  border-color: rgba(35, 122, 99, 0.45);
-  box-shadow: 0 22px 44px -12px rgba(22, 42, 34, 0.12), 0 0 24px -4px rgba(82, 183, 154, 0.18);
+  background: linear-gradient(145deg, rgba(24, 38, 30, 0.95) 0%, rgba(15, 25, 20, 0.98) 100%);
+  border-color: rgba(212, 163, 89, 0.42);
+  box-shadow: 0 24px 48px -12px rgba(0, 0, 0, 0.75), 0 0 28px -4px rgba(212, 163, 89, 0.16);
 }
 
-/* Sân khấu trưng bày 3D rừng sương đậm chất chiều sâu */
+/* Sân khấu trưng bày 3D rừng sương đậm chất chiều sâu và ánh lửa bản làng */
 .forest-stage-dark {
-  background: radial-gradient(circle at 50% 35%, #244B3E 0%, #163329 58%, #0E221B 100%);
-  border: 1px solid rgba(82, 183, 154, 0.32);
-  box-shadow: 0 25px 50px -12px rgba(14, 34, 27, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  background: radial-gradient(circle at 50% 30%, #1A3528 0%, #102219 55%, #07100B 100%);
+  border: 1px solid rgba(212, 163, 89, 0.28);
+  box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(245, 239, 230, 0.1);
 }
 
-/* Đường diềm thổ cẩm Cơ Tu tinh tế (Geometric Brocade Accent) */
+/* Đường diềm dệt thổ cẩm Cơ Tu Zơ-râm (Cơ Tu Traditional Brocade Weave Divider) */
 .cotu-pattern-divider {
-  height: 10px;
+  height: 14px;
   width: 100%;
-  background-image: radial-gradient(#237A63 1.2px, transparent 1.2px), radial-gradient(#D4A359 1.2px, transparent 1.2px);
-  background-size: 16px 10px;
-  background-position: 0 0, 8px 5px;
-  opacity: 0.35;
+  background: repeating-linear-gradient(
+    45deg,
+    #C25336 0px,
+    #C25336 6px,
+    #D49B45 6px,
+    #D49B45 12px,
+    #0C1511 12px,
+    #0C1511 16px,
+    #38A17E 16px,
+    #38A17E 20px,
+    #F5EFE6 20px,
+    #F5EFE6 22px
+  );
+  opacity: 0.55;
+  border-radius: 9999px;
+  box-shadow: 0 2px 10px rgba(194, 83, 54, 0.2);
 }
 
 /* 3D Model Viewer Element Styling */
 model-viewer {
   width: 100%;
   height: 100%;
-  background: radial-gradient(circle at 50% 42%, #265344 0%, #17362C 62%, #0F241D 100%);
+  background: radial-gradient(circle at 50% 42%, #183327 0%, #0F2119 60%, #060D0A 100%);
   --poster-color: transparent;
-  --progress-bar-color: #52B79A;
+  --progress-bar-color: #D49B45;
   --progress-bar-height: 4px;
 }
 
@@ -94,14 +107,15 @@ model-viewer.hero-viewer {
   height: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: #EAF3EE;
+  background: #0A120E;
 }
 ::-webkit-scrollbar-thumb {
-  background: #A7C7BC;
+  background: #25392F;
   border-radius: 9999px;
+  border: 2px solid #0A120E;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #237A63;
+  background: #D49B45;
 }
 
 .no-scrollbar::-webkit-scrollbar {

@@ -8,9 +8,7 @@ import {
   GraduationCap,
   Layers,
   Sparkles,
-  Globe,
   BarChart3,
-  Music,
   Volume2,
   VolumeX,
   SkipForward
@@ -37,40 +35,49 @@ export const Header: React.FC = () => {
     setMobileMenuOpen(false);
   }, [location.pathname]);
 
-  const navLinks = [
-    { to: '/', label: 'Trang chủ', en: 'Home', icon: Compass },
-    { to: '/artifacts', label: 'Hiện vật', en: 'Artifacts', icon: Layers },
-    { to: '/learn', label: 'Học tập', en: 'Learning Hub', icon: GraduationCap },
-    { to: '/qr-codes', label: 'Mã QR', en: 'QR Labels', icon: QrCode },
+  const primaryNavLinks = [
+    { to: '/', label: 'Khám phá', en: 'Explore', icon: Compass },
+    { to: '/artifacts', label: 'Hiện vật 3D', en: '3D Collection', icon: Layers },
+    { to: '/learn', label: 'Học tập & Quiz', en: 'Learning Hub', icon: GraduationCap }
+  ];
+
+  const secondaryNavLinks = [
+    { to: '/qr-codes', label: 'Nhãn QR', en: 'QR Labels', icon: QrCode },
     { to: '/dashboard', label: 'Thống kê', en: 'Analytics', icon: BarChart3 }
   ];
 
   return (
-    <header className="sticky top-0 z-40 bg-white/75 backdrop-blur-xl border-b border-heritage-sand/70 transition-all shadow-[0_4px_24px_-6px_rgba(35,122,99,0.06)]">
+    <header className="sticky top-0 z-40 bg-[#0B130F]/90 backdrop-blur-xl border-b border-[#25362E] transition-all shadow-[0_8px_30px_rgba(0,0,0,0.55)]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 sm:h-20 gap-3">
-          {/* Logo & Brand */}
+        <div className="flex items-center justify-between h-16 sm:h-20 gap-4">
+          
+          {/* Logo & Brand: Dignified, Museum-Grade Heritage Mark */}
           <Link
             to="/"
-            className="flex items-center space-x-3.5 group py-2 focus:outline-none rounded-2xl shrink-0"
+            className="flex items-center space-x-3 group py-2 focus:outline-none shrink-0"
           >
-            <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-gradient-to-br from-heritage-clay to-heritage-forest flex items-center justify-center text-white shadow-md group-hover:shadow-glow group-hover:scale-105 transition-all duration-300">
-              <Sparkles className="w-5 h-5 text-heritage-ivory" />
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#1E3B2E] via-[#142920] to-[#0A1611] border border-heritage-ochre/30 flex items-center justify-center text-heritage-ochre shadow-lg group-hover:border-heritage-ochre/60 group-hover:shadow-glow transition-all duration-300">
+              <Sparkles className="w-5 h-5 text-heritage-ochre animate-pulse-soft" />
             </div>
             <div className="flex flex-col">
-              <span className="text-base sm:text-lg font-semibold tracking-tight text-heritage-wood group-hover:text-heritage-clay transition-colors font-serif">
-                Cơ Tu Heritage AR
-              </span>
-              <span className="text-[11px] sm:text-xs text-heritage-woodMuted font-medium">
-                {t('Không gian Di sản Tây Giang · Song ngữ', 'Tây Giang Heritage · Bilingual WebAR')}
+              <div className="flex items-center space-x-2">
+                <span className="text-base sm:text-lg font-serif font-semibold tracking-tight text-heritage-wood group-hover:text-heritage-ochre transition-colors">
+                  Cơ Tu Heritage
+                </span>
+                <span className="text-[10px] font-mono uppercase tracking-wider px-1.5 py-0.5 rounded bg-heritage-ochre/15 border border-heritage-ochre/30 text-heritage-ochre hidden sm:inline-block">
+                  AR
+                </span>
+              </div>
+              <span className="text-[11px] text-heritage-woodMuted font-medium tracking-wide">
+                {t('Bảo tàng số Tây Giang · WebAR', 'Tây Giang Digital Museum · WebAR')}
               </span>
             </div>
           </Link>
 
-          {/* Desktop Navigation + Language Toggle */}
-          <div className="hidden md:flex items-center space-x-2.5">
-            <nav className="flex items-center space-x-1 bg-heritage-cream/70 p-1.5 rounded-full border border-heritage-sand/80">
-              {navLinks.map((link) => {
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex items-center space-x-4 lg:space-x-6">
+            <nav className="flex items-center space-x-1 bg-[#101A15]/80 p-1 rounded-xl border border-[#23352C]">
+              {primaryNavLinks.map((link) => {
                 const Icon = link.icon;
                 const isActive =
                   link.to === '/'
@@ -80,123 +87,150 @@ export const Header: React.FC = () => {
                   <Link
                     key={link.to}
                     to={link.to}
-                    className={`relative flex items-center space-x-1.5 px-3.5 lg:px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 whitespace-nowrap ${
+                    className={`relative flex items-center space-x-2 px-3.5 py-2 rounded-lg text-sm font-medium transition-all duration-200 whitespace-nowrap ${
                       isActive
-                        ? 'bg-gradient-to-r from-heritage-clay to-heritage-forest text-white shadow-sm'
-                        : 'text-heritage-woodLight hover:bg-white/80 hover:text-heritage-clay'
+                        ? 'bg-heritage-forest text-heritage-wood shadow-sm border border-heritage-ochre/30 text-heritage-ochre'
+                        : 'text-heritage-woodLight hover:text-heritage-wood hover:bg-white/5'
                     }`}
                   >
-                    <Icon className={`w-4 h-4 ${isActive ? 'text-white' : 'text-heritage-clay'}`} />
+                    <Icon className={`w-4 h-4 ${isActive ? 'text-heritage-ochre' : 'text-heritage-clayLight'}`} />
+                    <span className={isActive ? 'font-semibold text-heritage-wood' : ''}>
+                      {t(link.label, link.en)}
+                    </span>
+                  </Link>
+                );
+              })}
+
+              {/* Secondary links dropdown/compact */}
+              {secondaryNavLinks.map((link) => {
+                const Icon = link.icon;
+                const isActive = location.pathname.startsWith(link.to);
+                return (
+                  <Link
+                    key={link.to}
+                    to={link.to}
+                    className={`relative flex items-center space-x-1.5 px-3 py-2 rounded-lg text-xs font-medium transition-all duration-200 whitespace-nowrap ${
+                      isActive
+                        ? 'bg-heritage-forest text-heritage-ochre border border-heritage-ochre/30'
+                        : 'text-heritage-woodMuted hover:text-heritage-woodLight hover:bg-white/5'
+                    }`}
+                    title={t(link.label, link.en)}
+                  >
+                    <Icon className="w-3.5 h-3.5" />
                     <span>{t(link.label, link.en)}</span>
                   </Link>
                 );
               })}
             </nav>
 
-            {/* Soothing Studio Background Music Toggle + Track Switcher */}
-            <div
-              data-music-control="true"
-              className="inline-flex items-center bg-heritage-cream/80 p-1 rounded-full border border-heritage-sand/90 shadow-xs"
-            >
-              <button
-                onClick={() => forestSoundService.toggle()}
-                className={`inline-flex items-center space-x-1.5 px-3 py-1 rounded-full text-xs font-semibold transition-all ${
-                  forestSoundOn
-                    ? 'bg-emerald-700 text-white shadow-xs'
-                    : 'text-heritage-woodLight hover:text-heritage-clay'
-                }`}
-                title={t(
-                  `Đang chọn: ${BG_MUSIC_TRACKS[trackIdx]?.titleVi} (Bấm để Bật/Tắt)`,
-                  `Current: ${BG_MUSIC_TRACKS[trackIdx]?.titleEn} (Click to Toggle)`
-                )}
+            {/* Right Group: Discreet Ambient Sound Bar & Minimalist Language Switcher */}
+            <div className="flex items-center space-x-3">
+              
+              {/* Discreet Ambient Forest & Flute Audio Controller */}
+              <div
+                data-music-control="true"
+                className="inline-flex items-center bg-[#101A15]/90 px-2 py-1.5 rounded-xl border border-[#23352C] shadow-sm"
               >
-                <Music
-                  className={`w-3.5 h-3.5 ${
-                    forestSoundOn ? 'text-amber-300 animate-pulse' : 'text-heritage-clay'
+                <button
+                  onClick={() => forestSoundService.toggle()}
+                  className={`inline-flex items-center space-x-2 px-2.5 py-1 rounded-lg text-xs font-medium transition-all ${
+                    forestSoundOn
+                      ? 'text-heritage-ochre hover:text-heritage-ochreLight'
+                      : 'text-heritage-woodMuted hover:text-heritage-woodLight opacity-70'
                   }`}
-                />
-                <span className="hidden xl:inline">
-                  {forestSoundOn
-                    ? t('Nhạc nền: Bật', 'Music: ON')
-                    : t('Nhạc nền: Tắt', 'Music: OFF')}
-                </span>
-                {forestSoundOn ? (
-                  <Volume2 className="w-3.5 h-3.5 text-emerald-200" />
-                ) : (
-                  <VolumeX className="w-3.5 h-3.5 opacity-60" />
+                  title={t(
+                    `Âm thanh đại ngàn: ${BG_MUSIC_TRACKS[trackIdx]?.titleVi} (Bấm để Bật/Tắt)`,
+                    `Highland Ambient: ${BG_MUSIC_TRACKS[trackIdx]?.titleEn} (Click to Toggle)`
+                  )}
+                >
+                  {forestSoundOn ? (
+                    <div className="flex items-end space-x-0.5 h-3.5">
+                      <span className="w-0.5 h-2 bg-heritage-ochre rounded-full animate-pulse" />
+                      <span className="w-0.5 h-3.5 bg-heritage-ochre rounded-full animate-pulse delay-75" />
+                      <span className="w-0.5 h-1.5 bg-heritage-ochre rounded-full animate-pulse delay-150" />
+                    </div>
+                  ) : (
+                    <VolumeX className="w-3.5 h-3.5" />
+                  )}
+                  <span className="text-[11px] font-mono tracking-tight hidden lg:inline">
+                    {forestSoundOn ? t('Âm thanh', 'Ambient') : t('Tắt âm', 'Mute')}
+                  </span>
+                </button>
+
+                {forestSoundOn && (
+                  <button
+                    onClick={() => forestSoundService.nextTrack()}
+                    className="p-1 rounded text-heritage-woodMuted hover:text-heritage-ochre transition-colors ml-0.5"
+                    title={t('Đổi giai điệu khác', 'Next ambient track')}
+                  >
+                    <SkipForward className="w-3 h-3" />
+                  </button>
                 )}
-              </button>
+              </div>
 
-              <button
-                onClick={() => forestSoundService.nextTrack()}
-                className="p-1.5 rounded-full text-heritage-woodLight hover:text-heritage-clay hover:bg-white/70 transition-colors ml-0.5"
-                title={t('Đổi bản nhạc nền khác', 'Switch background track')}
+              {/* Minimalist Language Switcher VI | EN */}
+              <div
+                className="inline-flex items-center bg-[#101A15]/90 p-1 rounded-xl border border-[#23352C]"
+                role="group"
+                aria-label={t('Chuyển đổi ngôn ngữ', 'Switch language')}
               >
-                <SkipForward className="w-3.5 h-3.5" />
-              </button>
-            </div>
+                <button
+                  onClick={() => setLang('vi')}
+                  className={`px-2 py-1 rounded-lg text-xs font-semibold transition-all ${
+                    lang === 'vi'
+                      ? 'bg-heritage-ochre text-slate-950 font-bold shadow-xs'
+                      : 'text-heritage-woodMuted hover:text-heritage-wood'
+                  }`}
+                  title="Tiếng Việt"
+                >
+                  VI
+                </button>
+                <span className="text-heritage-sandDark text-xs px-0.5">/</span>
+                <button
+                  onClick={() => setLang('en')}
+                  className={`px-2 py-1 rounded-lg text-xs font-semibold transition-all ${
+                    lang === 'en'
+                      ? 'bg-heritage-ochre text-slate-950 font-bold shadow-xs'
+                      : 'text-heritage-woodMuted hover:text-heritage-wood'
+                  }`}
+                  title="English"
+                >
+                  EN
+                </button>
+              </div>
 
-            {/* Global Language Switcher Pill */}
-            <div
-              className="inline-flex items-center bg-heritage-cream/80 p-1 rounded-full border border-heritage-sand/90 shadow-xs"
-              role="group"
-              aria-label={t('Chuyển đổi ngôn ngữ', 'Switch language')}
-            >
-              <Globe className="w-3.5 h-3.5 text-heritage-clay ml-2 mr-1 hidden lg:block" />
-              <button
-                onClick={() => setLang('vi')}
-                className={`px-2.5 py-1 rounded-full text-xs font-semibold transition-all ${
-                  lang === 'vi'
-                    ? 'bg-heritage-clay text-white shadow-xs'
-                    : 'text-heritage-woodLight hover:text-heritage-clay'
-                }`}
-                title="Tiếng Việt"
-              >
-                VI
-              </button>
-              <button
-                onClick={() => setLang('en')}
-                className={`px-2.5 py-1 rounded-full text-xs font-semibold transition-all ${
-                  lang === 'en'
-                    ? 'bg-heritage-clay text-white shadow-xs'
-                    : 'text-heritage-woodLight hover:text-heritage-clay'
-                }`}
-                title="English"
-              >
-                EN
-              </button>
             </div>
           </div>
 
-          {/* Mobile controls: Music Toggle + Language Switcher + Hamburger */}
+          {/* Mobile controls: Compact Audio + Language Switcher + Hamburger */}
           <div className="flex md:hidden items-center space-x-2">
             <button
               data-music-control="true"
               onClick={() => forestSoundService.toggle()}
-              className={`p-2 rounded-full border transition-all ${
+              className={`p-2 rounded-xl border transition-all ${
                 forestSoundOn
-                  ? 'bg-emerald-700 text-white border-emerald-600'
-                  : 'bg-heritage-cream/80 text-heritage-clay border-heritage-sand'
+                  ? 'bg-heritage-forest text-heritage-ochre border-heritage-ochre/40'
+                  : 'bg-[#101A15] text-heritage-woodMuted border-[#23352C]'
               }`}
-              title={t('Bật/tắt nhạc nền', 'Toggle background music')}
+              title={t('Bật/tắt âm thanh đại ngàn', 'Toggle ambient audio')}
             >
-              <Music className="w-4 h-4" />
+              {forestSoundOn ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
             </button>
 
-            {/* Compact Mobile Language Toggle */}
-            <div className="inline-flex items-center bg-heritage-cream/80 p-0.5 rounded-full border border-heritage-sand">
+            {/* Mobile Language Toggle */}
+            <div className="inline-flex items-center bg-[#101A15] p-1 rounded-xl border border-[#23352C]">
               <button
                 onClick={() => setLang('vi')}
-                className={`px-2.5 py-1 rounded-full text-xs font-semibold transition-all ${
-                  lang === 'vi' ? 'bg-heritage-clay text-white' : 'text-heritage-woodLight'
+                className={`px-2 py-1 rounded-lg text-xs font-bold transition-all ${
+                  lang === 'vi' ? 'bg-heritage-ochre text-slate-950' : 'text-heritage-woodMuted'
                 }`}
               >
                 VI
               </button>
               <button
                 onClick={() => setLang('en')}
-                className={`px-2.5 py-1 rounded-full text-xs font-semibold transition-all ${
-                  lang === 'en' ? 'bg-heritage-clay text-white' : 'text-heritage-woodLight'
+                className={`px-2 py-1 rounded-lg text-xs font-bold transition-all ${
+                  lang === 'en' ? 'bg-heritage-ochre text-slate-950' : 'text-heritage-woodMuted'
                 }`}
               >
                 EN
@@ -205,10 +239,10 @@ export const Header: React.FC = () => {
 
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2.5 rounded-2xl text-heritage-wood bg-heritage-cream/70 hover:bg-heritage-cream border border-heritage-sand/80 min-w-[44px] min-h-[44px] flex items-center justify-center transition-colors"
+              className="p-2 rounded-xl text-heritage-wood bg-[#101A15] hover:bg-[#16241D] border border-[#23352C] min-w-[40px] min-h-[40px] flex items-center justify-center transition-colors"
               aria-label={mobileMenuOpen ? t('Đóng menu', 'Close menu') : t('Mở menu', 'Open menu')}
             >
-              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              {mobileMenuOpen ? <X className="w-5 h-5 text-heritage-ochre" /> : <Menu className="w-5 h-5" />}
             </button>
           </div>
         </div>
@@ -216,8 +250,8 @@ export const Header: React.FC = () => {
 
       {/* Mobile dropdown menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden border-t border-heritage-sand/60 bg-white/95 backdrop-blur-xl px-4 pt-3 pb-6 space-y-1.5 shadow-xl">
-          {navLinks.map((link) => {
+        <div className="md:hidden border-t border-[#23352C] bg-[#0A120E]/98 backdrop-blur-2xl px-4 pt-3 pb-6 space-y-2 shadow-2xl">
+          {[...primaryNavLinks, ...secondaryNavLinks].map((link) => {
             const Icon = link.icon;
             const isActive =
               link.to === '/'
@@ -227,24 +261,23 @@ export const Header: React.FC = () => {
               <Link
                 key={link.to}
                 to={link.to}
-                className={`flex items-center justify-between px-4 py-3 rounded-2xl text-base font-medium min-h-[48px] transition-all ${
+                className={`flex items-center justify-between px-4 py-3 rounded-xl text-sm font-medium transition-all ${
                   isActive
-                    ? 'bg-gradient-to-r from-heritage-clay/15 to-heritage-cream text-heritage-clay font-semibold border border-heritage-clay/25'
-                    : 'text-heritage-woodLight hover:bg-heritage-cream/60'
+                    ? 'bg-heritage-forest text-heritage-wood border border-heritage-ochre/30 shadow-md'
+                    : 'text-heritage-woodLight hover:bg-[#142019]'
                 }`}
               >
                 <div className="flex items-center space-x-3">
                   <div
-                    className={`w-9 h-9 rounded-xl flex items-center justify-center ${
-                      isActive ? 'bg-heritage-clay text-white' : 'bg-heritage-cream text-heritage-clay'
+                    className={`w-8 h-8 rounded-lg flex items-center justify-center ${
+                      isActive ? 'bg-heritage-ochre text-slate-950' : 'bg-[#142019] text-heritage-clayLight'
                     }`}
                   >
                     <Icon className="w-4 h-4" />
                   </div>
                   <div>
-                    <div className="text-sm font-semibold">{t(link.label, link.en)}</div>
-                    <div className="text-xs text-heritage-woodMuted font-normal">
-                      {t(link.en, link.label)}
+                    <div className={`text-sm ${isActive ? 'font-semibold text-heritage-wood' : 'font-medium'}`}>
+                      {t(link.label, link.en)}
                     </div>
                   </div>
                 </div>

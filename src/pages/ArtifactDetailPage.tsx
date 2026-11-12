@@ -73,7 +73,7 @@ export const ArtifactDetailPage: React.FC = () => {
   if (!artifact) {
     return (
       <div className="max-w-2xl mx-auto px-4 py-20 text-center space-y-6">
-        <div className="w-16 h-16 mx-auto rounded-full bg-amber-100 border border-amber-300 text-amber-800 flex items-center justify-center">
+        <div className="w-16 h-16 mx-auto rounded-full bg-[#0D1813] border border-amber-600/30 text-amber-400 flex items-center justify-center">
           <ShieldAlert className="w-8 h-8" />
         </div>
         <div className="space-y-2">
@@ -82,7 +82,7 @@ export const ArtifactDetailPage: React.FC = () => {
           </h2>
           <p className="text-sm text-heritage-woodMuted">
             {t('Mã định danh', 'Artifact slug')}{' '}
-            <code className="bg-heritage-cream px-2 py-1 rounded font-mono text-heritage-clay">
+            <code className="bg-[#0D1813] border border-[#1E3029] px-2 py-1 rounded font-mono text-heritage-ochre">
               {slug}
             </code>{' '}
             {t('không tồn tại trong hệ thống.', 'does not exist in the system.')}
@@ -91,7 +91,7 @@ export const ArtifactDetailPage: React.FC = () => {
         <div>
           <Link
             to="/artifacts"
-            className="inline-flex items-center space-x-2 px-5 py-2.5 rounded-xl bg-heritage-clay text-white text-sm font-semibold hover:bg-heritage-clayDark transition-colors shadow"
+            className="inline-flex items-center space-x-2 px-5 py-2.5 rounded-xl bg-heritage-ochre text-slate-950 text-sm font-bold hover:bg-heritage-ochreLight transition-colors shadow"
           >
             <ArrowLeft className="w-4 h-4" />
             <span>{t('Quay lại danh mục hiện vật', 'Back to Artifacts')}</span>
@@ -122,33 +122,33 @@ export const ArtifactDetailPage: React.FC = () => {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10 space-y-8">
       {/* 1. BREADCRUMB */}
-      <nav className="flex items-center space-x-1.5 text-xs text-heritage-woodMuted overflow-x-auto whitespace-nowrap pb-1">
-        <Link to="/" className="hover:text-heritage-wood transition-colors">
+      <nav className="flex items-center space-x-1.5 text-xs font-mono text-heritage-woodMuted overflow-x-auto whitespace-nowrap pb-1">
+        <Link to="/" className="hover:text-heritage-ochre transition-colors">
           {t('Trang chủ', 'Home')}
         </Link>
-        <ChevronRight className="w-3.5 h-3.5" />
-        <Link to="/artifacts" className="hover:text-heritage-wood transition-colors">
+        <ChevronRight className="w-3.5 h-3.5 text-heritage-sandDark" />
+        <Link to="/artifacts" className="hover:text-heritage-ochre transition-colors">
           {t('Hiện vật', 'Artifacts')}
         </Link>
-        <ChevronRight className="w-3.5 h-3.5" />
-        <span className="text-heritage-clay font-medium truncate max-w-[200px] sm:max-w-none">
+        <ChevronRight className="w-3.5 h-3.5 text-heritage-sandDark" />
+        <span className="text-heritage-ochre font-medium truncate max-w-[200px] sm:max-w-none">
           {t(artifact.name.vi, artifact.name.en)}
         </span>
       </nav>
 
       {/* 2. HEADER TITLE & LANGUAGE TOGGLE */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-heritage-sand/80 pb-6">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-[#23352C] pb-6">
         <div className="space-y-1.5">
           <div className="flex items-center space-x-2">
-            <span className="px-3 py-0.5 rounded-full text-xs font-semibold bg-heritage-clay/10 text-heritage-clay border border-heritage-clay/20">
+            <span className="px-3 py-0.5 rounded-lg text-xs font-mono font-semibold bg-[#14221A] text-heritage-ochre border border-heritage-ochre/30">
               {t(artifact.categoryName.vi, artifact.categoryName.en)}
             </span>
           </div>
 
-          <h1 className="text-2xl sm:text-4xl font-serif font-semibold text-heritage-wood">
+          <h1 className="text-2xl sm:text-4xl font-serif font-bold text-heritage-wood">
             {t(artifact.name.vi, artifact.name.en)}
           </h1>
-          <p className="text-base sm:text-lg text-heritage-woodMuted italic font-serif">
+          <p className="text-base sm:text-lg text-heritage-ochre/90 italic font-serif">
             {t(artifact.name.en, artifact.name.vi)}
           </p>
         </div>
@@ -194,11 +194,11 @@ export const ArtifactDetailPage: React.FC = () => {
             />
 
             {/* Compact Heritage Specs Strip */}
-            <div className="soft-glass-card rounded-2xl p-4 sm:p-5 grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
+            <div className="soft-glass-card rounded-xl p-4 sm:p-5 grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs border border-[#23352C]">
               {artifact.dimensions && (
                 <div className="space-y-1">
                   <span className="text-heritage-woodMuted flex items-center space-x-1.5 font-medium">
-                    <Ruler className="w-3.5 h-3.5 text-heritage-clay" />
+                    <Ruler className="w-3.5 h-3.5 text-heritage-ochre" />
                     <span>{t('Quy mô / Kích thước', 'Dimensions')}</span>
                   </span>
                   <div className="font-semibold text-heritage-wood">{artifact.dimensions}</div>
@@ -207,7 +207,7 @@ export const ArtifactDetailPage: React.FC = () => {
               {artifact.materials && (
                 <div className="space-y-1">
                   <span className="text-heritage-woodMuted flex items-center space-x-1.5 font-medium">
-                    <Hammer className="w-3.5 h-3.5 text-heritage-clay" />
+                    <Hammer className="w-3.5 h-3.5 text-heritage-ochre" />
                     <span>{t('Chất liệu rừng già', 'Natural Materials')}</span>
                   </span>
                   <div className="font-semibold text-heritage-wood">
@@ -218,7 +218,7 @@ export const ArtifactDetailPage: React.FC = () => {
               {artifact.origin && (
                 <div className="space-y-1">
                   <span className="text-heritage-woodMuted flex items-center space-x-1.5 font-medium">
-                    <MapPin className="w-3.5 h-3.5 text-heritage-clay" />
+                    <MapPin className="w-3.5 h-3.5 text-heritage-ochre" />
                     <span>{t('Không gian văn hóa', 'Cultural Origin')}</span>
                   </span>
                   <div className="font-semibold text-heritage-wood">
@@ -233,8 +233,8 @@ export const ArtifactDetailPage: React.FC = () => {
         {/* RIGHT COLUMN: STORYTELLING & VOCABULARY */}
         <div className="lg:col-span-5 space-y-6">
           {/* Story Overview */}
-          <div className="soft-glass-card rounded-3xl p-5 sm:p-6 space-y-3">
-            <h3 className="font-serif font-semibold text-base sm:text-lg text-heritage-wood flex items-center space-x-2">
+          <div className="soft-glass-card rounded-2xl p-5 sm:p-6 space-y-3 border border-[#23352C]">
+            <h3 className="font-serif font-bold text-base sm:text-lg text-heritage-wood flex items-center space-x-2">
               <Sparkles className="w-4 h-4 text-heritage-ochre" />
               <span>{t('Câu Chuyện Hiện Vật', 'The Artifact’s Story')}</span>
             </h3>
@@ -245,16 +245,16 @@ export const ArtifactDetailPage: React.FC = () => {
 
           {/* Interactive Vocabulary Chips in Dark Forest Theme */}
           {artifact.vocabulary && artifact.vocabulary.length > 0 && (
-            <div className="forest-stage-dark rounded-3xl p-5 sm:p-6 space-y-3.5 text-white">
+            <div className="forest-stage-dark rounded-2xl p-5 sm:p-6 space-y-3.5 text-heritage-wood border border-[#23352C]">
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-2">
-                  <BookOpen className="w-4 h-4 text-amber-300" />
-                  <h3 className="font-serif font-semibold text-sm sm:text-base text-white">
+                  <BookOpen className="w-4 h-4 text-heritage-ochre" />
+                  <h3 className="font-serif font-bold text-sm sm:text-base text-heritage-wood">
                     {t('Từ Vựng Di Sản Trong Ngữ Cảnh', 'Heritage Vocabulary in Context')}
                   </h3>
                 </div>
-                <span className="text-[11px] text-emerald-200/80 font-medium">
-                  {t('Chạm để nghe & xem nghĩa', 'Tap to listen & inspect')}
+                <span className="text-[11px] text-heritage-ochre font-mono">
+                  {t('Chạm để nghe', 'Tap to listen')}
                 </span>
               </div>
 
@@ -271,17 +271,17 @@ export const ArtifactDetailPage: React.FC = () => {
                         artifact.name.en
                       );
                     }}
-                    className="group text-left p-3 rounded-2xl bg-white/10 hover:bg-white/20 border border-white/15 hover:border-emerald-300/60 transition-all flex items-center justify-between"
+                    className="group text-left p-3 rounded-xl bg-[#0D1813]/90 hover:bg-[#14241C] border border-[#23352C] hover:border-heritage-ochre/50 transition-all flex items-center justify-between"
                   >
                     <div className="min-w-0 pr-2">
-                      <div className="text-xs sm:text-sm font-semibold text-white group-hover:text-emerald-200 truncate">
+                      <div className="text-xs sm:text-sm font-semibold text-heritage-wood group-hover:text-heritage-ochre truncate">
                         {vocab.term}
                       </div>
-                      <div className="text-[11px] text-amber-200/90 truncate">
+                      <div className="text-[11px] text-heritage-ochre/90 truncate font-serif">
                         {vocab.vietnameseMeaning}
                       </div>
                     </div>
-                    <Volume2 className="w-4 h-4 text-emerald-300 shrink-0 opacity-80 group-hover:opacity-100" />
+                    <Volume2 className="w-4 h-4 text-heritage-ochre shrink-0 opacity-75 group-hover:opacity-100" />
                   </button>
                 ))}
               </div>
@@ -291,16 +291,16 @@ export const ArtifactDetailPage: React.FC = () => {
           {/* Deep-Dive Cultural Sections */}
           <div className="space-y-4">
             {artifact.sections.map((sec) => (
-              <div key={sec.id} className="soft-glass-card rounded-3xl p-5 sm:p-6 space-y-2">
-                <h4 className="font-serif font-semibold text-sm sm:text-base text-heritage-wood">
+              <div key={sec.id} className="soft-glass-card rounded-2xl p-5 sm:p-6 space-y-2 border border-[#23352C]">
+                <h4 className="font-serif font-bold text-sm sm:text-base text-heritage-wood">
                   {langMode === 'en' ? sec.title.en : sec.title.vi}
                 </h4>
                 {langMode === 'bilingual' && (
-                  <div className="text-xs text-heritage-clay font-medium italic -mt-1 mb-2">
+                  <div className="text-xs text-heritage-ochre font-medium italic -mt-1 mb-2 font-serif">
                     {sec.title.en}
                   </div>
                 )}
-                <div className="text-xs sm:text-sm text-heritage-woodLight">
+                <div className="text-xs sm:text-sm text-heritage-woodLight leading-relaxed">
                   {renderBilingual(sec.content.vi, sec.content.en)}
                 </div>
               </div>
@@ -329,14 +329,14 @@ export const ArtifactDetailPage: React.FC = () => {
 
       {/* 5. RELATED ARTIFACTS */}
       {relatedArtifacts.length > 0 && (
-        <div className="pt-10 border-t border-heritage-sand/80 space-y-6">
+        <div className="pt-10 border-t border-[#1E3029] space-y-6">
           <div className="flex items-center justify-between">
             <h3 className="font-serif font-semibold text-xl text-heritage-wood">
               {t('Khám Phá Tiếp Hiện Vật Khác', 'Continue Exploring Other Artifacts')}
             </h3>
             <Link
               to="/artifacts"
-              className="text-xs font-semibold text-heritage-clay hover:text-heritage-clayDark"
+              className="text-xs font-semibold text-heritage-ochre hover:text-heritage-ochreLight"
             >
               {t('Xem tất cả', 'View All')}
             </Link>

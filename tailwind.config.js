@@ -8,20 +8,29 @@ export default {
     extend: {
       colors: {
         heritage: {
-          // Bảng màu: Rừng Sương Tây Giang & Ngọc Bích Dịu Mát
-          ivory: '#F5F9F7',      // Nền sương sớm trắng ngọc dịu mắt
-          cream: '#EBF3F0',      // Nền thẻ phụ xanh bạc hà nhạt
-          sand: '#D5E5DF',       // Viền nhẹ nhàng xanh sương
-          sandDark: '#B3CEC4',   // Viền nhấn
-          clay: '#237A63',       // Màu chủ đạo: Xanh Ngọc Bích Rừng (Jade Teal)
-          clayDark: '#195E4B',   // Hover đậm hơn
-          clayLight: '#52B79A',  // Điểm nhấn sáng dịu
-          ochre: '#D4A359',      // Vàng nắng mai nhẹ nhàng (Champagne Gold)
-          wood: '#1E332C',       // Chữ chính: Xanh Rêu Đá Đậm
-          woodLight: '#355248',  // Chữ phụ đậm
-          woodMuted: '#607D73',  // Chữ chú thích dịu
-          charcoal: '#162621',   // Nền 3D sâu dịu
-          forest: '#1D4D3F',     // Xanh rừng già
+          // Bảng màu: Đại Ngàn Tây Giang & Gỗ Trầm, Lửa Trại, Thổ Cẩm
+          dark: '#0A120E',          // Nền chính tối trầm đại ngàn
+          darker: '#060B08',        // Nền tối sâu thẳm
+          surface: '#111D17',       // Nền card/panel tối sang trọng
+          surfaceHover: '#172720',  // Hover trên surface
+          surfaceLight: '#1E3228',  // Khối nổi
+          sand: '#22342A',          // Viền tinh tế trầm
+          sandDark: '#334D3F',      // Viền nhấn
+          border: 'rgba(212, 163, 89, 0.22)', // Viền vàng đồng ánh kim
+          clay: '#38A17E',          // Xanh ngọc bích rừng (Luminous Jade)
+          clayDark: '#237358',      // Xanh rừng đậm
+          clayLight: '#5CC9A3',     // Điểm nhấn sáng
+          ochre: '#D49B45',         // Vàng đồng ánh kim / Hổ phách Tây Giang
+          ochreLight: '#E8B868',    // Vàng sáng
+          terracotta: '#C25336',    // Đỏ thổ cẩm Cơ Tu / Đất nung
+          terracottaDark: '#8F381F',// Đỏ sẫm
+          wood: '#F5EFE6',          // Chữ chính: Trắng ngà cổ / Xương ngà giấy dó
+          woodLight: '#D2C7B8',     // Chữ phụ sáng
+          woodMuted: '#8E9E95',     // Chữ chú thích dịu
+          cream: '#131F19',         // Thẻ phụ tối nhẹ
+          ivory: '#0A120E',         // Nền phụ
+          charcoal: '#060A08',      // Nền đen than
+          forest: '#142E23',        // Xanh rừng già
         }
       },
       fontFamily: {
@@ -36,14 +45,16 @@ export default {
         '5xl': ['3rem', { lineHeight: '1.22' }],
       },
       boxShadow: {
-        'heritage': '0 10px 30px -5px rgba(30, 51, 44, 0.05), 0 4px 12px -2px rgba(35, 122, 99, 0.04)',
-        'heritage-lg': '0 20px 45px -10px rgba(30, 51, 44, 0.09), 0 8px 20px -4px rgba(35, 122, 99, 0.06)',
-        'glow': '0 0 25px rgba(82, 183, 154, 0.25)',
+        'heritage': '0 16px 36px -8px rgba(0, 0, 0, 0.45), 0 4px 16px -2px rgba(0, 0, 0, 0.3)',
+        'heritage-lg': '0 24px 50px -12px rgba(0, 0, 0, 0.65), 0 8px 24px -4px rgba(212, 163, 89, 0.08)',
+        'glow': '0 0 30px rgba(212, 163, 89, 0.25)',
+        'glow-jade': '0 0 30px rgba(56, 161, 126, 0.25)',
       },
       borderRadius: {
-        '2xl': '1.25rem',
-        '3xl': '1.75rem',
-        '4xl': '2.25rem',
+        'xl': '0.875rem',
+        '2xl': '1.125rem',
+        '3xl': '1.5rem',
+        '4xl': '1.75rem',
       },
       animation: {
         'float-slow': 'float 7s ease-in-out infinite',

@@ -98,7 +98,7 @@ export const AudioGuidePlayer: React.FC<AudioGuidePlayerProps> = ({
   };
 
   return (
-    <div className="bg-heritage-cream/60 border border-heritage-sand rounded-2xl p-4 sm:p-5 space-y-3.5">
+    <div className="bg-[#0D1813]/90 border border-[#1E3029] rounded-2xl p-4 sm:p-5 space-y-3.5">
       {activeAudioFile && (
         <audio
           ref={audioRef}
@@ -110,7 +110,7 @@ export const AudioGuidePlayer: React.FC<AudioGuidePlayerProps> = ({
 
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
         <div className="flex items-center space-x-2.5">
-          <div className="w-8 h-8 rounded-lg bg-heritage-clay text-white flex items-center justify-center shrink-0">
+          <div className="w-8 h-8 rounded-lg bg-[#14221A] border border-heritage-ochre/25 text-heritage-ochre flex items-center justify-center shrink-0">
             <Headphones className="w-4 h-4" />
           </div>
           <div>
@@ -125,13 +125,13 @@ export const AudioGuidePlayer: React.FC<AudioGuidePlayerProps> = ({
           </div>
         </div>
 
-        <div className="inline-flex p-1 bg-white rounded-lg border border-heritage-sand self-start sm:self-auto">
+        <div className="inline-flex p-1 bg-[#0A120E] rounded-lg border border-[#1E3029] self-start sm:self-auto">
           <button
             onClick={() => setSelectedLang('vi')}
             className={`px-3 py-1 text-xs font-semibold rounded-md transition-colors ${
               selectedLang === 'vi'
-                ? 'bg-heritage-clay text-white'
-                : 'text-heritage-woodLight hover:text-heritage-wood'
+                ? 'bg-heritage-ochre text-slate-950 font-bold'
+                : 'text-heritage-wood/70 hover:text-heritage-wood'
             }`}
           >
             🇻🇳 Tiếng Việt
@@ -140,8 +140,8 @@ export const AudioGuidePlayer: React.FC<AudioGuidePlayerProps> = ({
             onClick={() => setSelectedLang('en')}
             className={`px-3 py-1 text-xs font-semibold rounded-md transition-colors ${
               selectedLang === 'en'
-                ? 'bg-heritage-clay text-white'
-                : 'text-heritage-woodLight hover:text-heritage-wood'
+                ? 'bg-heritage-ochre text-slate-950 font-bold'
+                : 'text-heritage-wood/70 hover:text-heritage-wood'
             }`}
           >
             🇬🇧 English
@@ -152,10 +152,10 @@ export const AudioGuidePlayer: React.FC<AudioGuidePlayerProps> = ({
       <div className="flex items-center space-x-3 pt-1">
         <button
           onClick={handlePlayToggle}
-          className={`flex items-center space-x-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all shadow-sm min-h-[42px] ${
+          className={`flex items-center space-x-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all shadow-sm min-h-[42px] ${
             isPlaying
-              ? 'bg-heritage-ochre text-white hover:bg-heritage-ochreLight'
-              : 'bg-heritage-clay text-white hover:bg-heritage-clayDark'
+              ? 'bg-heritage-ochreLight text-slate-950'
+              : 'bg-heritage-ochre text-slate-950 hover:bg-heritage-ochreLight'
           }`}
         >
           {isPlaying ? (
@@ -177,7 +177,7 @@ export const AudioGuidePlayer: React.FC<AudioGuidePlayerProps> = ({
         {isPlaying && (
           <button
             onClick={handleStop}
-            className="p-2.5 rounded-xl bg-white hover:bg-heritage-sand text-heritage-wood border border-heritage-sand text-xs font-medium transition-colors min-h-[42px] min-w-[42px] flex items-center justify-center"
+            className="p-2.5 rounded-xl bg-[#14221A] hover:bg-[#1E3029] text-heritage-wood border border-[#1E3029] text-xs font-medium transition-colors min-h-[42px] min-w-[42px] flex items-center justify-center"
             title={t('Dừng hẳn', 'Stop')}
           >
             <Square className="w-4 h-4" />
@@ -185,7 +185,7 @@ export const AudioGuidePlayer: React.FC<AudioGuidePlayerProps> = ({
         )}
 
         <div className="hidden sm:flex items-center space-x-1.5 text-xs text-heritage-woodMuted ml-auto">
-          <Volume2 className={`w-4 h-4 ${isPlaying ? 'text-heritage-clay animate-pulse' : ''}`} />
+          <Volume2 className={`w-4 h-4 ${isPlaying ? 'text-heritage-ochre animate-pulse' : ''}`} />
           <span>
             {isPlaying
               ? t('Đang phát âm thanh...', 'Playing audio...')
@@ -196,7 +196,7 @@ export const AudioGuidePlayer: React.FC<AudioGuidePlayerProps> = ({
 
       {/* Post-Audio Interactive Prompt */}
       {hasListened && onOpenChallenge && (
-        <div className="pt-3 border-t border-heritage-sand/80 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 animate-in fade-in">
+        <div className="pt-3 border-t border-[#1E3029] flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 animate-in fade-in">
           <span className="text-xs font-medium text-heritage-wood">
             {t(
               '✨ Nghe xong thuyết minh? Thử tài về hiện vật này ngay:',
@@ -206,14 +206,14 @@ export const AudioGuidePlayer: React.FC<AudioGuidePlayerProps> = ({
           <div className="flex items-center gap-2">
             <button
               onClick={() => onOpenChallenge('quiz')}
-              className="px-3 py-1.5 rounded-xl bg-heritage-clay hover:bg-heritage-clayDark text-white text-xs font-semibold flex items-center gap-1 shadow-xs transition-all"
+              className="px-3 py-1.5 rounded-xl bg-[#14221A] hover:bg-[#1E3029] text-heritage-wood border border-[#1E3029] text-xs font-semibold flex items-center gap-1 shadow-xs transition-all"
             >
-              <HelpCircle className="w-3.5 h-3.5" />
+              <HelpCircle className="w-3.5 h-3.5 text-heritage-ochre" />
               <span>{t('Làm Quiz (4 câu)', 'Quick Quiz')}</span>
             </button>
             <button
               onClick={() => onOpenChallenge('minigame')}
-              className="px-3 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white text-xs font-semibold flex items-center gap-1 shadow-xs transition-all"
+              className="px-3 py-1.5 rounded-xl bg-heritage-ochre hover:bg-heritage-ochreLight text-slate-950 text-xs font-bold flex items-center gap-1 shadow-xs transition-all"
             >
               <Gamepad2 className="w-3.5 h-3.5" />
               <span>{t('Chơi Mini-Game', 'Mini-Game')}</span>

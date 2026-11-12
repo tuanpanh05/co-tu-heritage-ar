@@ -24,28 +24,28 @@ export const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({
 
   return (
     <div className={`flex items-center space-x-2 ${className}`}>
-      <div className="hidden sm:flex items-center text-xs font-semibold text-heritage-woodMuted uppercase tracking-wider">
-        <Languages className="w-4 h-4 mr-1 text-heritage-clay" />
-        <span>{t('Chế độ đọc:', 'Reading Mode:')}</span>
+      <div className="hidden sm:flex items-center text-xs font-mono uppercase tracking-wider text-heritage-woodMuted">
+        <Languages className="w-4 h-4 mr-1 text-heritage-ochre" />
+        <span>{t('Chế độ đọc:', 'Mode:')}</span>
       </div>
 
-      <div className="inline-flex p-1 bg-heritage-cream rounded-xl border border-heritage-sand shadow-inner">
+      <div className="inline-flex p-1 bg-[#0E1813] rounded-xl border border-[#23352C] shadow-inner">
         {modes.map((mode) => {
           const isActive = currentMode === mode.id;
           return (
             <button
               key={mode.id}
               onClick={() => onChange(mode.id)}
-              className={`px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-all min-h-[38px] flex items-center space-x-1.5 ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all min-h-[36px] flex items-center space-x-1.5 ${
                 isActive
-                  ? 'bg-heritage-clay text-white shadow-sm'
-                  : 'text-heritage-wood hover:text-heritage-woodLight hover:bg-heritage-ivory/50'
+                  ? 'bg-heritage-forest text-heritage-ochre border border-heritage-ochre/40 shadow-sm font-semibold'
+                  : 'text-heritage-woodLight hover:text-heritage-wood hover:bg-white/5'
               }`}
             >
               {mode.id === 'bilingual' && <BookOpen className="w-3.5 h-3.5" />}
               <span>{mode.label}</span>
-              <span className={`text-[10px] px-1 py-0.2 rounded ${
-                isActive ? 'bg-white/20 text-white' : 'bg-heritage-sand/60 text-heritage-woodMuted'
+              <span className={`text-[10px] px-1 py-0.5 rounded font-mono ${
+                isActive ? 'bg-heritage-ochre/25 text-heritage-ochre' : 'bg-white/5 text-heritage-woodMuted'
               }`}>
                 {mode.sub}
               </span>

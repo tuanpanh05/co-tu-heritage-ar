@@ -78,8 +78,8 @@ export const VocabularyQuiz: React.FC<VocabularyQuizProps> = ({ questions }) => 
   if (quizFinished) {
     const percentage = Math.round((score / questions.length) * 100);
     return (
-      <div className="max-w-lg mx-auto bg-heritage-cream/80 border border-heritage-sand rounded-2xl p-6 sm:p-8 text-center space-y-6 shadow-heritage">
-        <div className="w-16 h-16 mx-auto rounded-full bg-amber-100 border border-amber-300 text-amber-700 flex items-center justify-center">
+      <div className="max-w-lg mx-auto bg-[#0D1813] border border-[#1E3029] rounded-2xl p-6 sm:p-8 text-center space-y-6 shadow-heritage">
+        <div className="w-16 h-16 mx-auto rounded-full bg-heritage-ochre/15 border border-heritage-ochre/30 text-heritage-ochre flex items-center justify-center">
           <Trophy className="w-8 h-8" />
         </div>
 
@@ -95,8 +95,8 @@ export const VocabularyQuiz: React.FC<VocabularyQuizProps> = ({ questions }) => 
           </p>
         </div>
 
-        <div className="p-4 bg-white rounded-xl border border-heritage-sand inline-block min-w-[200px] shadow-inner">
-          <div className="text-3xl sm:text-4xl font-extrabold text-heritage-clay">
+        <div className="p-4 bg-[#0A120E] rounded-xl border border-[#1E3029] inline-block min-w-[200px] shadow-inner">
+          <div className="text-3xl sm:text-4xl font-extrabold text-heritage-ochre">
             {score} / {questions.length}
           </div>
           <div className="text-xs font-semibold text-heritage-woodMuted mt-1">
@@ -107,7 +107,7 @@ export const VocabularyQuiz: React.FC<VocabularyQuizProps> = ({ questions }) => 
         <div className="pt-2">
           <button
             onClick={handleRestart}
-            className="inline-flex items-center space-x-2 px-5 py-2.5 rounded-xl bg-heritage-clay hover:bg-heritage-clayDark text-white text-sm font-semibold transition-colors shadow-md min-h-[44px]"
+            className="inline-flex items-center space-x-2 px-5 py-2.5 rounded-xl bg-heritage-ochre hover:bg-heritage-ochreLight text-slate-950 text-sm font-bold transition-colors shadow-md min-h-[44px]"
           >
             <RotateCcw className="w-4 h-4" />
             <span>{t('Làm lại bài kiểm tra', 'Retake Quiz')}</span>
@@ -118,11 +118,11 @@ export const VocabularyQuiz: React.FC<VocabularyQuizProps> = ({ questions }) => 
   }
 
   return (
-    <div className="max-w-xl mx-auto bg-heritage-ivory rounded-2xl border border-heritage-sand p-5 sm:p-7 shadow-heritage space-y-5">
+    <div className="max-w-xl mx-auto bg-[#0D1813] rounded-2xl border border-[#1E3029] p-5 sm:p-7 shadow-heritage space-y-5">
       
       {/* Quiz Header & Progress */}
-      <div className="flex items-center justify-between border-b border-heritage-sand/60 pb-3">
-        <div className="flex items-center space-x-1.5 text-xs font-bold text-heritage-clay uppercase tracking-wider">
+      <div className="flex items-center justify-between border-b border-[#1E3029] pb-3">
+        <div className="flex items-center space-x-1.5 text-xs font-bold text-heritage-ochre uppercase tracking-wider">
           <HelpCircle className="w-4 h-4" />
           <span>
             {t('Câu hỏi', 'Question')} {currentIndex + 1} / {questions.length}
@@ -130,7 +130,7 @@ export const VocabularyQuiz: React.FC<VocabularyQuizProps> = ({ questions }) => 
         </div>
         <div className="text-xs font-semibold text-heritage-woodMuted">
           {t('Điểm hiện tại:', 'Score:')}{' '}
-          <span className="text-heritage-clay font-bold">{score}</span>
+          <span className="text-heritage-ochre font-bold">{score}</span>
         </div>
       </div>
 
@@ -147,15 +147,15 @@ export const VocabularyQuiz: React.FC<VocabularyQuizProps> = ({ questions }) => 
       {/* Options List */}
       <div className="space-y-2.5">
         {currentQ.options.map((option, idx) => {
-          let optionStyle = 'bg-white hover:bg-heritage-cream/60 border-heritage-sand text-heritage-wood';
+          let optionStyle = 'bg-[#0A120E] hover:bg-[#14221A] border-[#1E3029] text-heritage-wood';
 
           if (isAnswered) {
             if (idx === currentQ.correctIndex) {
-              optionStyle = 'bg-emerald-50 border-emerald-400 text-emerald-900 font-semibold';
+              optionStyle = 'bg-[#0E1A14] border-emerald-500/70 text-emerald-200 font-semibold';
             } else if (idx === selectedOption) {
-              optionStyle = 'bg-rose-50 border-rose-300 text-rose-900';
+              optionStyle = 'bg-[#1A0E10] border-rose-500/70 text-rose-200';
             } else {
-              optionStyle = 'bg-white/50 border-heritage-sand/50 text-heritage-woodMuted opacity-60';
+              optionStyle = 'bg-[#0A120E]/40 border-[#1E3029]/50 text-heritage-woodMuted opacity-50';
             }
           }
 
@@ -164,14 +164,14 @@ export const VocabularyQuiz: React.FC<VocabularyQuizProps> = ({ questions }) => 
               key={idx}
               onClick={() => handleSelectOption(idx)}
               disabled={isAnswered}
-              className={`w-full p-3.5 sm:p-4 rounded-xl border-2 text-left text-xs sm:text-sm font-medium transition-all flex items-center justify-between min-h-[48px] ${optionStyle}`}
+              className={`w-full p-3.5 sm:p-4 rounded-xl border text-left text-xs sm:text-sm font-medium transition-all flex items-center justify-between min-h-[48px] ${optionStyle}`}
             >
               <span>{option}</span>
               {isAnswered && idx === currentQ.correctIndex && (
-                <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 ml-2" />
+                <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0 ml-2" />
               )}
               {isAnswered && idx === selectedOption && idx !== currentQ.correctIndex && (
-                <XCircle className="w-5 h-5 text-rose-500 shrink-0 ml-2" />
+                <XCircle className="w-5 h-5 text-rose-400 shrink-0 ml-2" />
               )}
             </button>
           );
@@ -180,8 +180,8 @@ export const VocabularyQuiz: React.FC<VocabularyQuizProps> = ({ questions }) => 
 
       {/* Explanation Box */}
       {isAnswered && (
-        <div className="p-4 rounded-xl bg-heritage-sand/20 border border-heritage-sand space-y-1 animate-in fade-in text-xs sm:text-sm">
-          <div className="font-semibold text-heritage-clay flex items-center space-x-1">
+        <div className="p-4 rounded-xl bg-[#0A120E] border border-[#1E3029] space-y-1 animate-in fade-in text-xs sm:text-sm">
+          <div className="font-semibold text-heritage-ochre flex items-center space-x-1">
             <Sparkles className="w-3.5 h-3.5" />
             <span>{t('Giải thích đáp án:', 'Explanation:')}</span>
           </div>
@@ -199,7 +199,7 @@ export const VocabularyQuiz: React.FC<VocabularyQuizProps> = ({ questions }) => 
         <div className="pt-2 flex justify-end">
           <button
             onClick={handleNextQuestion}
-            className="flex items-center space-x-2 px-5 py-2.5 rounded-xl bg-heritage-clay hover:bg-heritage-clayDark text-white text-xs sm:text-sm font-semibold transition-colors shadow-md min-h-[44px]"
+            className="flex items-center space-x-2 px-5 py-2.5 rounded-xl bg-heritage-ochre hover:bg-heritage-ochreLight text-slate-950 text-xs sm:text-sm font-bold transition-colors shadow-md min-h-[44px]"
           >
             <span>
               {currentIndex + 1 < questions.length

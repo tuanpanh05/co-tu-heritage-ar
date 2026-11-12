@@ -187,18 +187,18 @@ export const VoiceShadowingSimulator: React.FC<VoiceShadowingSimulatorProps> = (
   };
 
   return (
-    <div className="bg-white/10 backdrop-blur-md border border-white/15 rounded-3xl p-5 sm:p-7 text-white space-y-5">
+    <div className="bg-[#0D1813]/90 backdrop-blur-md border border-[#1E3029] rounded-3xl p-5 sm:p-7 text-white space-y-5">
       {/* Header & Script Selector */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/15 pb-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#1E3029] pb-4">
         <div className="space-y-1">
-          <span className="text-xs font-bold uppercase tracking-wider text-amber-300 flex items-center gap-1.5">
+          <span className="text-xs font-bold uppercase tracking-wider text-heritage-ochre flex items-center gap-1.5">
             <Mic className="w-4 h-4" />
             {t(
               `Phòng Thử Giọng Hướng Dẫn Viên Di Sản · ${artifactName}`,
               `AI Tour Guide Voice Shadowing · ${artifactName}`
             )}
           </span>
-          <p className="text-xs text-emerald-100/80">
+          <p className="text-xs text-heritage-wood/80">
             {t(
               'Nghe câu mẫu, sau đó bấm Thu âm để luyện thuyết minh tiếng Anh như một Đại sứ Văn hóa Tây Giang thực thụ!',
               'Listen to the model sentence, then record your voice to practice guiding international visitors in English!'
@@ -214,8 +214,8 @@ export const VoiceShadowingSimulator: React.FC<VoiceShadowingSimulatorProps> = (
                 onClick={() => handleSelectScript(idx)}
                 className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all ${
                   idx === currentIndex
-                    ? 'bg-emerald-400 text-slate-950 font-bold'
-                    : 'bg-white/10 hover:bg-white/20 text-emerald-100'
+                    ? 'bg-heritage-ochre text-slate-950 font-bold'
+                    : 'bg-[#14221A] hover:bg-[#1E3029] text-heritage-wood/80 border border-[#1E3029]'
                 }`}
               >
                 {t(`Mẫu #${idx + 1}`, `Script #${idx + 1}`)}
@@ -226,12 +226,12 @@ export const VoiceShadowingSimulator: React.FC<VoiceShadowingSimulatorProps> = (
       </div>
 
       {/* Target Sentence with Word-by-Word Highlight */}
-      <div className="p-5 rounded-2xl bg-black/25 border border-white/15 space-y-3">
-        <div className="flex items-center justify-between text-xs text-emerald-300 font-semibold">
+      <div className="p-5 rounded-2xl bg-[#0A120E] border border-[#1E3029] space-y-3">
+        <div className="flex items-center justify-between text-xs text-heritage-ochre font-semibold">
           <span>{t(currentScript.roleTitle.vi, currentScript.roleTitle.en)}</span>
           <button
             onClick={() => speechService.speak(currentScript.englishSentence, 'en')}
-            className="px-3 py-1 rounded-lg bg-emerald-500/20 hover:bg-emerald-500 text-emerald-200 hover:text-slate-950 font-bold flex items-center gap-1.5 transition-colors"
+            className="px-3 py-1 rounded-lg bg-heritage-ochre/15 hover:bg-heritage-ochre text-heritage-ochre hover:text-slate-950 font-bold flex items-center gap-1.5 transition-colors"
           >
             <Volume2 className="w-3.5 h-3.5" />
             <span>{t('Nghe giọng mẫu chuẩn', 'Listen to Native Guide')}</span>
@@ -253,9 +253,9 @@ export const VoiceShadowingSimulator: React.FC<VoiceShadowingSimulatorProps> = (
                 title={t('Chạm để nghe phát âm từ này', 'Click to pronounce this word')}
                 className={`cursor-pointer px-1.5 py-0.5 rounded-lg transition-all ${
                   isMatched
-                    ? 'bg-emerald-400/30 text-emerald-200 border border-emerald-400/50 font-bold'
+                    ? 'bg-heritage-ochre/25 text-heritage-ochre border border-heritage-ochre/50 font-bold'
                     : isKey
-                    ? 'underline decoration-amber-400/70 decoration-2 underline-offset-4 text-amber-200 font-semibold hover:bg-white/10'
+                    ? 'underline decoration-heritage-ochre/70 decoration-2 underline-offset-4 text-heritage-ochre font-semibold hover:bg-white/10'
                     : 'text-white hover:bg-white/10'
                 }`}
               >
@@ -265,7 +265,7 @@ export const VoiceShadowingSimulator: React.FC<VoiceShadowingSimulatorProps> = (
           })}
         </div>
 
-        <p className="text-xs sm:text-sm text-emerald-100/75 italic border-t border-white/10 pt-2.5">
+        <p className="text-xs sm:text-sm text-heritage-wood/80 italic border-t border-[#1E3029] pt-2.5">
           "{currentScript.vietnameseTranslation}"
         </p>
       </div>
@@ -278,7 +278,7 @@ export const VoiceShadowingSimulator: React.FC<VoiceShadowingSimulatorProps> = (
             className={`px-5 py-3 rounded-2xl text-xs sm:text-sm font-bold flex items-center space-x-2 transition-all shadow-lg min-h-[46px] ${
               isRecording
                 ? 'bg-rose-500 hover:bg-rose-600 text-white animate-pulse'
-                : 'bg-amber-400 hover:bg-amber-300 text-slate-950'
+                : 'bg-heritage-ochre hover:bg-heritage-ochreLight text-slate-950'
             }`}
           >
             {isRecording ? (
@@ -296,16 +296,16 @@ export const VoiceShadowingSimulator: React.FC<VoiceShadowingSimulatorProps> = (
 
           <button
             onClick={handleSimulatedCheck}
-            className="px-4 py-3 rounded-2xl bg-white/10 hover:bg-white/20 border border-white/20 text-white text-xs sm:text-sm font-semibold flex items-center space-x-1.5 transition-all min-h-[46px]"
+            className="px-4 py-3 rounded-2xl bg-[#14221A] hover:bg-[#1E3029] border border-[#1E3029] text-heritage-wood text-xs sm:text-sm font-semibold flex items-center space-x-1.5 transition-all min-h-[46px]"
           >
-            <Sparkles className="w-4 h-4 text-emerald-300" />
+            <Sparkles className="w-4 h-4 text-heritage-ochre" />
             <span>{t('Nghe & Chấm mẫu tự động', 'Listen & Auto-Shadow')}</span>
           </button>
 
           {accuracyScore !== null && (
             <button
               onClick={() => handleSelectScript(currentIndex)}
-              className="p-3 rounded-2xl bg-white/10 hover:bg-white/20 text-emerald-200 transition-colors"
+              className="p-3 rounded-2xl bg-[#14221A] hover:bg-[#1E3029] text-heritage-wood/80 transition-colors"
               title={t('Làm lại', 'Reset')}
             >
               <RotateCcw className="w-4 h-4" />
@@ -315,16 +315,16 @@ export const VoiceShadowingSimulator: React.FC<VoiceShadowingSimulatorProps> = (
 
         {/* Score Badge */}
         {accuracyScore !== null && (
-          <div className="flex items-center gap-3 px-4 py-2.5 rounded-2xl bg-emerald-500/25 border border-emerald-400/50">
-            <Award className="w-6 h-6 text-amber-300 shrink-0" />
+          <div className="flex items-center gap-3 px-4 py-2.5 rounded-2xl bg-heritage-ochre/15 border border-heritage-ochre/30">
+            <Award className="w-6 h-6 text-heritage-ochre shrink-0" />
             <div>
-              <div className="text-[10px] uppercase tracking-wider text-emerald-200 font-bold">
+              <div className="text-[10px] uppercase tracking-wider text-heritage-ochre font-bold">
                 {t('Độ chuẩn xác Thuyết minh', 'Pronunciation Match')}
               </div>
               <div className="text-lg font-extrabold text-white flex items-center gap-1.5">
                 <span>{accuracyScore}%</span>
                 {accuracyScore >= 75 && (
-                  <span className="text-xs font-semibold text-amber-300 flex items-center gap-1">
+                  <span className="text-xs font-semibold text-heritage-ochre flex items-center gap-1">
                     <CheckCircle2 className="w-3.5 h-3.5" />
                     {t('Đạt chuẩn Đại sứ!', 'Ambassador Ready!')}
                   </span>

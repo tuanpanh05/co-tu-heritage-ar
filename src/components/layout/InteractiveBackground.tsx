@@ -41,11 +41,11 @@ export const InteractiveBackground: React.FC = () => {
     };
 
     const colors = [
-      '35, 122, 99',    // Xanh ngọc rừng sâu
-      '82, 183, 154',   // Xanh lá sương mai
-      '212, 163, 89',   // Đom đóm vàng nắng ấm
-      '235, 185, 95',   // Ánh lửa bản làng dịu
-      '116, 198, 157'   // Xanh ngọc bích non
+      '212, 155, 69',   // Vàng hổ phách tàn lửa bếp Gươl
+      '194, 83, 54',    // Đỏ đất nung thổ cẩm Cơ Tu
+      '56, 161, 126',   // Xanh ngọc bích rừng già
+      '232, 184, 104',  // Ánh lửa bập bùng
+      '74, 138, 114'    // Sương rừng Trường Sơn trầm
     ];
 
     const particleCount = Math.min(68, Math.max(30, Math.floor((width * height) / 21000)));
@@ -270,16 +270,16 @@ export const InteractiveBackground: React.FC = () => {
       >
         <defs>
           <linearGradient id="mountainFar" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stopColor="#9CC5B6" stopOpacity="0.32" />
-            <stop offset="100%" stopColor="#D7EAE2" stopOpacity="0.05" />
+            <stop offset="0%" stopColor="#1C3026" stopOpacity="0.45" />
+            <stop offset="100%" stopColor="#0B130F" stopOpacity="0.1" />
           </linearGradient>
           <linearGradient id="mountainMid" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stopColor="#6AA893" stopOpacity="0.28" />
-            <stop offset="100%" stopColor="#CBE2D9" stopOpacity="0.08" />
+            <stop offset="0%" stopColor="#14261E" stopOpacity="0.65" />
+            <stop offset="100%" stopColor="#080E0B" stopOpacity="0.2" />
           </linearGradient>
           <linearGradient id="mountainNear" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stopColor="#3B7D67" stopOpacity="0.22" />
-            <stop offset="100%" stopColor="#DCECE5" stopOpacity="0.15" />
+            <stop offset="0%" stopColor="#0E1E17" stopOpacity="0.85" />
+            <stop offset="100%" stopColor="#050806" stopOpacity="0.4" />
           </linearGradient>
         </defs>
 

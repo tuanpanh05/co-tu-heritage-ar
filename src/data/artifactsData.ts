@@ -13,9 +13,9 @@ export const ARTIFACTS_DATA: Artifact[] = [
       vi: 'Kiến trúc truyền thống',
       en: 'Traditional Architecture'
     },
-    thumbnail: '/images/guol-thumb.svg',
+    thumbnail: '/images/guol-authentic.jpg',
     originalImages: [
-      '/images/guol-thumb.svg'
+      '/images/guol-authentic.jpg'
     ],
     model3D: '/models/guol.glb',
     modelStatus: 'available', // Đã có mô hình 3D hình học minh họa kỹ thuật
@@ -137,9 +137,9 @@ export const ARTIFACTS_DATA: Artifact[] = [
       vi: 'Nhạc cụ cổ truyền',
       en: 'Traditional Musical Instruments'
     },
-    thumbnail: '/images/drum-thumb.svg',
+    thumbnail: '/images/drum-authentic.jpg',
     originalImages: [
-      '/images/drum-thumb.svg'
+      '/images/drum-authentic.jpg'
     ],
     model3D: '/models/ktu-drum.glb',
     modelStatus: 'available',
@@ -237,9 +237,9 @@ export const ARTIFACTS_DATA: Artifact[] = [
       vi: 'Nghệ thuật đan lát',
       en: 'Traditional Basketry & Weaving'
     },
-    thumbnail: '/images/basket-thumb.svg',
+    thumbnail: '/images/basket-authentic.jpg',
     originalImages: [
-      '/images/basket-thumb.svg'
+      '/images/basket-authentic.jpg'
     ],
     model3D: '/models/bahieng-basket.glb',
     modelStatus: 'coming_soon',
@@ -337,9 +337,9 @@ export const ARTIFACTS_DATA: Artifact[] = [
       vi: 'Nhạc cụ cổ truyền',
       en: 'Traditional Musical Instruments'
     },
-    thumbnail: '/images/trut-thumb.svg',
+    thumbnail: '/images/trut-authentic.jpg',
     originalImages: [
-      '/images/trut-thumb.svg'
+      '/images/trut-authentic.jpg'
     ],
     model3D: '/models/trut.glb',
     modelStatus: 'coming_soon',
@@ -415,9 +415,9 @@ export const ARTIFACTS_DATA: Artifact[] = [
       vi: 'Điêu khắc & Nghi lễ',
       en: 'Spiritual Sculpture & Rituals'
     },
-    thumbnail: '/images/tkoor-thumb.svg',
+    thumbnail: '/images/tkoor-authentic.jpg',
     originalImages: [
-      '/images/tkoor-thumb.svg'
+      '/images/tkoor-authentic.jpg'
     ],
     model3D: '/models/tkoor.glb',
     modelStatus: 'available',

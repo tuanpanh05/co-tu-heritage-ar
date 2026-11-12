@@ -166,26 +166,26 @@ export const InteractiveVillageMap: React.FC = () => {
 
   return (
     <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div className="soft-glass-card rounded-3xl p-6 sm:p-10 border border-heritage-sand shadow-heritage space-y-8">
+      <div className="soft-glass-card rounded-2xl p-6 sm:p-10 border border-[#23352C] shadow-heritage space-y-8">
         {/* Section Header */}
-        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-4 border-b border-heritage-sand/80 pb-6">
+        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-4 border-b border-[#23352C] pb-6">
           <div className="space-y-2 max-w-3xl">
-            <div className="inline-flex items-center space-x-2 px-3.5 py-1 rounded-full bg-heritage-clay/10 border border-heritage-clay/25 text-heritage-clay text-xs font-semibold">
-              <Compass className="w-4 h-4" />
+            <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-lg bg-[#14221A] border border-heritage-ochre/30 text-heritage-ochre text-xs font-mono uppercase tracking-wider">
+              <Compass className="w-3.5 h-3.5" />
               <span>
                 {t(
-                  'Nghiên cứu Nhân học Không gian & Sinh thái Nhân văn',
-                  'Spatial Anthropology & Human Ecology Study'
+                  'Nghiên cứu Nhân học Không gian & Sinh thái Bản làng',
+                  'Spatial Anthropology & Village Ecology'
                 )}
               </span>
             </div>
-            <h2 className="text-2xl sm:text-4xl font-serif font-semibold text-heritage-wood">
+            <h2 className="text-2xl sm:text-4xl font-serif font-bold text-heritage-wood">
               {t(
                 'Sơ Đồ Vũ Trụ Quan & Cấu Trúc Làng Tròn Cơ Tu Tây Giang',
                 'Cosmological & Spatial Map of a Traditional Cơ Tu Circular Village'
               )}
             </h2>
-            <p className="text-xs sm:text-sm text-heritage-woodMuted leading-relaxed">
+            <p className="text-xs sm:text-sm text-heritage-woodLight/80 leading-relaxed">
               {t(
                 'Chạm vào từng vòng không gian trên sơ đồ bản làng bên dưới để khám phá mối liên hệ hữu cơ giữa Rừng thiêng – Bản làng – Nhà Gươl – Cột tế T’kơơr và các hiện vật 3D.',
                 'Click any concentric ring on the interactive village diagram below to explore the organic relationship between the Sacred Forest, Stilt Homes, Gươl House, and T’kơơr Pole.'
@@ -193,8 +193,8 @@ export const InteractiveVillageMap: React.FC = () => {
             </p>
           </div>
 
-          <div className="flex items-center gap-1.5 text-xs font-semibold text-heritage-clay bg-heritage-cream px-4 py-2 rounded-full border border-heritage-sand shrink-0 self-start lg:self-auto">
-            <Sparkles className="w-4 h-4 text-heritage-ochre" />
+          <div className="flex items-center gap-1.5 text-xs font-mono text-heritage-ochre bg-[#14221A] px-3.5 py-1.5 rounded-lg border border-heritage-ochre/30 shrink-0 self-start lg:self-auto">
+            <Sparkles className="w-3.5 h-3.5 text-heritage-ochre" />
             <span>{t('Mô hình Làng cổ Pơr’ning · 5 Lớp không gian', 'Pơr’ning Village Model · 5 Spatial Rings')}</span>
           </div>
         </div>
@@ -400,10 +400,10 @@ export const InteractiveVillageMap: React.FC = () => {
                   <button
                     key={z.id}
                     onClick={() => handleSelectZone(z)}
-                    className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all flex items-center gap-1.5 ${
+                    className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all flex items-center gap-1.5 ${
                       isSelected
-                        ? 'bg-heritage-clay text-white shadow-sm scale-105'
-                        : 'bg-heritage-cream text-heritage-woodLight hover:bg-heritage-sand/60 border border-heritage-sand'
+                        ? 'bg-heritage-ochre text-slate-950 font-bold shadow-sm scale-105'
+                        : 'bg-[#14221A] text-heritage-woodMuted hover:text-heritage-wood hover:bg-[#1A2C22] border border-[#23352C]'
                     }`}
                   >
                     <span className="font-mono font-bold">{z.code}.</span>
@@ -421,39 +421,39 @@ export const InteractiveVillageMap: React.FC = () => {
 
           {/* RIGHT: Detailed Academic & Ecological Panel for Selected Zone */}
           <div className="lg:col-span-6 space-y-5">
-            <div className="forest-stage-dark rounded-3xl p-6 sm:p-8 text-white space-y-5 shadow-xl">
+            <div className="forest-stage-dark rounded-2xl p-6 sm:p-8 text-heritage-wood space-y-5 shadow-xl">
               <div className="flex items-start justify-between gap-3">
                 <div className="space-y-1.5">
                   <span
-                    className={`inline-block px-3 py-0.5 rounded-full text-xs font-bold uppercase tracking-wider ${activeZone.badgeColor}`}
+                    className={`inline-block px-3 py-0.5 rounded-lg text-xs font-mono font-bold uppercase tracking-wider ${activeZone.badgeColor}`}
                   >
                     {t(`Vùng không gian ${activeZone.code}`, `Spatial Ring ${activeZone.code}`)}
                   </span>
-                  <h3 className="text-xl sm:text-2xl font-serif font-semibold text-white leading-snug">
+                  <h3 className="text-xl sm:text-2xl font-serif font-bold text-heritage-wood leading-snug">
                     {t(activeZone.title.vi, activeZone.title.en)}
                   </h3>
-                  <p className="text-xs sm:text-sm text-emerald-200/90 italic">
+                  <p className="text-xs sm:text-sm text-heritage-ochre italic font-serif">
                     {t(activeZone.subtitle.vi, activeZone.subtitle.en)}
                   </p>
                 </div>
               </div>
 
               {/* CLIL Academic Term Box */}
-              <div className="p-3.5 rounded-2xl bg-white/10 border border-white/15 flex items-center justify-between gap-3">
+              <div className="p-3.5 rounded-2xl bg-[#0D1813]/90 border border-heritage-ochre/25 flex items-center justify-between gap-3">
                 <div>
-                  <span className="text-[10px] uppercase tracking-wider text-amber-300 font-bold block">
+                  <span className="text-[10px] uppercase tracking-wider text-heritage-ochre font-bold block">
                     {t('Thuật ngữ Nhân học Không gian (CLIL)', 'Spatial Anthropology Term')}
                   </span>
                   <div className="text-sm sm:text-base font-serif font-semibold text-white">
                     {activeZone.termEn}{' '}
-                    <span className="text-xs font-mono text-emerald-300 ml-1">
+                    <span className="text-xs font-mono text-heritage-ochre ml-1">
                       {activeZone.ipa}
                     </span>
                   </div>
                 </div>
                 <button
                   onClick={() => speechService.speak(activeZone.termEn, 'en')}
-                  className="p-2.5 rounded-xl bg-emerald-500/20 hover:bg-emerald-500 text-emerald-200 hover:text-slate-950 transition-colors shrink-0"
+                  className="p-2.5 rounded-xl bg-heritage-ochre/15 hover:bg-heritage-ochre text-heritage-ochre hover:text-slate-950 transition-colors shrink-0"
                   title={t('Nghe phát âm thuật ngữ', 'Listen to term')}
                 >
                   <Volume2 className="w-4 h-4" />
@@ -462,7 +462,7 @@ export const InteractiveVillageMap: React.FC = () => {
 
               {/* Anthropological Analysis */}
               <div className="space-y-2">
-                <h4 className="text-xs font-bold uppercase tracking-wider text-emerald-300 flex items-center gap-1.5">
+                <h4 className="text-xs font-bold uppercase tracking-wider text-heritage-ochre flex items-center gap-1.5">
                   <Layers className="w-3.5 h-3.5" />
                   <span>
                     {t(
@@ -471,14 +471,14 @@ export const InteractiveVillageMap: React.FC = () => {
                     )}
                   </span>
                 </h4>
-                <p className="text-xs sm:text-sm text-emerald-50/90 leading-relaxed">
+                <p className="text-xs sm:text-sm text-heritage-wood/90 leading-relaxed">
                   {t(activeZone.academicAnalysis.vi, activeZone.academicAnalysis.en)}
                 </p>
               </div>
 
               {/* Ecological Role */}
-              <div className="p-3.5 rounded-2xl bg-emerald-950/60 border border-emerald-500/30 space-y-1">
-                <h4 className="text-xs font-bold uppercase tracking-wider text-amber-300 flex items-center gap-1.5">
+              <div className="p-3.5 rounded-2xl bg-[#0A130E]/80 border border-[#1E3029] space-y-1">
+                <h4 className="text-xs font-bold uppercase tracking-wider text-heritage-ochre flex items-center gap-1.5">
                   <Trees className="w-3.5 h-3.5" />
                   <span>
                     {t(
@@ -487,19 +487,19 @@ export const InteractiveVillageMap: React.FC = () => {
                     )}
                   </span>
                 </h4>
-                <p className="text-xs text-emerald-100/85 leading-relaxed">
+                <p className="text-xs text-heritage-wood/85 leading-relaxed">
                   {t(activeZone.ecologicalRole.vi, activeZone.ecologicalRole.en)}
                 </p>
               </div>
 
               {/* Direct Link to the 3D Artifact of this Zone */}
-              <div className="pt-2 flex items-center justify-between border-t border-white/15">
-                <span className="text-xs text-emerald-200/80">
+              <div className="pt-2 flex items-center justify-between border-t border-[#1E3029]">
+                <span className="text-xs text-heritage-woodMuted">
                   {t('Hiện vật tiêu biểu tại không gian này:', 'Featured artifact in this zone:')}
                 </span>
                 <Link
                   to={`/artifacts/${activeZone.relatedSlug}`}
-                  className="px-4 py-2.5 rounded-xl bg-emerald-400 hover:bg-emerald-300 text-slate-950 text-xs font-bold flex items-center gap-1.5 shadow-md transition-all"
+                  className="px-4 py-2.5 rounded-xl bg-heritage-ochre hover:bg-heritage-ochreLight text-slate-950 text-xs font-bold flex items-center gap-1.5 shadow-md transition-all"
                 >
                   <span>
                     {t(
