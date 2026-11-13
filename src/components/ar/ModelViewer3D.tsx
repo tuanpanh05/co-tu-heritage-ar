@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import '@google/model-viewer';
 import { 
   Box, 
@@ -60,6 +61,9 @@ export const ModelViewer3D: React.FC<ModelViewer3DProps> = ({
   }, [cameraOrbit]);
 
   useEffect(() => {
+    setLoadError(false);
+    setLoading(true);
+
     const viewer = modelViewerRef.current;
     if (!viewer) return;
 
@@ -69,7 +73,8 @@ export const ModelViewer3D: React.FC<ModelViewer3DProps> = ({
       }
     };
 
-    const handleError = () => {
+    const handleError = (event: any) => {
+      console.error('model-viewer load error:', event);
       setLoadError(true);
       setLoading(false);
     };
@@ -267,12 +272,20 @@ const ArGuidanceModal: React.FC<{
 }> = ({ onClose, artifactUrl, artifactName, copiedUrl, onCopy }) => {
   const { t } = useLanguage();
 
-  return (
-    <div className="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
-      <div className="bg-[#0D1813] rounded-3xl max-w-md w-full p-6 text-heritage-wood shadow-2xl border border-[#1E3029] relative animate-in fade-in zoom-in-95">
+  return createPortal(
+    <div 
+      className="fixed inset-0 z-[99999] bg-black/80 backdrop-blur-md flex items-center justify-center p-4 animate-in fade-in duration-200"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
+    >
+      <div 
+        className="bg-[#0D1813] rounded-3xl max-w-md w-full p-6 text-heritage-wood shadow-2xl border border-heritage-ochre/30 relative animate-in zoom-in-95 duration-200"
+        onClick={(e) => e.stopPropagation()}
+      >
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 p-2 text-heritage-woodMuted hover:text-heritage-wood rounded-full hover:bg-[#14221A]"
+          className="absolute top-4 right-4 p-2 text-heritage-woodMuted hover:text-heritage-wood rounded-full hover:bg-[#14221A] transition-colors"
           aria-label={t('Đóng', 'Close')}
         >
           <X className="w-5 h-5" />
@@ -336,6 +349,7 @@ const ArGuidanceModal: React.FC<{
           </div>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };

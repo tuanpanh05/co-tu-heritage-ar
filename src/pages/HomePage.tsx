@@ -38,14 +38,15 @@ export const HomePage: React.FC = () => {
       
       {/* 1. HERO SECTION: Trầm Hùng Đại Ngàn Tây Giang & Sân Khấu 3D Trực Tiếp */}
       <section className="relative pt-6 sm:pt-12 pb-10 overflow-hidden">
-        {/* Subtle Photographic Panorama Ambient Layer */}
-        <div className="absolute inset-0 z-0 opacity-20 pointer-events-none">
+        {/* Dynamic Authentic Highland Ambient Background Layer */}
+        <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
           <img
-            src="/images/hero-highlands-bg.jpg"
-            alt="Đại ngàn Tây Giang"
-            className="w-full h-full object-cover object-top filter blur-xs"
+            key={activeHeroArtifact.slug}
+            src={activeHeroArtifact.thumbnail || '/images/hero-highlands-bg.jpg'}
+            alt={t(activeHeroArtifact.name.vi, activeHeroArtifact.name.en)}
+            className="w-full h-full object-cover object-center filter blur-sm scale-105 opacity-25 transition-all duration-700 ease-out"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-[#0A120E]/60 via-[#0A120E]/90 to-[#0A120E]" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#0A120E]/60 via-[#0A120E]/85 to-[#0A120E]" />
         </div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
@@ -219,18 +220,18 @@ export const HomePage: React.FC = () => {
                   </div>
 
                   {/* Model Switcher: Elegant Archeological Selector */}
-                  <div className="mt-3.5 flex items-center justify-between gap-2 overflow-x-auto no-scrollbar pt-1">
-                    <span className="text-[11px] font-mono text-heritage-woodMuted shrink-0 hidden sm:inline">
-                      {t('Chọn mẫu 3D:', 'Select 3D:')}
+                  <div className="mt-3.5 flex items-center gap-2 overflow-x-auto no-scrollbar pt-1 pb-1">
+                    <span className="text-[11px] font-mono text-heritage-woodMuted shrink-0">
+                      {t('Mô hình 3D thực tế:', 'Authentic 3D Models:')}
                     </span>
-                    <div className="flex items-center gap-2 w-full sm:w-auto">
+                    <div className="flex items-center gap-2 shrink-0">
                       {showcaseModels.map((item) => {
                         const isSelected = item.slug === activeHeroArtifact.slug;
                         return (
                           <button
                             key={item.id}
                             onClick={() => setActiveHeroSlug(item.slug)}
-                            className={`flex-1 sm:flex-initial px-3 py-1.5 rounded-lg text-xs font-medium transition-all whitespace-nowrap flex items-center justify-center space-x-1.5 ${
+                            className={`shrink-0 px-3 py-1.5 rounded-lg text-xs font-medium transition-all whitespace-nowrap flex items-center space-x-1.5 ${
                               isSelected
                                 ? 'bg-heritage-forest text-heritage-ochre border border-heritage-ochre/50 shadow-sm font-semibold'
                                 : 'bg-[#0E1813] text-heritage-woodMuted hover:text-heritage-wood hover:bg-[#14221A] border border-[#23352C]'
@@ -276,12 +277,12 @@ export const HomePage: React.FC = () => {
               <span>{t('Di sản vật thể tiêu biểu', 'Master Tangible Heritage')}</span>
             </div>
             <h2 className="text-2xl sm:text-4xl font-serif font-bold text-heritage-wood">
-              {t('5 Biểu Trưng Văn Hóa Cơ Tu Tây Giang', '5 Iconic Cơ Tu Cultural Artifacts')}
+              {t('Bộ Sưu Tập Di Sản Văn Hóa Cơ Tu Tây Giang', 'Cơ Tu Cultural Heritage 3D Collection')}
             </h2>
             <p className="text-xs sm:text-sm text-heritage-woodLight/80 max-w-2xl leading-relaxed">
               {t(
-                'Từ mái Nhà Gươl sừng sững giữa trung tâm làng đến chiếc gùi Ba-hieng bóng màu khói bếp — mỗi hiện vật là một chứng tích sống động về tư duy thẩm mỹ và tâm linh của đồng bào Cơ Tu.',
-                'From the soaring Gươl communal roof at the village heart to the amber-smoked Ba-hieng basket—each artifact embodies ancestral craftsmanship and highland cosmology.'
+                'Từ mái Nhà Gươl sừng sững, nhịp Trống K’tu, Gùi Ba-hieng, Chiêng đồng đến Trang phục thổ cẩm nam nữ và Tượng điêu khắc Tê tê — mỗi hiện vật là một chứng tích sống động với mô hình 3D thực tế.',
+                'From the soaring Gươl roof, resonant K’tu drum, Ba-hieng basket, and bronze gongs to traditional male & female brocade attire and chiseled pangolin sculptures—each artifact is digitized with authentic 3D photogrammetry models.'
               )}
             </p>
           </div>

@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F7EFEF"/>
+      <stop offset="50%" stop-color="#EDE2DF"/>
+      <stop offset="100%" stop-color="#FAF5F4"/>
+    </linearGradient>
+    <linearGradient id="skirtGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#211C20"/>
+      <stop offset="50%" stop-color="#141012"/>
+      <stop offset="100%" stop-color="#0A0809"/>
+    </linearGradient>
+    <linearGradient id="redAccent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#D94B34"/>
+      <stop offset="50%" stop-color="#B83320"/>
+      <stop offset="100%" stop-color="#8F2213"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="800" height="600" fill="url(#bg)"/>
+
+  <!-- Halo & Shadow -->
+  <circle cx="400" cy="290" r="210" fill="none" stroke="#D94B34" stroke-width="1.2" opacity="0.2"/>
+  <ellipse cx="400" cy="495" rx="195" ry="24" fill="#D4C5C0" opacity="0.6"/>
+
+  <!-- Upper Blouse / Yếm dệt Nữ Cơ Tu -->
+  <path d="M330 150 L470 150 L485 240 L315 240 Z" fill="url(#skirtGrad)"/>
+  <rect x="315" y="180" width="170" height="22" fill="url(#redAccent)"/>
+
+  <!-- Traditional Wrap Skirt (Váy thổ cẩm Cơ Tu) -->
+  <path d="M315 250 L485 250 L520 460 L280 460 Z" fill="url(#skirtGrad)" stroke="#383034" stroke-width="2"/>
+
+  <!-- Horizontal Brocade Bands (Dải hoa văn zút chơ rơ dệt cườm) -->
+  <rect x="300" y="275" width="200" height="18" fill="url(#redAccent)"/>
+  <rect x="290" y="340" width="220" height="24" fill="url(#redAccent)"/>
+  <rect x="282" y="420" width="236" height="20" fill="url(#redAccent)"/>
+
+  <!-- Intricate White Seed Bead Embroidery Waves & Diamonds -->
+  <g stroke="#FFF8F0" stroke-width="2" stroke-linecap="round" fill="none">
+    <!-- Top band wave -->
+    <path d="M305 284 Q315 277 325 284 T345 284 T365 284 T385 284 T405 284 T425 284 T445 284 T465 284 T485 284 T495 284"/>
+    
+    <!-- Middle band diamonds -->
+    <path d="M310 352 L320 345 L330 352 L320 359 Z"/>
+    <path d="M340 352 L350 345 L360 352 L350 359 Z"/>
+    <path d="M370 352 L380 345 L390 352 L380 359 Z"/>
+    <path d="M400 352 L410 345 L420 352 L410 359 Z"/>
+    <path d="M430 352 L440 345 L450 352 L440 359 Z"/>
+    <path d="M460 352 L470 345 L480 352 L470 359 Z"/>
+    <path d="M490 352 L500 345 L505 352 L500 359 Z"/>
+
+    <!-- Bottom band dots -->
+    <circle cx="310" cy="430" r="2.5" fill="#FFF8F0"/>
+    <circle cx="330" cy="430" r="2.5" fill="#FFF8F0"/>
+    <circle cx="350" cy="430" r="2.5" fill="#FFF8F0"/>
+    <circle cx="370" cy="430" r="2.5" fill="#FFF8F0"/>
+    <circle cx="390" cy="430" r="2.5" fill="#FFF8F0"/>
+    <circle cx="410" cy="430" r="2.5" fill="#FFF8F0"/>
+    <circle cx="430" cy="430" r="2.5" fill="#FFF8F0"/>
+    <circle cx="450" cy="430" r="2.5" fill="#FFF8F0"/>
+    <circle cx="470" cy="430" r="2.5" fill="#FFF8F0"/>
+    <circle cx="490" cy="430" r="2.5" fill="#FFF8F0"/>
+    <circle cx="510" cy="430" r="2.5" fill="#FFF8F0"/>
+  </g>
+
+  <!-- Fringe -->
+  <g stroke="#FAF0EA" stroke-width="2" stroke-linecap="round">
+    <line x1="285" y1="460" x2="285" y2="475"/>
+    <line x1="305" y1="460" x2="305" y2="475"/>
+    <line x1="325" y1="460" x2="325" y2="478"/>
+    <line x1="345" y1="460" x2="345" y2="475"/>
+    <line x1="365" y1="460" x2="365" y2="478"/>
+    <line x1="385" y1="460" x2="385" y2="475"/>
+    <line x1="405" y1="460" x2="405" y2="478"/>
+    <line x1="425" y1="460" x2="425" y2="475"/>
+    <line x1="445" y1="460" x2="445" y2="478"/>
+    <line x1="465" y1="460" x2="465" y2="475"/>
+    <line x1="485" y1="460" x2="485" y2="478"/>
+    <line x1="505" y1="460" x2="505" y2="475"/>
+  </g>
+
+  <!-- Label Badge -->
+  <rect x="230" y="510" width="340" height="40" rx="20" fill="#FFFFFF" opacity="0.9"/>
+  <text x="400" y="535" font-family="'Be Vietnam Pro', 'Segoe UI', Arial, sans-serif" font-size="14" font-weight="700" fill="#1E332C" text-anchor="middle" letter-spacing="1.2">VÁY ÁO THỔ CẨM NỮ CƠ TU</text>
+</svg>
+

@@ -47,8 +47,8 @@ const VILLAGE_SPATIAL_ZONES: SpatialZone[] = [
       vi: 'Không gian mở trung tâm giúp điều hòa gió núi và ánh sáng tự nhiên cho toàn bộ các nếp nhà xung quanh.',
       en: 'The open central plaza facilitates mountain air circulation and natural sunlight across the settlement.'
     },
-    relatedSlug: 'tkoor-sacrifice-pillar',
-    relatedArtifactName: { vi: 'Cột Tế T’kơơr 3D', en: '3D T’kơơr Ceremonial Pole' },
+    relatedSlug: 'chieng-gong-instrument',
+    relatedArtifactName: { vi: 'Chiêng Đồng Cơ Tu 3D', en: '3D Sacred Bronze Gong' },
     badgeColor: 'bg-amber-400 text-slate-950'
   },
   {
@@ -147,8 +147,8 @@ const VILLAGE_SPATIAL_ZONES: SpatialZone[] = [
       vi: 'Giữ nước mạch ngầm, điều hòa vi khí hậu sương mù và cung cấp mây tre, dược liệu Ba Kích bền vững.',
       en: 'Protects mountain aquifers, regulates misty microclimates, and sustainably supplies rattan and medicinal herbs.'
     },
-    relatedSlug: 'trut-traditional-instrument',
-    relatedArtifactName: { vi: 'Đàn T’rứt Dân Gian 3D', en: '3D T’rứt Folk Instrument' },
+    relatedSlug: 'tuong-te-te-cotu',
+    relatedArtifactName: { vi: 'Điêu Khắc Con Tê Tê 3D', en: '3D Carved Pangolin' },
     badgeColor: 'bg-lime-300 text-slate-950'
   }
 ];

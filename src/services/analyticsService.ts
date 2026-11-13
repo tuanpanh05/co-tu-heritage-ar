@@ -47,7 +47,11 @@ const PILOT_BASELINE = {
     'ktu-traditional-drum': 68,
     'tkoor-sacred-pillar': 54,
     'bahieng-woven-basket': 47,
-    'trot-two-string-fiddle': 39
+    'trot-two-string-fiddle': 39,
+    'chieng-gong-instrument': 42,
+    'ao-nam-cotu': 38,
+    'ao-nu-cotu': 45,
+    'tuong-te-te-cotu': 36
   } as Record<string, number>,
   eventCounts: {
     page_view: 342,

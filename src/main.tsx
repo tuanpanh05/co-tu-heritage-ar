@@ -17,6 +17,12 @@ import './index.css';
 // Import model-viewer for WebAR rendering
 import '@google/model-viewer';
 
+// Cấu hình Meshopt Decoder để tải các mô hình 3D thực tế nén bằng gltfpack (EXT_meshopt_compression)
+const ModelViewerElement = customElements.get('model-viewer') as any;
+if (ModelViewerElement) {
+  ModelViewerElement.meshoptDecoderLocation = '/libs/meshopt_decoder.js';
+}
+
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <App />

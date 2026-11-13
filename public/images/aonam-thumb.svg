@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F2EFEB"/>
+      <stop offset="50%" stop-color="#E5DED4"/>
+      <stop offset="100%" stop-color="#F9F6F0"/>
+    </linearGradient>
+    <linearGradient id="fabricBlack" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#242124"/>
+      <stop offset="50%" stop-color="#141416"/>
+      <stop offset="100%" stop-color="#0A0A0C"/>
+    </linearGradient>
+    <linearGradient id="fabricRed" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#C2412D"/>
+      <stop offset="50%" stop-color="#9C2718"/>
+      <stop offset="100%" stop-color="#73190E"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="800" height="600" fill="url(#bg)"/>
+
+  <!-- Halo & Shadow -->
+  <circle cx="400" cy="285" r="210" fill="none" stroke="#C2412D" stroke-width="1.2" opacity="0.2"/>
+  <ellipse cx="400" cy="490" rx="190" ry="24" fill="#C9BDB0" opacity="0.6"/>
+
+  <!-- Vest / Sleeveless Tunic Body (Áo chui đầu nam Cơ Tu) -->
+  <path d="M290 150 L360 140 L400 180 L440 140 L510 150 L530 250 L485 260 L495 460 L305 460 L315 260 L270 250 Z" fill="url(#fabricBlack)" stroke="#383335" stroke-width="2"/>
+
+  <!-- Red Center Band -->
+  <path d="M370 180 L430 180 L430 460 L370 460 Z" fill="url(#fabricRed)"/>
+
+  <!-- White Glass Bead (Hạt cườm) Diamond & Rhombus Pattern Bands -->
+  <g stroke="#FAF8F5" stroke-width="2.5" stroke-linecap="round" fill="none">
+    <!-- Center beads -->
+    <path d="M400 195 L385 215 L400 235 L415 215 Z"/>
+    <path d="M400 245 L385 265 L400 285 L415 265 Z"/>
+    <path d="M400 295 L385 315 L400 335 L415 315 Z"/>
+    <path d="M400 345 L385 365 L400 385 L415 365 Z"/>
+    <path d="M400 395 L385 415 L400 435 L415 415 Z"/>
+
+    <!-- Side geometric rows -->
+    <line x1="330" y1="230" x2="355" y2="230"/>
+    <line x1="330" y1="260" x2="355" y2="260"/>
+    <line x1="330" y1="360" x2="355" y2="360"/>
+    <line x1="330" y1="390" x2="355" y2="390"/>
+
+    <line x1="445" y1="230" x2="470" y2="230"/>
+    <line x1="445" y1="260" x2="470" y2="260"/>
+    <line x1="445" y1="360" x2="470" y2="360"/>
+    <line x1="445" y1="390" x2="470" y2="390"/>
+  </g>
+
+  <!-- Fringe Bottom Tassels -->
+  <g stroke="#C2412D" stroke-width="3" stroke-linecap="round">
+    <line x1="320" y1="460" x2="320" y2="480"/>
+    <line x1="345" y1="460" x2="345" y2="480"/>
+    <line x1="370" y1="460" x2="370" y2="483"/>
+    <line x1="400" y1="460" x2="400" y2="485"/>
+    <line x1="430" y1="460" x2="430" y2="483"/>
+    <line x1="455" y1="460" x2="455" y2="480"/>
+    <line x1="480" y1="460" x2="480" y2="480"/>
+  </g>
+
+  <!-- Label Badge -->
+  <rect x="230" y="510" width="340" height="40" rx="20" fill="#FFFFFF" opacity="0.9"/>
+  <text x="400" y="535" font-family="'Be Vietnam Pro', 'Segoe UI', Arial, sans-serif" font-size="14" font-weight="700" fill="#1E332C" text-anchor="middle" letter-spacing="1.2">ÁO NAM THỔ CẨM CƠ TU</text>
+</svg>
+

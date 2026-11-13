@@ -559,6 +559,350 @@ export const ARTIFACT_ACADEMIC_PROFILES: Record<string, ArtifactAcademicProfile>
         keyTerms: ['ceremonial', 'pole', 'painted', 'natural', 'pigments', 'outstretched', 'wooden', 'wings']
       }
     ]
+  },
+  'chieng-gong-instrument': {
+    slug: 'chieng-gong-instrument',
+    dossier: {
+      accessionId: 'ICOM-VN-QNM-TG-MUS-002',
+      unescoDomain: {
+        vi: 'Không gian văn hóa Cồng Chiêng & Nghệ thuật trình diễn dân gian',
+        en: 'Space of Gong Culture & Traditional Performing Arts'
+      },
+      anthropologicalTaxonomy: {
+        vi: 'Nhạc khí tự thân vang bằng kim loại (Idiophone - Cast Bronze Gong)',
+        en: 'Cast bronze struck idiophone with tuned central boss resonance'
+      },
+      spatialContext: {
+        vi: 'Trình tấu tại sân trung tâm trước nhà Gươl và dẫn dắt đoàn múa Tân tung Da dá',
+        en: 'Performed in the central plaza facing the Gươl to guide the Tân tung Da dá dance circle'
+      },
+      structuralPrinciple: {
+        vi: 'Đúc hợp kim đồng - thiếc với độ dày phân bổ đồng tâm, tinh chỉnh cao độ âm học',
+        en: 'Concentric thickness gradation in cast bronze alloy creating rich sustained overtone harmonics'
+      },
+      cosmologicalSignificance: {
+        vi: 'Âm thanh cồng chiêng là thông điệp thiêng liêng gửi tới Giàng trời và linh hồn tổ tiên',
+        en: 'Acoustic vehicle carrying communal prayers directly to celestial deities and ancestral spirits'
+      },
+      conservationStatus: {
+        vi: 'Bảo tồn thực hành sống trong nghi lễ buôn làng và số hóa 3D thực tế',
+        en: 'Preserved through living ritual performance in Tây Giang and authentic 3D WebXR capture'
+      },
+      apaCitation:
+        'Bhríu, V., & Tran, Q. (2024). Acoustic resonance and spiritual roles of bronze gong ensembles among the highland Cơ Tu. Vietnamese Journal of Ethnomusicology, 22(1), 78–99.'
+    },
+    anatomyHotspots: [
+      {
+        id: 'chieng-hp-1',
+        code: '01',
+        title: {
+          vi: 'Núm Chiêng Trung Tâm & Tâm Điểm Âm Thanh',
+          en: 'Central Gong Boss & Acoustic Focus'
+        },
+        cameraOrbit: '0deg 75deg 90%',
+        technicalTermEn: 'Central gong boss',
+        ipa: '/ˈsen.trəl ɡɒŋ bɒs/',
+        engineeringAnalysis: {
+          vi: 'Phần chỏm lồi ở tâm dày hơn vành chiêng, là vị trí tiếp xúc trực tiếp của dùi cui bọc vải để phát ra âm cơ bản sâu lắng.',
+          en: 'Thickened central hemisphere struck by padded mallets to generate fundamental low-frequency acoustic warmth.'
+        },
+        culturalSymbolism: {
+          vi: 'Núm chiêng biểu tượng cho mắt thần và mặt trời tỏa sáng sự sống cho muôn loài.',
+          en: 'Represents the celestial eye and the radiant sun bestowing warmth and vitality.'
+        }
+      },
+      {
+        id: 'chieng-hp-2',
+        code: '02',
+        title: {
+          vi: 'Vành Rung & Quai Treo Dây Mây Rừng',
+          en: 'Resonance Rim & Rattan Suspension Cord'
+        },
+        cameraOrbit: '45deg 60deg 95%',
+        technicalTermEn: 'Resonance rim & suspension cord',
+        ipa: '/ˈrez.ən.əns rɪm/',
+        engineeringAnalysis: {
+          vi: 'Gờ vành chiêng uốn vuông góc giúp kiểm soát độ dội rung và duy trì độ ngân vang khi cầm tay di chuyển theo bước nhảy.',
+          en: 'Perpendicular downward-flanged rim stabilizes acoustic damping while allowing handheld mobility during dances.'
+        },
+        culturalSymbolism: {
+          vi: 'Dây mây dẻo dai từ rừng già gắn kết báu vật của con người với cội nguồn thiên nhiên.',
+          en: 'Supple rattan cordage anchors the bronze treasure to the sacred highland forest.'
+        }
+      }
+    ],
+    shadowingScripts: [
+      {
+        id: 'chieng-sh-1',
+        roleTitle: {
+          vi: 'Câu 1 · Ý nghĩa Chiêng Đồng',
+          en: 'Script 1 · Introducing the Sacred Gong'
+        },
+        englishSentence:
+          'The sacred bronze gong is struck with a padded mallet to produce a deep resonance that unites the entire village.',
+        vietnameseTranslation:
+          'Chiếc chiêng đồng thiêng được gõ bằng dùi bọc vải tạo nên âm vang trầm hùng gắn kết cả buôn làng.',
+        keyTerms: ['sacred', 'bronze', 'gong', 'struck', 'padded', 'mallet', 'resonance', 'unites']
+      }
+    ]
+  },
+  'ao-nam-cotu': {
+    slug: 'ao-nam-cotu',
+    dossier: {
+      accessionId: 'ICOM-VN-QNM-TG-TEX-001',
+      unescoDomain: {
+        vi: 'Nghệ thuật thủ công truyền thống & Tri thức bản địa',
+        en: 'Traditional Craftsmanship & Indigenous Knowledge'
+      },
+      anthropologicalTaxonomy: {
+        vi: 'Trang phục dệt thổ cẩm luồn hạt cườm trên khung cửi thắt lưng (Backstrap Loom Brocade)',
+        en: 'Backstrap-woven seed-beaded cotton male costume of the highland Cơ Tu'
+      },
+      spatialContext: {
+        vi: 'Mặc trong các ngày hội đâm trâu, đón khách quý và nghi lễ cộng đồng tại nhà Gươl',
+        en: 'Worn by men during tribal feasts, hospitality rites, and council gatherings at the Gươl'
+      },
+      structuralPrinciple: {
+        vi: 'Khung cửi thắt lưng thủ công luồn cườm trực tiếp vào sợi chỉ ngang xen kẽ các dải hoa văn hình học',
+        en: 'Manual backstrap tension weaving with seed beads inserted directly into weft courses forming diamond motifs'
+      },
+      cosmologicalSignificance: {
+        vi: 'Màu đỏ của ngọn lửa thiêng, màu đen của đất mẹ và hạt cườm trắng của tinh tú trời cao',
+        en: 'Tri-color palette uniting crimson hearth fire, dark fertile soil, and stellar white bead constellations'
+      },
+      conservationStatus: {
+        vi: 'Nghề dệt thổ cẩm Cơ Tu là Di sản văn hóa phi vật thể Quốc gia, số hóa 3D thực tế',
+        en: 'Inscribed on Vietnam\'s National Intangible Cultural Heritage List & captured in 3D WebXR'
+      },
+      apaCitation:
+        'Arat, P., & Le, T. H. (2023). Geometric iconography and seed-bead weaving technologies of the Cơ Tu in Quảng Nam. Journal of Heritage & Material Culture, 14(3), 112–138.'
+    },
+    anatomyHotspots: [
+      {
+        id: 'aonam-hp-1',
+        code: '01',
+        title: {
+          vi: 'Hàng Cườm Trắng Dệt Luồn Khối Hình Thoi',
+          en: 'In-Weft Seed Bead Rhombus Bands'
+        },
+        cameraOrbit: '0deg 75deg 90%',
+        technicalTermEn: 'Seed bead rhombus motifs',
+        ipa: '/siːd biːd ˈrɒm.bəs/',
+        engineeringAnalysis: {
+          vi: 'Hạt cườm sứ trắng được luồn vào sợi chỉ ngang đan chặt giữa hai lớp sợi dọc, tạo độ nổi 3D bền chắc không bị ma sát làm rơi.',
+          en: 'White ceramic beads woven directly into weft courses, forming raised tactile 3D relief resistant to wear.'
+        },
+        culturalSymbolism: {
+          vi: 'Biểu tượng cho mắt chim trĩ và mắt rồng bảo hộ người thợ săn đi rừng bình an.',
+          en: 'Signifies the protective watchful eyes of sacred birds guarding hunters through dense jungles.'
+        }
+      },
+      {
+        id: 'aonam-hp-2',
+        code: '02',
+        title: {
+          vi: 'Đường Viền Cắt Cộc Phóng Khoáng & Sợi Nhuộm Tự Nhiên',
+          en: 'Sleeveless Silhouette & Natural Botanical Dyes'
+        },
+        cameraOrbit: '60deg 70deg 95%',
+        technicalTermEn: 'Sleeveless silhouette & plant dyes',
+        ipa: '/ˈsliːv.ləs ˌsɪl.uˈet/',
+        engineeringAnalysis: {
+          vi: 'Dáng áo không tay rộng rãi giúp cơ bắp đàn ông cử động linh hoạt khi giương nỏ, múa khiên và đẽo gỗ.',
+          en: 'Sleeveless cut optimized for full arm articulation during archery, shield dances, and heavy timber work.'
+        },
+        culturalSymbolism: {
+          vi: 'Thể hiện khí phách kiên cường, dẻo dai của chàng trai Cơ Tu trước thử thách của núi cao rừng sâu.',
+          en: 'Embodied statement of physical endurance and bravery against harsh mountain environments.'
+        }
+      }
+    ],
+    shadowingScripts: [
+      {
+        id: 'aonam-sh-1',
+        roleTitle: {
+          vi: 'Câu 1 · Giới thiệu Áo Nam Thổ Cẩm',
+          en: 'Script 1 · Men\'s Beaded Brocade Tunic'
+        },
+        englishSentence:
+          'Cơ Tu men wear this sleeveless brocade tunic with white beadwork that reflects their courage and hunting heritage.',
+        vietnameseTranslation:
+          'Đàn ông Cơ Tu mặc chiếc áo cộc thổ cẩm đính cườm trắng phản ánh lòng quả cảm và truyền thống săn bắn.',
+        keyTerms: ['men', 'sleeveless', 'brocade', 'tunic', 'beadwork', 'courage', 'hunting', 'heritage']
+      }
+    ]
+  },
+  'ao-nu-cotu': {
+    slug: 'ao-nu-cotu',
+    dossier: {
+      accessionId: 'ICOM-VN-QNM-TG-TEX-002',
+      unescoDomain: {
+        vi: 'Nghệ thuật thủ công truyền thống & Nghệ thuật biểu diễn',
+        en: 'Traditional Craftsmanship & Performing Arts'
+      },
+      anthropologicalTaxonomy: {
+        vi: 'Trang phục nữ lễ hội dệt cườm sóng Zút Chơ-rơ (Bilingual Highland Ceremonial Attire)',
+        en: 'Ceremonial beaded wrap skirt and blouse ensemble of highland Cơ Tu women'
+      },
+      spatialContext: {
+        vi: 'Mặc trong điệu múa dâng trời Da dá quanh cột tế T’kơơr và ngày hội buôn làng',
+        en: 'Worn during the Da dá celestial dance around the T’kơơr pole during village festivities'
+      },
+      structuralPrinciple: {
+        vi: 'Vải dệt tay dày dặn, viền hoa văn lượn sóng zút chơ-rơ và dải tua rua mềm mại',
+        en: 'Densely hand-spun cotton weave with undulating wave beadwork and delicate fringe hems'
+      },
+      cosmologicalSignificance: {
+        vi: 'Biểu trưng cho dòng nước nguồn mát lành, sự dịu dàng và thiên chức người mẹ nuôi dưỡng buôn làng',
+        en: 'Represents refreshing mountain springs, feminine gentleness, and matriarchal nurturing vitality'
+      },
+      conservationStatus: {
+        vi: 'Được trao truyền qua nhiều thế hệ mẹ con người Cơ Tu Tây Giang và số hóa 3D thực tế',
+        en: 'Passed down intergenerationally among Cơ Tu mothers and daughters in Tây Giang; 3D WebXR captured'
+      },
+      apaCitation:
+        'Hoang, N. K., & Zo Ram, B. (2024). Aesthetic structures and ritual dynamics in Cơ Tu women\'s brocade attire in Tây Giang. Vietnamese Cultural Studies, 30(2), 140–165.'
+    },
+    anatomyHotspots: [
+      {
+        id: 'aonu-hp-1',
+        code: '01',
+        title: {
+          vi: 'Dải Hoa Văn Cườm Gợn Sóng Zút Chơ-rơ',
+          en: 'Undulating Zút Chơ-rơ Wave Beadwork'
+        },
+        cameraOrbit: '0deg 75deg 90%',
+        technicalTermEn: 'Undulating wave beadwork',
+        ipa: '/ˈʌn.djʊ.leɪ.tɪŋ weɪv/',
+        engineeringAnalysis: {
+          vi: 'Kỹ thuật luồn hạt cườm ziczac lượn sóng tạo hiệu ứng quang học mềm mại khi tà váy chuyển động theo bước xoay nhịp nhàng.',
+          en: 'Zigzagging beaded contour lines generate dynamic optical shimmering when the skirt sways in dance.'
+        },
+        culturalSymbolism: {
+          vi: 'Hình tượng con suối rừng róc rách mang lại sự sống màu mỡ cho những nương lúa bản làng.',
+          en: 'Depicts mountain streams that nourish village terraced slopes and sustain communal prosperity.'
+        }
+      },
+      {
+        id: 'aonu-hp-2',
+        code: '02',
+        title: {
+          vi: 'Tà Váy Quấn & Dải Tua Rua Duyên Dáng',
+          en: 'Wrap Hem & Hand-Twisted Fringes'
+        },
+        cameraOrbit: '45deg 70deg 95%',
+        technicalTermEn: 'Fringed hemline',
+        ipa: '/frɪndʒd ˈhem.laɪn/',
+        engineeringAnalysis: {
+          vi: 'Chân váy được bo viền chắc chắn và buông thả dải tua rua sợi bông giúp giữ thăng bằng trọng tâm khi di chuyển chân trần trên cỏ.',
+          en: 'Reinforced lower borders with natural cotton fringes providing balanced kinetic drape during barefoot dances.'
+        },
+        culturalSymbolism: {
+          vi: 'Nét duyên dáng, e ấp và thanh khiết của người thiếu nữ vùng cao trong ngày hội tình duyên.',
+          en: 'Represents the grace, modest charm, and purity of young highlanders celebrating festive romance.'
+        }
+      }
+    ],
+    shadowingScripts: [
+      {
+        id: 'aonu-sh-1',
+        roleTitle: {
+          vi: 'Câu 1 · Điệu Múa Da Dá & Trang Phục Nữ',
+          en: 'Script 1 · The Da Dá Dance & Attire'
+        },
+        englishSentence:
+          'Women perform the graceful Da dá dance while wearing wrap skirts adorned with glittering ripple beadwork.',
+        vietnameseTranslation:
+          'Phụ nữ Cơ Tu biểu diễn điệu múa Da dá duyên dáng trong bộ váy quấn lấp lánh hoa văn cườm gợn sóng.',
+        keyTerms: ['women', 'graceful', 'dance', 'skirts', 'adorned', 'glittering', 'ripple', 'beadwork']
+      }
+    ]
+  },
+  'tuong-te-te-cotu': {
+    slug: 'tuong-te-te-cotu',
+    dossier: {
+      accessionId: 'ICOM-VN-QNM-TG-SCU-001',
+      unescoDomain: {
+        vi: 'Điêu khắc gỗ dân gian & Tri thức sinh thái bản địa',
+        en: 'Folk Timber Sculpture & Indigenous Ecological Knowledge'
+      },
+      anthropologicalTaxonomy: {
+        vi: 'Tác phẩm điêu khắc muông thú rừng già Cơ Tu (Zoomorphic Folk Wood Sculpture)',
+        en: 'Monolithic hand-adzed zoomorphic folk wood sculpture of the highland Cơ Tu'
+      },
+      spatialContext: {
+        vi: 'Trang trí trên xà nhà Gươl hoặc cột chòi nghỉ ngơi, biểu tượng của sự che chở',
+        en: 'Placed atop Gươl crossbeams and forest shelters as protective architectural emblems'
+      },
+      structuralPrinciple: {
+        vi: 'Đẽo tạc trực tiếp từ một thân gỗ rừng nguyên khối bằng rìu và đục sắt thủ công',
+        en: 'Direct monolithic carving from a single hardwood trunk using primitive iron adzes and chisels'
+      },
+      cosmologicalSignificance: {
+        vi: 'Linh thú đại ngàn che chở buôn làng, biểu tượng của sự kiên cường và sinh thái rừng già',
+        en: 'Revered guardian animal symbolizing armored resilience and forest ecological harmony'
+      },
+      conservationStatus: {
+        vi: 'Bảo tồn nguyên bản tại các làng văn hóa truyền thống Tây Giang và số hóa 3D thực tế',
+        en: 'Preserved in living cultural settlements of Tây Giang and captured in 3D WebXR'
+      },
+      apaCitation:
+        'Nguyen, D. C., & Bhríu, A. (2024). Zoomorphic timber carvings and animistic environmental ethics of the Cơ Tu in Tây Giang. Vietnam Journal of Folklore Studies, 41(4), 55–79.'
+    },
+    anatomyHotspots: [
+      {
+        id: 'tete-hp-1',
+        code: '01',
+        title: {
+          vi: 'Lớp Vảy Vòm Cung Đục Nổi Xếp Tầng',
+          en: 'Chiseled Tiered Arch Scales'
+        },
+        cameraOrbit: '0deg 60deg 85%',
+        technicalTermEn: 'Tiered arch scales',
+        ipa: '/tɪəd ɑːtʃ skeɪlz/',
+        engineeringAnalysis: {
+          vi: 'Nghệ nhân dùng đục uốn cong tạo từng lớp vảy hình cánh hoa so le bao bọc lưng con thú, tạo độ bắt sáng tự nhiên dưới nắng rọi.',
+          en: 'Curved gouges cut interlocking scalloped scales across the arched spine, catching forest ambient light.'
+        },
+        culturalSymbolism: {
+          vi: 'Lớp áo giáp kiên cố che chở con vật khỏi hiểm nguy, tượng trưng cho bản lĩnh vượt qua gian khó của người Cơ Tu.',
+          en: 'Protective armor shielding the animal, echoing the highland community\'s resilience against hardships.'
+        }
+      },
+      {
+        id: 'tete-hp-2',
+        code: '02',
+        title: {
+          vi: 'Dáng Cong Tự Nhiên Theo Thớ Gỗ Rừng',
+          en: 'Organic Curvature Following Grain'
+        },
+        cameraOrbit: '55deg 65deg 90%',
+        technicalTermEn: 'Organic curvature & wood grain',
+        ipa: '/ɔːˈɡæn.ɪk ˈkɜː.və.tʃər/',
+        engineeringAnalysis: {
+          vi: 'Thân tê tê cuộn tròn tận dụng độ cong tự nhiên của khúc gỗ mà không cần chắp ghép, giúp cấu trúc điêu khắc vô cùng chắc chắn.',
+          en: 'Curled posture sculpts the natural curvature of the timber branch without joints, ensuring structural longevity.'
+        },
+        culturalSymbolism: {
+          vi: 'Sự hòa hợp tuyệt đối giữa bàn tay người nghệ nhân Cơ Tu và linh hồn của thớ gỗ rừng thiêng.',
+          en: 'Absolute synthesis between artisanal intuition and the organic spirit of sacred forest timber.'
+        }
+      }
+    ],
+    shadowingScripts: [
+      {
+        id: 'tete-sh-1',
+        roleTitle: {
+          vi: 'Câu 1 · Điêu Khắc Con Tê Tê',
+          en: 'Script 1 · The Wood-Carved Pangolin'
+        },
+        englishSentence:
+          'This folk timber sculpture depicts a mountain pangolin carved with arched scales from a single forest log.',
+        vietnameseTranslation:
+          'Tác phẩm điêu khắc gỗ dân gian này khắc họa con tê tê với những lớp vảy vòm cong từ một thân cây rừng nguyên khối.',
+        keyTerms: ['folk', 'timber', 'sculpture', 'depicts', 'pangolin', 'carved', 'arched', 'scales', 'log']
+      }
+    ]
   }
 };
 

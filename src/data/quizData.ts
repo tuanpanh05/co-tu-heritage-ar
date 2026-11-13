@@ -399,5 +399,169 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
       en: 'Rituals around the pole express gratitude to Mother Forest and pray for village harmony and abundant harvests.'
     },
     relatedArtifactSlug: 'tkoor-sacrifice-pillar'
+  },
+  // =========================================================================
+  // 6. CHIÊNG ĐỒNG CƠ TU (chieng-gong-instrument)
+  // =========================================================================
+  {
+    id: 'quiz-chieng-01',
+    question: {
+      vi: 'Nhạc khí bộ gõ bằng hợp kim đồng thiếc linh thiêng của người Cơ Tu được gọi là gì trong tiếng Anh?',
+      en: 'What is the sacred bronze percussion instrument of the Cơ Tu people called in English?'
+    },
+    options: [
+      'Bronze gong (Chiêng đồng)',
+      'Bamboo flute (Sáo trúc)',
+      'Acoustic guitar (Đàn ghita)',
+      'Electronic keyboard (Đàn phím điện tử)'
+    ],
+    correctIndex: 0,
+    explanation: {
+      vi: '"Bronze gong" là chiêng đồng, báu vật gia bảo lưu truyền qua nhiều thế hệ của người Cơ Tu.',
+      en: '"Bronze gong" refers to the prized metal instrument sounded during paramount rituals and celebrations.'
+    },
+    relatedArtifactSlug: 'chieng-gong-instrument'
+  },
+  {
+    id: 'quiz-chieng-02',
+    question: {
+      vi: 'Vị trí chỏm lồi ở tâm chiêng để dùi bọc vải gõ vào phát ra âm thanh ấm áp được gọi là gì?',
+      en: 'What is the raised central dome on a gong that is struck with a mallet called?'
+    },
+    options: [
+      'Central boss / Gong boss (Núm chiêng)',
+      'Gong handle',
+      'Tuning peg',
+      'Sound hole'
+    ],
+    correctIndex: 0,
+    explanation: {
+      vi: 'Núm chiêng ("Central boss") là điểm dày nhất tạo nên âm cơ bản trầm sâu đặc trưng.',
+      en: 'The raised central boss provides acoustic depth and focus when struck by a padded mallet.'
+    },
+    relatedArtifactSlug: 'chieng-gong-instrument'
+  },
+  // =========================================================================
+  // 7. ÁO NAM THỔ CẨM CƠ TU (ao-nam-cotu)
+  // =========================================================================
+  {
+    id: 'quiz-aonam-01',
+    question: {
+      vi: 'Kỹ thuật dệt độc đáo nào tạo nên hoa văn nổi bật trên áo thổ cẩm nam Cơ Tu?',
+      en: 'Which unique weaving technique creates the signature geometric relief on Cơ Tu men\'s brocade?'
+    },
+    options: [
+      'In-weft seed bead insertion (Dệt luồn hạt cườm trực tiếp trên khung cửi)',
+      'Machine screen printing (In lưới công nghiệp)',
+      'Plastic heat transfer (Ép nhiệt decal nhựa)',
+      'Chemical bleaching (Tẩy trắng hóa chất)'
+    ],
+    correctIndex: 0,
+    explanation: {
+      vi: 'Nghệ nhân Cơ Tu xỏ hạt cườm trắng trực tiếp vào sợi chỉ ngang khi đang dệt trên khung cửi thắt lưng.',
+      en: 'Artisans insert white seed beads directly onto weft threads on backstrap looms.'
+    },
+    relatedArtifactSlug: 'ao-nam-cotu'
+  },
+  {
+    id: 'quiz-aonam-02',
+    question: {
+      vi: 'Khung cửi truyền thống mà người phụ nữ vùng cao dùng hông/thắt lưng để căng sợi dệt gọi là gì?',
+      en: 'What is the portable traditional loom tensioned around the weaver\'s waist called in English?'
+    },
+    options: [
+      'Backstrap loom (Khung cửi thắt lưng)',
+      'Power mechanical loom',
+      'Laser cutting machine',
+      'Spinning jenny'
+    ],
+    correctIndex: 0,
+    explanation: {
+      vi: '"Backstrap loom" là khung cửi luồn thắt lưng cơ động, gắn liền với phụ nữ Cơ Tu từ thuở xưa.',
+      en: 'A backstrap loom uses body tension to weave dense, high-quality indigenous brocade.'
+    },
+    relatedArtifactSlug: 'ao-nam-cotu'
+  },
+  // =========================================================================
+  // 8. VÁY ÁO THỔ CẨM NỮ CƠ TU (ao-nu-cotu)
+  // =========================================================================
+  {
+    id: 'quiz-aonu-01',
+    question: {
+      vi: 'Hoa văn dệt cườm lượn sóng nổi tiếng trên trang phục phụ nữ Cơ Tu tượng trưng cho điều gì?',
+      en: 'What do the undulating wave beadwork motifs (Zút Chơ-rơ) on Cơ Tu women\'s skirts symbolize?'
+    },
+    options: [
+      'Mountain streams and river ripples (Dòng suối và sóng nước đại ngàn)',
+      'Factory machinery gears',
+      'Automobile highways',
+      'Electronic circuits'
+    ],
+    correctIndex: 0,
+    explanation: {
+      vi: 'Hoa văn Zút Chơ-rơ mô phỏng dòng suối mát lành uốn lượn mang lại sự sống cho nương rẫy bản làng.',
+      en: 'The ripple patterns depict the flow of mountain water nourishing highland life.'
+    },
+    relatedArtifactSlug: 'ao-nu-cotu'
+  },
+  {
+    id: 'quiz-aonu-02',
+    question: {
+      vi: 'Chiếc váy quấn truyền thống của phụ nữ Cơ Tu được gọi là gì trong tiếng Anh?',
+      en: 'What is the traditional wrap-around skirt of Cơ Tu women called in English?'
+    },
+    options: [
+      'Wrap skirt (Váy quấn Chơ-rơ)',
+      'Pleated miniskirt',
+      'Denim jeans',
+      'Leather trousers'
+    ],
+    correctIndex: 0,
+    explanation: {
+      vi: '"Wrap skirt" là váy quấn dài duyên dáng, lộng lẫy trong các điệu múa dâng trời Da dá.',
+      en: 'Wrap skirts (Chơ-rơ) are paired with sleeveless blouses during ceremonial dances.'
+    },
+    relatedArtifactSlug: 'ao-nu-cotu'
+  },
+  // =========================================================================
+  // 9. ĐIÊU KHẮC CON TÊ TÊ CƠ TU (tuong-te-te-cotu)
+  // =========================================================================
+  {
+    id: 'quiz-tete-01',
+    question: {
+      vi: 'Loài động vật có lớp vảy cứng quý hiếm trong rừng già Tây Giang được tạc tượng gỗ gọi là gì trong tiếng Anh?',
+      en: 'What is the scale-armored mammal portrayed in Cơ Tu folk woodcarvings called in English?'
+    },
+    options: [
+      'Pangolin (Con tê tê)',
+      'Polar bear',
+      'Penguin',
+      'Kangaroo'
+    ],
+    correctIndex: 0,
+    explanation: {
+      vi: '"Pangolin" là con tê tê rừng, loài thú quý gắn bó mật thiết với văn hóa bảo tồn rừng già Tây Giang.',
+      en: '"Pangolin" is the keratin-scaled mammal honored in Cơ Tu folklore and folk timber sculpture.'
+    },
+    relatedArtifactSlug: 'tuong-te-te-cotu'
+  },
+  {
+    id: 'quiz-tete-02',
+    question: {
+      vi: 'Phương pháp đẽo tạc tượng con tê tê từ một thân gỗ rừng duy nhất mà không chắp ghép được gọi là gì?',
+      en: 'What is the term for sculpting an artwork from a single solid log without assembly?'
+    },
+    options: [
+      'Monolithic carving / Single-log sculpture (Điêu khắc gỗ nguyên khối)',
+      '3D plastic printing',
+      'Metal welding assembly',
+      'Glued cardboard model'
+    ],
+    correctIndex: 0,
+    explanation: {
+      vi: 'Nghệ nhân Cơ Tu đẽo trực tiếp từ thân cây gỗ nguyên khối ("Monolithic carving") theo thế cong tự nhiên.',
+      en: 'Direct carving from a single timber trunk preserves the primal organic curvature of the wood.'
+    },
+    relatedArtifactSlug: 'tuong-te-te-cotu'
   }
 ];

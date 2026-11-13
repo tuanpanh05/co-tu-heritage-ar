@@ -18,8 +18,12 @@ export const Footer: React.FC = () => {
           {/* Col 1: Brand & Mountain Heritage Spirit */}
           <div className="md:col-span-6 space-y-4">
             <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#1E3B2E] via-[#142920] to-[#0A1611] border border-heritage-ochre/30 flex items-center justify-center text-heritage-ochre shadow-lg">
-                <Mountain className="w-5 h-5 text-heritage-ochre" />
+              <div className="w-10 h-10 rounded-xl overflow-hidden border border-heritage-ochre/40 shadow-lg bg-[#0A1611] flex items-center justify-center shrink-0">
+                <img
+                  src="/images/logo-emblem.png"
+                  alt="Cơ Tu Heritage Emblem"
+                  className="w-full h-full object-cover object-center"
+                />
               </div>
               <span className="font-serif font-bold text-xl text-heritage-wood tracking-wide">
                 Cơ Tu Heritage <span className="text-xs font-mono text-heritage-ochre font-normal">AR</span>
