@@ -438,9 +438,9 @@ export const ARTIFACTS_DATA: Artifact[] = [
       vi: 'Nghệ thuật đan lát & Dệt thổ cẩm',
       en: 'Traditional Basketry & Weaving'
     },
-    thumbnail: '/images/aonam-authentic.jpg',
+    thumbnail: '/images/aonam_v2.png',
     originalImages: [
-      '/images/aonam-authentic.jpg'
+      '/images/aonam_v2.png'
     ],
     model3D: '/models/ao-nam.glb',
     modelStatus: 'available',
@@ -539,9 +539,9 @@ export const ARTIFACTS_DATA: Artifact[] = [
       vi: 'Nghệ thuật đan lát & Dệt thổ cẩm',
       en: 'Traditional Basketry & Weaving'
     },
-    thumbnail: '/images/aonu-authentic.jpg',
+    thumbnail: '/images/aonu_v2.png',
     originalImages: [
-      '/images/aonu-authentic.jpg'
+      '/images/aonu_v2.png'
     ],
     model3D: '/models/ao-nu.glb',
     modelStatus: 'available',
@@ -640,9 +640,9 @@ export const ARTIFACTS_DATA: Artifact[] = [
       vi: 'Điêu khắc & Tâm linh',
       en: 'Spiritual Sculpture & Rituals'
     },
-    thumbnail: '/images/tete-authentic.jpg',
+    thumbnail: '/images/tete_v2.png',
     originalImages: [
-      '/images/tete-authentic.jpg'
+      '/images/tete_v2.png'
     ],
     model3D: '/models/te-te.glb',
     modelStatus: 'available',

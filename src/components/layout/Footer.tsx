@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Mountain, Sparkles, QrCode, Compass } from 'lucide-react';
+import { Sparkles, QrCode, Compass } from 'lucide-react';
 import { useLanguage } from '../../contexts/LanguageContext';
 
 export const Footer: React.FC = () => {

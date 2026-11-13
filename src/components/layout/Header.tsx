@@ -7,7 +7,6 @@ import {
   QrCode,
   GraduationCap,
   Layers,
-  Sparkles,
   BarChart3,
   Volume2,
   VolumeX,
