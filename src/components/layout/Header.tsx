@@ -49,32 +49,32 @@ export const Header: React.FC = () => {
 
   return (
     <header className="sticky top-0 z-40 bg-[#0B130F]/90 backdrop-blur-xl border-b border-[#25362E] transition-all shadow-[0_8px_30px_rgba(0,0,0,0.55)]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 sm:h-20 gap-3 lg:gap-4 flex-nowrap">
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-16 sm:h-20 gap-2 sm:gap-4 w-full">
           
           {/* Logo & Brand: Dignified, Museum-Grade Heritage Mark */}
           <Link
             to="/"
-            className="flex items-center space-x-3 group py-2 focus:outline-none shrink-0"
+            className="flex items-center space-x-2.5 sm:space-x-3 group py-2 focus:outline-none min-w-0"
           >
-            <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl overflow-hidden border border-heritage-ochre/40 shadow-lg group-hover:border-heritage-ochre/70 group-hover:shadow-glow transition-all duration-300 bg-[#0A1611] flex items-center justify-center shrink-0">
+            <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-xl overflow-hidden border border-heritage-ochre/40 shadow-lg group-hover:border-heritage-ochre/70 group-hover:shadow-glow transition-all duration-300 bg-[#0A1611] flex items-center justify-center shrink-0">
               <img
                 src="/images/logo-emblem.png"
                 alt="Cơ Tu Heritage Emblem"
                 className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-300"
               />
             </div>
-            <div className="flex flex-col shrink-0">
-              <div className="flex items-center space-x-2">
-                <span className="text-base sm:text-lg font-serif font-semibold tracking-tight text-heritage-wood group-hover:text-heritage-ochre transition-colors whitespace-nowrap">
+            <div className="flex flex-col min-w-0">
+              <div className="flex items-center space-x-1.5 sm:space-x-2">
+                <span className="text-sm sm:text-lg font-serif font-semibold tracking-tight text-heritage-wood group-hover:text-heritage-ochre transition-colors truncate">
                   Cơ Tu Heritage
                 </span>
                 <span className="text-[10px] font-mono uppercase tracking-wider px-1.5 py-0.5 rounded bg-heritage-ochre/15 border border-heritage-ochre/30 text-heritage-ochre hidden sm:inline-block">
                   AR
                 </span>
               </div>
-              <span className="text-[11px] text-heritage-woodMuted font-medium tracking-wide whitespace-nowrap">
-                {t('Bảo tàng số Tây Giang · WebAR', 'Tây Giang Digital Museum · WebAR')}
+              <span className="text-[10px] sm:text-[11px] text-heritage-woodMuted font-medium tracking-wide truncate max-w-[130px] xs:max-w-[200px] sm:max-w-none">
+                {t('Bảo tàng số Tây Giang', 'Tây Giang Digital Museum')}
               </span>
             </div>
           </Link>
@@ -223,7 +223,7 @@ export const Header: React.FC = () => {
           </div>
 
           {/* Mobile controls: Compact Audio + Language Switcher + Hamburger */}
-          <div className="flex md:hidden items-center space-x-2">
+          <div className="flex md:hidden items-center space-x-1 sm:space-x-1.5 shrink-0">
             <button
               data-tour="sound-toggle-mobile"
               data-music-control="true"

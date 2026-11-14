@@ -78,6 +78,29 @@ export const ModelViewer3D: React.FC<ModelViewer3DProps> = ({
     return isFullscreen ? (fullscreenViewerRef.current || modelViewerRef.current) : modelViewerRef.current;
   };
 
+  // Tự động nhận diện và thích ứng góc nhìn/khoảng cách camera theo tỷ lệ màn hình điện thoại
+  const getAdaptiveCameraOrbit = (orbit?: string) => {
+    if (!orbit) {
+      return 'auto 75deg auto';
+    }
+    // Trên điện thoại (màn hình hẹp hơn theo chiều ngang), tự động nới thêm bán kính
+    // để các hiện vật bề ngang rộng (như Nhà Gươi) không bao giờ bị cắt xén hay tràn viền
+    if (isMobileDevice) {
+      const parts = orbit.trim().split(/\s+/);
+      if (parts.length === 3) {
+        const theta = parts[0];
+        const phi = parts[1];
+        const radiusStr = parts[2];
+        const radiusVal = parseFloat(radiusStr);
+        if (!isNaN(radiusVal) && radiusStr.endsWith('%')) {
+          const safeRadius = Math.max(110, radiusVal + 25);
+          return `${theta} ${phi} ${safeRadius}%`;
+        }
+      }
+    }
+    return orbit;
+  };
+
   const handleZoomIn = () => {
     const viewer = getActiveViewer();
     if (!viewer) return;
@@ -113,26 +136,55 @@ export const ModelViewer3D: React.FC<ModelViewer3DProps> = ({
   const handleResetView = () => {
     const viewer = getActiveViewer();
     if (!viewer) return;
-    viewer.cameraOrbit = cameraOrbit || '0deg 75deg 105%';
+    viewer.cameraOrbit = cameraOrbit ? getAdaptiveCameraOrbit(cameraOrbit) : 'auto 75deg auto';
     viewer.fieldOfView = 'auto';
+    if (typeof viewer.updateFraming === 'function') {
+      viewer.updateFraming();
+    }
   };
 
   const toggleFullscreen = () => {
     setIsFullscreen((prev) => !prev);
   };
 
+  // Tự động phát hiện kích thước và hướng xoay của điện thoại để tự co giãn khung nhìn 3D
   useEffect(() => {
-    const checkMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-      navigator.userAgent
-    );
-    setIsMobileDevice(checkMobile);
+    const updateDimensions = () => {
+      const isMobile = window.innerWidth < 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+        navigator.userAgent
+      );
+      setIsMobileDevice(isMobile);
+
+      // Khi xoay ngang/dọc điện thoại hoặc đổi kích thước, gọi updateFraming để căn lại 3D vừa khít
+      if (modelViewerRef.current && typeof modelViewerRef.current.updateFraming === 'function') {
+        modelViewerRef.current.updateFraming();
+      }
+      if (fullscreenViewerRef.current && typeof fullscreenViewerRef.current.updateFraming === 'function') {
+        fullscreenViewerRef.current.updateFraming();
+      }
+    };
+
+    updateDimensions();
+    window.addEventListener('resize', updateDimensions);
+    window.addEventListener('orientationchange', updateDimensions);
+    return () => {
+      window.removeEventListener('resize', updateDimensions);
+      window.removeEventListener('orientationchange', updateDimensions);
+    };
   }, []);
 
   useEffect(() => {
-    if (cameraOrbit && modelViewerRef.current) {
-      modelViewerRef.current.cameraOrbit = cameraOrbit;
+    if (modelViewerRef.current) {
+      if (cameraOrbit) {
+        modelViewerRef.current.cameraOrbit = getAdaptiveCameraOrbit(cameraOrbit);
+      } else {
+        modelViewerRef.current.cameraOrbit = 'auto 75deg auto';
+      }
+      if (typeof modelViewerRef.current.updateFraming === 'function') {
+        modelViewerRef.current.updateFraming();
+      }
     }
-  }, [cameraOrbit]);
+  }, [cameraOrbit, isMobileDevice]);
 
   useEffect(() => {
     setLoadError(false);
@@ -156,6 +208,9 @@ export const ModelViewer3D: React.FC<ModelViewer3DProps> = ({
     const handleLoad = () => {
       setLoading(false);
       setLoadError(false);
+      if (typeof viewer.updateFraming === 'function') {
+        viewer.updateFraming();
+      }
     };
 
     viewer.addEventListener('progress', handleProgress);
@@ -193,7 +248,7 @@ export const ModelViewer3D: React.FC<ModelViewer3DProps> = ({
 
   if (modelStatus === 'coming_soon' || modelStatus === 'missing' || !modelUrl) {
     return (
-      <div className="relative w-full aspect-[4/3] sm:aspect-[16/10] bg-gradient-to-br from-[#0A120E] via-[#0E1A14] to-[#0A120E] rounded-3xl overflow-hidden shadow-heritage-lg border border-[#1E3029] flex flex-col items-center justify-center p-6 text-center text-heritage-wood">
+      <div className="relative w-full h-[52dvh] min-h-[320px] max-h-[560px] sm:h-auto sm:aspect-[16/10] bg-gradient-to-br from-[#0A120E] via-[#0E1A14] to-[#0A120E] rounded-2xl sm:rounded-3xl overflow-hidden shadow-heritage-lg border border-[#1E3029] flex flex-col items-center justify-center p-4 sm:p-6 text-center text-heritage-wood max-w-full">
         {posterUrl && (
           <img 
             src={posterUrl} 
@@ -246,8 +301,8 @@ export const ModelViewer3D: React.FC<ModelViewer3DProps> = ({
 
   return (
     <>
-      {/* Normal Embedded 3D Viewer Card */}
-      <div className="relative w-full aspect-[4/3] sm:aspect-[16/10] rounded-3xl overflow-hidden shadow-heritage-lg border border-[#1E3029] group bg-[#0A120E]">
+      {/* Normal Embedded 3D Viewer Card: Co giãn thích ứng với chiều cao mọi thiết bị di động */}
+      <div className="relative w-full h-[52dvh] min-h-[320px] max-h-[560px] sm:h-auto sm:aspect-[16/10] rounded-2xl sm:rounded-3xl overflow-hidden shadow-heritage-lg border border-[#1E3029] group bg-[#0A120E] max-w-full">
         <model-viewer
           ref={modelViewerRef}
           src={modelUrl}
@@ -255,6 +310,9 @@ export const ModelViewer3D: React.FC<ModelViewer3DProps> = ({
           alt={altText}
           camera-controls
           auto-rotate
+          bounds="tight"
+          camera-orbit={getAdaptiveCameraOrbit(cameraOrbit)}
+          field-of-view="auto"
           ar
           ar-modes="webxr scene-viewer quick-look"
           shadow-intensity="1.0"
@@ -262,10 +320,10 @@ export const ModelViewer3D: React.FC<ModelViewer3DProps> = ({
           exposure="1.05"
           interaction-prompt="auto"
           touch-action="pan-y"
-          min-camera-orbit="auto auto 15%"
-          max-camera-orbit="auto auto 350%"
-          min-field-of-view="12deg"
-          max-field-of-view="80deg"
+          min-camera-orbit="auto auto 5%"
+          max-camera-orbit="auto auto 400%"
+          min-field-of-view="8deg"
+          max-field-of-view="85deg"
           interpolation-decay="200"
           style={{ width: '100%', height: '100%', display: 'block' }}
         >
@@ -376,7 +434,7 @@ export const ModelViewer3D: React.FC<ModelViewer3DProps> = ({
       {isFullscreen &&
         createPortal(
           <div
-            className="fixed inset-0 w-screen h-screen bg-[#060D09] z-[999999] flex flex-col select-none overflow-hidden"
+            className="fixed inset-0 w-full h-[100dvh] bg-[#060D09] z-[999999] flex flex-col select-none overflow-hidden max-w-full"
             style={{ margin: 0, padding: 0 }}
           >
             {/* 1. Fullscreen Top Header with Safe Area support */}
@@ -419,6 +477,9 @@ export const ModelViewer3D: React.FC<ModelViewer3DProps> = ({
                 alt={altText}
                 camera-controls
                 auto-rotate
+                bounds="tight"
+                camera-orbit={getAdaptiveCameraOrbit(cameraOrbit)}
+                field-of-view="auto"
                 ar
                 ar-modes="webxr scene-viewer quick-look"
                 shadow-intensity="1.2"
@@ -426,8 +487,8 @@ export const ModelViewer3D: React.FC<ModelViewer3DProps> = ({
                 exposure="1.1"
                 interaction-prompt="auto"
                 touch-action="none"
-                min-camera-orbit="auto auto 10%"
-                max-camera-orbit="auto auto 400%"
+                min-camera-orbit="auto auto 5%"
+                max-camera-orbit="auto auto 450%"
                 min-field-of-view="8deg"
                 max-field-of-view="85deg"
                 interpolation-decay="200"

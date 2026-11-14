@@ -6,9 +6,13 @@
   html {
     scroll-behavior: smooth;
     -webkit-tap-highlight-color: transparent;
+    max-width: 100%;
+    overflow-x: hidden;
   }
   
   body {
+    max-width: 100%;
+    overflow-x: hidden;
     background: radial-gradient(circle at 50% 0%, #14231B 0%, #0C1511 42%, #060A08 100%);
     background-attachment: fixed;
     color: #F5EFE6;

@@ -22,8 +22,17 @@ declare global {
           'skybox-image'?: string;
           'interaction-prompt'?: 'auto' | 'when-focused' | 'none';
           'touch-action'?: string;
+          'bounds'?: 'tight' | 'legacy' | string;
+          'camera-orbit'?: string;
+          'field-of-view'?: string;
+          'min-camera-orbit'?: string;
+          'max-camera-orbit'?: string;
+          'min-field-of-view'?: string;
+          'max-field-of-view'?: string;
+          'interpolation-decay'?: string | number;
           tabIndex?: number;
           ref?: React.Ref<any>;
+          [key: string]: any;
         },
         HTMLElement
       >;
