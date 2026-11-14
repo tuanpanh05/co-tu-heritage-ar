@@ -50,7 +50,7 @@ export const Header: React.FC = () => {
   return (
     <header className="sticky top-0 z-40 bg-[#0B130F]/90 backdrop-blur-xl border-b border-[#25362E] transition-all shadow-[0_8px_30px_rgba(0,0,0,0.55)]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 sm:h-20 gap-4">
+        <div className="flex items-center justify-between h-16 sm:h-20 gap-3 lg:gap-4 flex-nowrap">
           
           {/* Logo & Brand: Dignified, Museum-Grade Heritage Mark */}
           <Link
@@ -64,26 +64,26 @@ export const Header: React.FC = () => {
                 className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-300"
               />
             </div>
-            <div className="flex flex-col">
+            <div className="flex flex-col shrink-0">
               <div className="flex items-center space-x-2">
-                <span className="text-base sm:text-lg font-serif font-semibold tracking-tight text-heritage-wood group-hover:text-heritage-ochre transition-colors">
+                <span className="text-base sm:text-lg font-serif font-semibold tracking-tight text-heritage-wood group-hover:text-heritage-ochre transition-colors whitespace-nowrap">
                   Cơ Tu Heritage
                 </span>
                 <span className="text-[10px] font-mono uppercase tracking-wider px-1.5 py-0.5 rounded bg-heritage-ochre/15 border border-heritage-ochre/30 text-heritage-ochre hidden sm:inline-block">
                   AR
                 </span>
               </div>
-              <span className="text-[11px] text-heritage-woodMuted font-medium tracking-wide">
+              <span className="text-[11px] text-heritage-woodMuted font-medium tracking-wide whitespace-nowrap">
                 {t('Bảo tàng số Tây Giang · WebAR', 'Tây Giang Digital Museum · WebAR')}
               </span>
             </div>
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-4 lg:space-x-6">
+          <div className="hidden md:flex items-center space-x-3 lg:space-x-5 shrink-0 flex-nowrap">
             <nav
               data-tour="main-nav-desktop"
-              className="flex items-center space-x-1 bg-[#101A15]/80 p-1 rounded-xl border border-[#23352C]"
+              className="flex items-center space-x-1 bg-[#101A15]/80 p-1 rounded-xl border border-[#23352C] shrink-0 whitespace-nowrap"
             >
               {primaryNavLinks.map((link) => {
                 const Icon = link.icon;
@@ -132,17 +132,17 @@ export const Header: React.FC = () => {
             </nav>
 
             {/* Right Group: Discreet Ambient Sound Bar & Minimalist Language Switcher */}
-            <div className="flex items-center space-x-3">
+            <div className="flex items-center space-x-2.5 shrink-0 whitespace-nowrap">
               
               {/* Discreet Ambient Forest & Flute Audio Controller */}
               <div
                 data-tour="sound-toggle-desktop"
                 data-music-control="true"
-                className="inline-flex items-center bg-[#101A15]/90 px-2 py-1.5 rounded-xl border border-[#23352C] shadow-sm"
+                className="inline-flex items-center bg-[#101A15]/90 px-2 py-1.5 rounded-xl border border-[#23352C] shadow-sm shrink-0 whitespace-nowrap"
               >
                 <button
                   onClick={() => forestSoundService.toggle()}
-                  className={`inline-flex items-center space-x-2 px-2.5 py-1 rounded-lg text-xs font-medium transition-all ${
+                  className={`inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-lg text-xs font-medium transition-all whitespace-nowrap shrink-0 ${
                     forestSoundOn
                       ? 'text-heritage-ochre hover:text-heritage-ochreLight'
                       : 'text-heritage-woodMuted hover:text-heritage-woodLight opacity-70'
@@ -153,15 +153,15 @@ export const Header: React.FC = () => {
                   )}
                 >
                   {forestSoundOn ? (
-                    <div className="flex items-end space-x-0.5 h-3.5">
+                    <div className="flex items-end space-x-0.5 h-3.5 shrink-0">
                       <span className="w-0.5 h-2 bg-heritage-ochre rounded-full animate-pulse" />
                       <span className="w-0.5 h-3.5 bg-heritage-ochre rounded-full animate-pulse delay-75" />
                       <span className="w-0.5 h-1.5 bg-heritage-ochre rounded-full animate-pulse delay-150" />
                     </div>
                   ) : (
-                    <VolumeX className="w-3.5 h-3.5" />
+                    <VolumeX className="w-3.5 h-3.5 shrink-0" />
                   )}
-                  <span className="text-[11px] font-mono tracking-tight hidden lg:inline">
+                  <span className="text-[11px] font-mono tracking-tight hidden lg:inline whitespace-nowrap">
                     {forestSoundOn ? t('Âm thanh', 'Ambient') : t('Tắt âm', 'Mute')}
                   </span>
                 </button>
@@ -169,7 +169,7 @@ export const Header: React.FC = () => {
                 {forestSoundOn && (
                   <button
                     onClick={() => forestSoundService.nextTrack()}
-                    className="p-1 rounded text-heritage-woodMuted hover:text-heritage-ochre transition-colors ml-0.5"
+                    className="p-1 rounded text-heritage-woodMuted hover:text-heritage-ochre transition-colors ml-0.5 shrink-0"
                     title={t('Đổi giai điệu khác', 'Next ambient track')}
                   >
                     <SkipForward className="w-3 h-3" />
@@ -180,13 +180,13 @@ export const Header: React.FC = () => {
               {/* Minimalist Language Switcher VI | EN */}
               <div
                 data-tour="lang-toggle-desktop"
-                className="inline-flex items-center bg-[#101A15]/90 p-1 rounded-xl border border-[#23352C]"
+                className="inline-flex items-center bg-[#101A15]/90 p-1 rounded-xl border border-[#23352C] shrink-0 whitespace-nowrap"
                 role="group"
                 aria-label={t('Chuyển đổi ngôn ngữ', 'Switch language')}
               >
                 <button
                   onClick={() => setLang('vi')}
-                  className={`px-2 py-1 rounded-lg text-xs font-semibold transition-all ${
+                  className={`px-2 py-1 rounded-lg text-xs font-semibold transition-all whitespace-nowrap ${
                     lang === 'vi'
                       ? 'bg-heritage-ochre text-slate-950 font-bold shadow-xs'
                       : 'text-heritage-woodMuted hover:text-heritage-wood'
@@ -195,10 +195,10 @@ export const Header: React.FC = () => {
                 >
                   VI
                 </button>
-                <span className="text-heritage-sandDark text-xs px-0.5">/</span>
+                <span className="text-heritage-sandDark text-xs px-0.5 select-none">/</span>
                 <button
                   onClick={() => setLang('en')}
-                  className={`px-2 py-1 rounded-lg text-xs font-semibold transition-all ${
+                  className={`px-2 py-1 rounded-lg text-xs font-semibold transition-all whitespace-nowrap ${
                     lang === 'en'
                       ? 'bg-heritage-ochre text-slate-950 font-bold shadow-xs'
                       : 'text-heritage-woodMuted hover:text-heritage-wood'
@@ -212,11 +212,11 @@ export const Header: React.FC = () => {
               {/* Tour / Guide Button */}
               <button
                 onClick={openSpotlightTour}
-                className="inline-flex items-center space-x-1.5 px-2.5 py-1.5 rounded-xl bg-[#101A15]/90 border border-[#23352C] hover:border-heritage-ochre/50 text-heritage-woodMuted hover:text-heritage-ochre transition-all text-xs font-medium"
+                className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-[#101A15]/90 border border-[#23352C] hover:border-heritage-ochre/50 text-heritage-woodMuted hover:text-heritage-ochre transition-all text-xs font-medium shrink-0 whitespace-nowrap"
                 title={t('Xem chỉ dẫn tương tác', 'Interactive Tour')}
               >
-                <HelpCircle className="w-3.5 h-3.5 text-heritage-ochre" />
-                <span className="hidden xl:inline">{t('Chỉ dẫn', 'Tour')}</span>
+                <HelpCircle className="w-3.5 h-3.5 text-heritage-ochre shrink-0" />
+                <span className="whitespace-nowrap">{t('Chỉ dẫn', 'Tour')}</span>
               </button>
 
             </div>
