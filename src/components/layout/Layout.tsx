@@ -3,6 +3,7 @@ import { Outlet, useLocation } from 'react-router-dom';
 import { Header } from './Header';
 import { Footer } from './Footer';
 import { InteractiveBackground } from './InteractiveBackground';
+import { LiveFeedbackFloatingTicker } from '../feedback/LiveFeedbackFloatingTicker';
 import { analyticsService } from '../../services/analyticsService';
 
 export const Layout: React.FC = () => {
@@ -26,6 +27,8 @@ export const Layout: React.FC = () => {
         <Outlet />
       </main>
       <Footer />
+      {/* Live Community Feedback Floating Ticker */}
+      <LiveFeedbackFloatingTicker />
     </div>
   );
 };

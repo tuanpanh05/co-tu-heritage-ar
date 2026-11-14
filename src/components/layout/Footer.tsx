@@ -69,6 +69,15 @@ export const Footer: React.FC = () => {
                   {t('Kho từ vựng & Thẻ lật 3D', 'Vocabulary Hub & 3D Cards')}
                 </Link>
               </li>
+              <li>
+                <a
+                  href="/#community-guestbook"
+                  className="hover:text-heritage-ochre transition-colors flex items-center space-x-1.5 text-heritage-ochre/90"
+                >
+                  <Sparkles className="w-3.5 h-3.5 text-heritage-ochre" />
+                  <span>{t('Sổ lưu bút & Góp ý cộng đồng', 'Guestbook & Feedback')}</span>
+                </a>
+              </li>
             </ul>
           </div>
 

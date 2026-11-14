@@ -11,6 +11,7 @@ import { ArtifactAnatomyInspector } from '../components/artifact/ArtifactAnatomy
 import { EthnographicDossierCard } from '../components/artifact/EthnographicDossierCard';
 import { ARTIFACT_ACADEMIC_PROFILES } from '../data/academicAnatomyData';
 import { ArtifactCard } from '../components/artifact/ArtifactCard';
+import { CommunityFeedbackSection } from '../components/feedback/CommunityFeedbackSection';
 import { useLanguage } from '../contexts/LanguageContext';
 import { analyticsService } from '../services/analyticsService';
 import {
@@ -349,6 +350,21 @@ export const ArtifactDetailPage: React.FC = () => {
           </div>
         </div>
       )}
+
+      {/* 6. ARTIFACT COMMUNITY REFLECTIONS & GUESTBOOK */}
+      <div className="pt-6">
+        <CommunityFeedbackSection
+          initialArtifactSlug={artifact.slug}
+          titleOverride={t(
+            `Cảm Nhận & Góp Ý Về: ${artifact.name.vi}`,
+            `Community Reviews: ${artifact.name.en}`
+          )}
+          subtitleOverride={t(
+            `Chia sẻ cảm nghĩ, góc nhìn hoặc câu hỏi của bạn về hiện vật ${artifact.name.vi} trong văn hóa Cơ Tu. Mọi phản hồi đều công khai trực tiếp.`,
+            `Share your reflections, insights, or questions about the ${artifact.name.en} in Cơ Tu culture. All contributions are immediately public.`
+          )}
+        />
+      </div>
 
       <VocabularyPopup
         item={activeVocab}

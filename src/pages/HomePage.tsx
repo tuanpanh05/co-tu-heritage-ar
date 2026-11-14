@@ -15,6 +15,7 @@ import {
 import { artifactService } from '../services/artifactService';
 import { ArtifactCard } from '../components/artifact/ArtifactCard';
 import { InteractiveVillageMap } from '../components/home/InteractiveVillageMap';
+import { CommunityFeedbackSection } from '../components/feedback/CommunityFeedbackSection';
 import { useLanguage } from '../contexts/LanguageContext';
 import { speechService } from '../services/speechService';
 
@@ -419,6 +420,9 @@ export const HomePage: React.FC = () => {
           </div>
         </div>
       </section>
+
+      {/* 5. COMMUNITY GUESTBOOK & PUBLIC FEEDBACK */}
+      <CommunityFeedbackSection />
 
     </div>
   );
