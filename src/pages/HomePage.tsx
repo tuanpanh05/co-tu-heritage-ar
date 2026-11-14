@@ -188,6 +188,10 @@ export const HomePage: React.FC = () => {
                       shadow-intensity="1.2"
                       exposure="1.0"
                       touch-action="pan-y"
+                      min-camera-orbit="auto auto 15%"
+                      max-camera-orbit="auto auto 350%"
+                      min-field-of-view="12deg"
+                      max-field-of-view="80deg"
                     />
 
                     {/* Gradient Overlay at Bottom of 3D Stage */}
