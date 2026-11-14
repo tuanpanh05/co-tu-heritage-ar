@@ -10,10 +10,12 @@ import {
   BarChart3,
   Volume2,
   VolumeX,
-  SkipForward
+  SkipForward,
+  HelpCircle
 } from 'lucide-react';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { forestSoundService, BG_MUSIC_TRACKS } from '../../services/forestSoundService';
+import { openSpotlightTour } from '../common/SpotlightTour';
 
 export const Header: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -79,7 +81,10 @@ export const Header: React.FC = () => {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-4 lg:space-x-6">
-            <nav className="flex items-center space-x-1 bg-[#101A15]/80 p-1 rounded-xl border border-[#23352C]">
+            <nav
+              data-tour="main-nav-desktop"
+              className="flex items-center space-x-1 bg-[#101A15]/80 p-1 rounded-xl border border-[#23352C]"
+            >
               {primaryNavLinks.map((link) => {
                 const Icon = link.icon;
                 const isActive =
@@ -131,6 +136,7 @@ export const Header: React.FC = () => {
               
               {/* Discreet Ambient Forest & Flute Audio Controller */}
               <div
+                data-tour="sound-toggle-desktop"
                 data-music-control="true"
                 className="inline-flex items-center bg-[#101A15]/90 px-2 py-1.5 rounded-xl border border-[#23352C] shadow-sm"
               >
@@ -173,6 +179,7 @@ export const Header: React.FC = () => {
 
               {/* Minimalist Language Switcher VI | EN */}
               <div
+                data-tour="lang-toggle-desktop"
                 className="inline-flex items-center bg-[#101A15]/90 p-1 rounded-xl border border-[#23352C]"
                 role="group"
                 aria-label={t('Chuyển đổi ngôn ngữ', 'Switch language')}
@@ -202,12 +209,23 @@ export const Header: React.FC = () => {
                 </button>
               </div>
 
+              {/* Tour / Guide Button */}
+              <button
+                onClick={openSpotlightTour}
+                className="inline-flex items-center space-x-1.5 px-2.5 py-1.5 rounded-xl bg-[#101A15]/90 border border-[#23352C] hover:border-heritage-ochre/50 text-heritage-woodMuted hover:text-heritage-ochre transition-all text-xs font-medium"
+                title={t('Xem chỉ dẫn tương tác', 'Interactive Tour')}
+              >
+                <HelpCircle className="w-3.5 h-3.5 text-heritage-ochre" />
+                <span className="hidden xl:inline">{t('Chỉ dẫn', 'Tour')}</span>
+              </button>
+
             </div>
           </div>
 
           {/* Mobile controls: Compact Audio + Language Switcher + Hamburger */}
           <div className="flex md:hidden items-center space-x-2">
             <button
+              data-tour="sound-toggle-mobile"
               data-music-control="true"
               onClick={() => forestSoundService.toggle()}
               className={`p-2 rounded-xl border transition-all ${
@@ -221,7 +239,10 @@ export const Header: React.FC = () => {
             </button>
 
             {/* Mobile Language Toggle */}
-            <div className="inline-flex items-center bg-[#101A15] p-1 rounded-xl border border-[#23352C]">
+            <div
+              data-tour="lang-toggle-mobile"
+              className="inline-flex items-center bg-[#101A15] p-1 rounded-xl border border-[#23352C]"
+            >
               <button
                 onClick={() => setLang('vi')}
                 className={`px-2 py-1 rounded-lg text-xs font-bold transition-all ${

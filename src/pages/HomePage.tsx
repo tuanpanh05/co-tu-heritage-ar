@@ -35,7 +35,7 @@ export const HomePage: React.FC = () => {
   };
 
   return (
-    <div className="space-y-24 sm:space-y-32 pb-20">
+    <div className="space-y-20 sm:space-y-32 pb-20">
       
       {/* 1. HERO SECTION: Trầm Hùng Đại Ngàn Tây Giang & Sân Khấu 3D Trực Tiếp */}
       <section className="relative pt-6 sm:pt-12 pb-10 overflow-hidden">
@@ -87,27 +87,27 @@ export const HomePage: React.FC = () => {
               </p>
 
               {/* Primary Call-to-Actions */}
-              <div className="pt-2 flex flex-wrap items-center gap-4">
+              <div className="pt-2 flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-3">
                 <Link
                   to="/artifacts"
-                  className="inline-flex items-center justify-center space-x-2.5 px-7 py-3.5 rounded-xl bg-gradient-to-r from-heritage-ochre to-[#B67E2D] hover:from-heritage-ochreLight hover:to-heritage-ochre text-slate-950 text-sm sm:text-base font-bold shadow-heritage-lg hover:shadow-glow transition-all duration-300 transform hover:-translate-y-0.5 min-h-[48px]"
+                  className="inline-flex items-center justify-center space-x-2.5 px-7 py-3.5 rounded-xl bg-gradient-to-r from-heritage-ochre to-[#B67E2D] hover:from-heritage-ochreLight hover:to-heritage-ochre text-slate-950 text-sm sm:text-base font-bold shadow-heritage-lg hover:shadow-glow transition-all duration-300 transform hover:-translate-y-0.5 min-h-[52px]"
                 >
-                  <Compass className="w-5 h-5 text-slate-950" />
+                  <Compass className="w-5 h-5 text-slate-950 shrink-0" />
                   <span>{t('Bước vào bộ sưu tập hiện vật', 'Enter 3D Collection')}</span>
-                  <ArrowRight className="w-4 h-4 text-slate-950" />
+                  <ArrowRight className="w-4 h-4 text-slate-950 shrink-0" />
                 </Link>
 
                 <Link
                   to="/learn"
-                  className="inline-flex items-center justify-center space-x-2 px-6 py-3.5 rounded-xl bg-[#121E18] hover:bg-[#182820] text-heritage-wood hover:text-heritage-ochre border border-[#263A2F] shadow-sm text-sm sm:text-base font-semibold transition-all duration-300 min-h-[48px]"
+                  className="inline-flex items-center justify-center space-x-2 px-6 py-3.5 rounded-xl bg-[#121E18] hover:bg-[#182820] text-heritage-wood hover:text-heritage-ochre border border-[#263A2F] shadow-sm text-sm sm:text-base font-semibold transition-all duration-300 min-h-[52px]"
                 >
-                  <GraduationCap className="w-4 h-4 text-heritage-ochre" />
+                  <GraduationCap className="w-4 h-4 text-heritage-ochre shrink-0" />
                   <span>{t('Học tập & Flashcard 3D', 'Learning & 3D Cards')}</span>
                 </Link>
               </div>
 
               {/* 3 Core Experience Pillars (Refined, Cultural, Crisp) */}
-              <div className="pt-5 grid grid-cols-3 gap-4 border-t border-[#23352C]">
+              <div className="pt-5 grid grid-cols-1 xs:grid-cols-3 sm:grid-cols-3 gap-3 sm:gap-4 border-t border-[#23352C]">
                 <div className="space-y-1">
                   <div className="text-xs font-serif font-semibold text-heritage-ochre flex items-center space-x-1.5">
                     <Rotate3d className="w-3.5 h-3.5 text-heritage-clayLight" />

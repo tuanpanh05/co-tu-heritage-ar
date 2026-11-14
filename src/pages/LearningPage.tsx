@@ -254,7 +254,8 @@ export const LearningPage: React.FC = () => {
                 `Tìm kiếm trong ${fullVocabularyList.length} từ vựng (tiếng Anh, nghĩa tiếng Việt, câu ví dụ)...`,
                 `Search across ${fullVocabularyList.length} terms (English term, Vietnamese meaning, or example)...`
               )}
-              className="w-full pl-11 pr-10 py-3 rounded-2xl bg-[#0D1813]/80 border border-[#23352C] text-xs sm:text-sm text-heritage-wood placeholder:text-heritage-woodMuted focus:outline-none focus:border-heritage-ochre transition-colors"
+              className="w-full pl-11 pr-10 py-3.5 rounded-2xl bg-[#0D1813]/80 border border-[#23352C] text-heritage-wood placeholder:text-heritage-woodMuted focus:outline-none focus:border-heritage-ochre transition-colors"
+              style={{ fontSize: '16px' }}
             />
             {searchQuery && (
               <button
@@ -288,10 +289,10 @@ export const LearningPage: React.FC = () => {
         </div>
 
         {/* Category Filter Pills */}
-        <div className="flex flex-wrap gap-2">
+        <div className="flex gap-2 overflow-x-auto no-scrollbar pb-1 sm:flex-wrap sm:pb-0">
           <button
             onClick={() => setSelectedTheme('all')}
-            className={`px-3.5 py-2 rounded-xl text-xs font-semibold transition-all flex items-center gap-1.5 ${
+            className={`px-3.5 py-2 rounded-xl text-xs font-semibold transition-all flex items-center gap-1.5 shrink-0 ${
               selectedTheme === 'all'
                 ? 'bg-heritage-ochre text-slate-950 shadow-xs'
                 : 'bg-[#0A120E] text-heritage-woodMuted border border-[#1E3029] hover:bg-[#14221A] hover:text-heritage-wood'
@@ -310,7 +311,7 @@ export const LearningPage: React.FC = () => {
               <button
                 key={theme.id}
                 onClick={() => setSelectedTheme(theme.id)}
-                className={`px-3.5 py-2 rounded-xl text-xs font-semibold transition-all flex items-center gap-1.5 ${
+                className={`px-3.5 py-2 rounded-xl text-xs font-semibold transition-all flex items-center gap-1.5 shrink-0 ${
                   isActive
                     ? 'bg-heritage-ochre text-slate-950 shadow-xs'
                     : 'bg-[#0A120E] text-heritage-woodMuted border border-[#1E3029] hover:bg-[#14221A] hover:text-heritage-wood'

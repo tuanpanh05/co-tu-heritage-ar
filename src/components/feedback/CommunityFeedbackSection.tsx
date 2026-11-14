@@ -372,9 +372,9 @@ export const CommunityFeedbackSection: React.FC<CommunityFeedbackSectionProps> =
         </div>
 
         {/* Filter Bar & Controls */}
-        <div className="flex flex-wrap items-center justify-between gap-3 pt-2">
-          <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
-            <span className="text-xs text-heritage-woodMuted flex items-center space-x-1 mr-1">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-2">
+          <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-1 sm:pb-0 sm:flex-wrap">
+            <span className="text-xs text-heritage-woodMuted flex items-center space-x-1 mr-1 shrink-0">
               <Filter className="w-3.5 h-3.5" />
               <span className="hidden sm:inline">{t('Lọc theo:', 'Filter:')}</span>
             </span>
@@ -385,7 +385,7 @@ export const CommunityFeedbackSection: React.FC<CommunityFeedbackSectionProps> =
                   setActiveFilter(opt.id);
                   setDisplayCount(6);
                 }}
-                className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+                className={`shrink-0 px-3 py-1.5 rounded-lg text-xs font-medium transition-all min-h-[36px] ${
                   activeFilter === opt.id
                     ? 'bg-heritage-forest text-heritage-ochre border border-heritage-ochre/40 font-semibold shadow-sm'
                     : 'bg-[#101A15] text-heritage-woodLight hover:text-heritage-wood border border-[#23352C]'
@@ -396,7 +396,7 @@ export const CommunityFeedbackSection: React.FC<CommunityFeedbackSectionProps> =
             ))}
           </div>
 
-          <div className="text-xs text-heritage-woodMuted font-mono">
+          <div className="text-xs text-heritage-woodMuted font-mono shrink-0">
             {t(`Hiển thị ${Math.min(displayCount, filteredComments.length)} / ${filteredComments.length} phản hồi`, `Showing ${Math.min(displayCount, filteredComments.length)} of ${filteredComments.length} reviews`)}
           </div>
         </div>
@@ -544,13 +544,20 @@ export const CommunityFeedbackSection: React.FC<CommunityFeedbackSectionProps> =
 
       {/* POPUP MODAL: Gửi cảm nghĩ & góp ý trực tiếp */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in">
-          <div className="relative w-full max-w-xl max-h-[90vh] overflow-y-auto rounded-3xl bg-[#0B1510] border border-heritage-ochre/40 p-6 sm:p-8 shadow-[0_25px_60px_rgba(0,0,0,0.85)] text-heritage-wood">
+        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-4 bg-black/80 backdrop-blur-sm animate-fade-in">
+          {/* Backdrop click to close */}
+          <div className="absolute inset-0" onClick={() => setIsModalOpen(false)} />
+          
+          <div className="relative w-full sm:max-w-xl max-h-[92dvh] sm:max-h-[90vh] overflow-y-auto bg-[#0B1510] border border-heritage-ochre/40 shadow-[0_25px_60px_rgba(0,0,0,0.85)] text-heritage-wood
+            rounded-t-3xl sm:rounded-3xl animate-slide-up sm:animate-none
+            p-5 sm:p-8">
+            {/* Mobile drag handle */}
+            <div className="w-10 h-1 rounded-full bg-heritage-woodMuted/40 mx-auto mb-4 sm:hidden" />
             
             {/* Close Button */}
             <button
               onClick={() => setIsModalOpen(false)}
-              className="absolute top-5 right-5 p-2 rounded-xl text-heritage-woodMuted hover:text-heritage-wood hover:bg-white/5 transition-colors"
+              className="absolute top-4 right-4 sm:top-5 sm:right-5 p-2 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-xl text-heritage-woodMuted hover:text-heritage-wood hover:bg-white/5 transition-colors"
             >
               <X className="w-5 h-5" />
             </button>
@@ -587,7 +594,8 @@ export const CommunityFeedbackSection: React.FC<CommunityFeedbackSectionProps> =
                     value={authorName}
                     onChange={(e) => setAuthorName(e.target.value)}
                     placeholder={t('vd: Nguyễn Hoàng Anh', 'e.g. Alex Le')}
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-[#122018] border border-[#23352C] focus:border-heritage-ochre text-sm text-heritage-wood placeholder-heritage-woodMuted/50 focus:outline-none"
+                    className="w-full px-3.5 py-3 rounded-xl bg-[#122018] border border-[#23352C] focus:border-heritage-ochre text-heritage-wood placeholder-heritage-woodMuted/50 focus:outline-none"
+                    style={{ fontSize: '16px' }}
                   />
                 </div>
 
@@ -603,7 +611,8 @@ export const CommunityFeedbackSection: React.FC<CommunityFeedbackSectionProps> =
                       'vd: Frontend Dev, Người dùng Hà Nội, 3D Artist, Expat...',
                       'e.g. Frontend Dev, Hanoi User, 3D Artist, Expat...'
                     )}
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-[#122018] border border-[#23352C] focus:border-heritage-ochre text-sm text-heritage-wood placeholder-heritage-woodMuted/50 focus:outline-none"
+                    className="w-full px-3.5 py-3 rounded-xl bg-[#122018] border border-[#23352C] focus:border-heritage-ochre text-heritage-wood placeholder-heritage-woodMuted/50 focus:outline-none"
+                    style={{ fontSize: '16px' }}
                   />
                 </div>
               </div>
@@ -631,7 +640,8 @@ export const CommunityFeedbackSection: React.FC<CommunityFeedbackSectionProps> =
                   <select
                     value={targetSlug}
                     onChange={(e) => setTargetSlug(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-[#122018] border border-[#23352C] focus:border-heritage-ochre text-sm text-heritage-wood focus:outline-none"
+                    className="w-full px-3.5 py-3 rounded-xl bg-[#122018] border border-[#23352C] focus:border-heritage-ochre text-heritage-wood focus:outline-none"
+                    style={{ fontSize: '16px' }}
                   >
                     {artifactTargetOptions.map((opt) => (
                       <option key={opt.slug} value={opt.slug} className="bg-[#0B1510]">
@@ -645,16 +655,16 @@ export const CommunityFeedbackSection: React.FC<CommunityFeedbackSectionProps> =
                   <label className="block text-xs font-mono font-semibold text-heritage-ochre">
                     {t('Đánh giá trải nghiệm', 'Rating')}
                   </label>
-                  <div className="flex items-center space-x-1.5 py-1">
+                  <div className="flex items-center space-x-2 py-1">
                     {[1, 2, 3, 4, 5].map((star) => (
                       <button
                         type="button"
                         key={star}
                         onClick={() => setRating(star)}
-                        className="p-1 text-heritage-woodMuted hover:text-heritage-ochre focus:outline-none transition-colors"
+                        className="p-1.5 min-w-[40px] min-h-[40px] flex items-center justify-center text-heritage-woodMuted hover:text-heritage-ochre focus:outline-none transition-colors"
                       >
                         <Star
-                          className={`w-6 h-6 ${
+                          className={`w-7 h-7 ${
                             star <= rating
                               ? 'text-heritage-ochre fill-heritage-ochre'
                               : 'text-stone-700'
@@ -662,7 +672,7 @@ export const CommunityFeedbackSection: React.FC<CommunityFeedbackSectionProps> =
                         />
                       </button>
                     ))}
-                    <span className="text-xs font-mono text-heritage-ochre font-bold ml-2">
+                    <span className="text-xs font-mono text-heritage-ochre font-bold ml-1">
                       {rating}/5
                     </span>
                   </div>
@@ -706,7 +716,8 @@ export const CommunityFeedbackSection: React.FC<CommunityFeedbackSectionProps> =
                     'Chia sẻ cảm nhận chân thực của bạn khi trải nghiệm mô hình 3D, quét WebAR hoặc học tập văn hóa Cơ Tu...',
                     'Share your genuine thoughts on the 3D models, WebAR, or learning experience...'
                   )}
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-[#122018] border border-[#23352C] focus:border-heritage-ochre text-sm text-heritage-wood placeholder-heritage-woodMuted/50 focus:outline-none"
+                  className="w-full px-3.5 py-3 rounded-xl bg-[#122018] border border-[#23352C] focus:border-heritage-ochre text-heritage-wood placeholder-heritage-woodMuted/50 focus:outline-none resize-none"
+                  style={{ fontSize: '16px' }}
                 />
               </div>
 
@@ -753,7 +764,6 @@ export const CommunityFeedbackSection: React.FC<CommunityFeedbackSectionProps> =
           </div>
         </div>
       )}
-
     </section>
   );
 };

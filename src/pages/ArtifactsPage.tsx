@@ -54,7 +54,8 @@ export const ArtifactsPage: React.FC = () => {
               'Tìm theo tên hiện vật (Gươl, Trống, Gùi...), từ vựng tiếng Anh (pillar, basket...)',
               'Search by artifact name (Gươl, Drum, Basket...), or English terms (pillar, basket...)'
             )}
-            className="w-full pl-11 pr-10 py-3 rounded-xl bg-[#0A120E] border border-[#25392F] text-heritage-wood placeholder-heritage-woodMuted text-sm focus:outline-none focus:ring-1 focus:ring-heritage-ochre focus:border-heritage-ochre transition-all"
+            className="w-full pl-11 pr-10 py-3.5 rounded-xl bg-[#0A120E] border border-[#25392F] text-heritage-wood placeholder-heritage-woodMuted focus:outline-none focus:ring-1 focus:ring-heritage-ochre focus:border-heritage-ochre transition-all"
+            style={{ fontSize: '16px' }}
           />
           {searchQuery && (
             <button
