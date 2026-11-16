@@ -1,10 +1,18 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Sparkles, QrCode, Compass } from 'lucide-react';
 import { useLanguage } from '../../contexts/LanguageContext';
+import { contentService, WebsiteContentRecord } from '../../services/contentService';
 
 export const Footer: React.FC = () => {
   const { t } = useLanguage();
+  const [aboutContent, setAboutContent] = useState<WebsiteContentRecord | null>(null);
+
+  useEffect(() => {
+    contentService.getByKey('about_project').then((content) => {
+      if (content) setAboutContent(content);
+    }).catch(() => {});
+  }, []);
 
   return (
     <footer className="relative z-10 bg-[#070D0A]/95 backdrop-blur-xl text-heritage-wood pt-12 pb-8 border-t border-[#23352C] mt-16">
@@ -31,10 +39,12 @@ export const Footer: React.FC = () => {
             </div>
             
             <p className="text-sm text-heritage-woodLight/80 leading-relaxed max-w-lg">
-              {t(
-                'Không gian Bảo tàng Số 3D/AR lưu giữ và lan tỏa vẻ đẹp kiến trúc, nhạc cụ và nghề thủ công truyền thống của đồng bào Cơ Tu giữa đại ngàn Trường Sơn – Tây Giang, Quảng Nam.',
-                'An interactive 3D/AR Digital Museum preserving and celebrating the architecture, musical instruments, and traditional crafts of the Cơ Tu people in the Trường Sơn – Tây Giang highlands.'
-              )}
+              {aboutContent
+                ? t(aboutContent.content_vi || '', aboutContent.content_en || '')
+                : t(
+                    'Không gian Bảo tàng Số 3D/AR lưu giữ và lan tỏa vẻ đẹp kiến trúc, nhạc cụ và nghề thủ công truyền thống của đồng bào Cơ Tu giữa đại ngàn Trường Sơn – Tây Giang, Quảng Nam.',
+                    'An interactive 3D/AR Digital Museum preserving and celebrating the architecture, musical instruments, and traditional crafts of the Cơ Tu people in the Trường Sơn – Tây Giang highlands.'
+                  )}
             </p>
 
             <div className="inline-flex items-center space-x-2 text-xs text-heritage-ochre bg-[#101A15] px-3.5 py-1.5 rounded-lg border border-[#23352C]">
@@ -112,9 +122,17 @@ export const Footer: React.FC = () => {
             © {new Date().getFullYear()} CO TU HERITAGE AR ·{' '}
             {t('Không gian Di sản Văn hóa Cơ Tu Tây Giang.', 'Tây Giang Cơ Tu Cultural Heritage Space.')}
           </div>
-          <div className="flex items-center space-x-1.5 text-heritage-ochre font-mono text-[11px]">
-            <Sparkles className="w-3.5 h-3.5 text-heritage-ochre" />
-            <span>WebXR 3D/AR Digital Museum</span>
+          <div className="flex items-center space-x-4">
+            <Link
+              to="/admin"
+              className="hover:text-heritage-wood text-heritage-woodMuted/50 hover:underline transition-colors text-[11px] font-mono"
+            >
+              Cổng Quản Trị
+            </Link>
+            <div className="flex items-center space-x-1.5 text-heritage-ochre font-mono text-[11px]">
+              <Sparkles className="w-3.5 h-3.5 text-heritage-ochre" />
+              <span>WebXR 3D/AR Digital Museum</span>
+            </div>
           </div>
         </div>
 

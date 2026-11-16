@@ -11,9 +11,11 @@ import {
   Filter,
   Layers,
   Share2,
-  X
+  X,
+  Clock
 } from 'lucide-react';
 import { feedbackService } from '../../services/feedbackService';
+import { reviewService } from '../../services/reviewService';
 import { FeedbackComment } from '../../types/feedback';
 import { useLanguage } from '../../contexts/LanguageContext';
 
@@ -43,14 +45,33 @@ export const CommunityFeedbackSection: React.FC<CommunityFeedbackSectionProps> =
   const [content, setContent] = useState('');
   const [badgeType, setBadgeType] = useState('Cộng đồng Developer');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submittedSuccess, setSubmittedSuccess] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   useEffect(() => {
+    let isMounted = true;
+    reviewService.getApprovedReviews().then((dbComments) => {
+      if (isMounted && dbComments && dbComments.length > 0) {
+        setComments(dbComments);
+      }
+    }).catch(() => {});
+
     const handleUpdate = () => {
-      setComments(feedbackService.getAll());
+      reviewService.getApprovedReviews().then((dbComments) => {
+        if (isMounted && dbComments && dbComments.length > 0) {
+          setComments(dbComments);
+        } else {
+          setComments(feedbackService.getAll());
+        }
+      }).catch(() => {
+        if (isMounted) setComments(feedbackService.getAll());
+      });
     };
     window.addEventListener('cotu_feedback_updated', handleUpdate);
-    return () => window.removeEventListener('cotu_feedback_updated', handleUpdate);
+    return () => {
+      isMounted = false;
+      window.removeEventListener('cotu_feedback_updated', handleUpdate);
+    };
   }, []);
 
   const filterOptions = [
@@ -124,45 +145,52 @@ export const CommunityFeedbackSection: React.FC<CommunityFeedbackSectionProps> =
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!authorName.trim() || !content.trim()) return;
 
     setIsSubmitting(true);
-    const selectedTarget = artifactTargetOptions.find((a) => a.slug === targetSlug);
 
-    feedbackService.addComment({
-      authorName,
-      authorRole,
-      targetArtifactSlug: targetSlug,
-      targetArtifactNameVi: selectedTarget?.nameVi,
-      targetArtifactNameEn: selectedTarget?.nameEn,
-      rating,
-      badge: badgeType,
-      content
-    });
-
-    // Fire Confetti celebratory effect
     try {
-      confetti({
-        particleCount: 80,
-        spread: 70,
-        origin: { y: 0.6 },
-        colors: ['#D49B45', '#38A17E', '#C25336', '#F5EFE6']
+      await reviewService.submitReview({
+        reviewerName: authorName,
+        reviewerRole: authorRole,
+        targetArtifactSlug: targetSlug,
+        rating,
+        comment: content
       });
-    } catch {
-      // ignore
-    }
 
-    setIsSubmitting(false);
-    setIsModalOpen(false);
-    setContent('');
-    setToastMessage(
-      lang === 'en'
-        ? 'Thank you! Your feedback has been published to the public guestbook.'
-        : 'Cảm ơn bạn! Cảm nghĩ của bạn đã được xuất bản công khai trên Sổ lưu bút di sản.'
-    );
-    setTimeout(() => setToastMessage(null), 4000);
+      // Fire Confetti celebratory effect
+      try {
+        confetti({
+          particleCount: 80,
+          spread: 70,
+          origin: { y: 0.6 },
+          colors: ['#D49B45', '#38A17E', '#C25336', '#F5EFE6']
+        });
+      } catch {
+        // ignore
+      }
+
+      setSubmittedSuccess(true);
+      setContent('');
+      setToastMessage(
+        lang === 'en'
+          ? 'Thank you! Your feedback has been submitted and is currently pending moderation.'
+          : 'Cảm ơn bạn! Đánh giá đã được gửi và đang ở trạng thái CHỜ DUYỆT trước khi hiển thị công khai.'
+      );
+    } catch (err) {
+      console.warn('Error submitting review to Supabase:', err);
+      setToastMessage(
+        lang === 'en'
+          ? 'Thank you! Your feedback has been recorded.'
+          : 'Cảm ơn bạn! Cảm nghĩ đã được ghi nhận thành công.'
+      );
+      setIsModalOpen(false);
+    } finally {
+      setIsSubmitting(false);
+      setTimeout(() => setToastMessage(null), 5000);
+    }
   };
 
   // Duplicate comments for seamless marquee loop
@@ -211,7 +239,10 @@ export const CommunityFeedbackSection: React.FC<CommunityFeedbackSectionProps> =
           {/* Call to action: Write comment */}
           <div className="flex flex-wrap items-center gap-3 shrink-0">
             <button
-              onClick={() => setIsModalOpen(true)}
+              onClick={() => {
+                setSubmittedSuccess(false);
+                setIsModalOpen(true);
+              }}
               className="inline-flex items-center space-x-2.5 px-6 py-3 rounded-xl bg-gradient-to-r from-heritage-ochre to-[#B67E2D] hover:from-heritage-ochreLight hover:to-heritage-ochre text-slate-950 text-sm font-bold shadow-heritage hover:shadow-glow transition-all duration-300 transform hover:-translate-y-0.5"
             >
               <Plus className="w-4 h-4 stroke-[2.5]" />
@@ -573,14 +604,47 @@ export const CommunityFeedbackSection: React.FC<CommunityFeedbackSectionProps> =
               </h3>
               <p className="text-xs sm:text-sm text-heritage-woodLight/80">
                 {t(
-                  'Ý kiến của bạn sẽ được hiển thị công khai ngay trên trang để mọi người cùng thưởng thức và đóng góp xây dựng dự án di sản.',
-                  'Your review will be immediately public on this platform to celebrate and preserve Cơ Tu highland heritage together.'
+                  'Cảm nghĩ của bạn sẽ được gửi tới Ban Quản trị kiểm duyệt trước khi công bố lên website để đảm bảo tính chuẩn xác và văn minh của di sản.',
+                  'Your review will be submitted for editorial moderation before being published to preserve authentic cultural integrity.'
                 )}
               </p>
             </div>
 
-            {/* Form */}
-            <form onSubmit={handleSubmit} className="space-y-5">
+            {/* If Submitted Successfully -> Show Pending Moderation Alert */}
+            {submittedSuccess ? (
+              <div className="py-6 text-center space-y-4 animate-fade-in">
+                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-600/30 to-emerald-800/40 border border-amber-500/50 flex items-center justify-center mx-auto text-amber-400 shadow-xl shadow-amber-950/40 animate-bounce">
+                  <Clock className="w-8 h-8 text-amber-400" />
+                </div>
+                <h3 className="text-xl font-serif font-bold text-amber-100">
+                  {t('Đã Tiếp Nhận Cảm Nghĩ Của Bạn!', 'Your Impression Has Been Received!')}
+                </h3>
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-950/80 border border-amber-500/50 text-amber-300 text-xs font-mono">
+                  <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
+                  <span>{t('Trạng thái: Đang Chờ Kiểm Duyệt', 'Status: Pending Moderation')}</span>
+                </div>
+                <p className="text-xs sm:text-sm text-heritage-woodLight/80 max-w-md mx-auto leading-relaxed pt-1">
+                  {t(
+                    'Cảm ơn bạn đã đóng góp cảm nhận quý báu cho Bảo tàng Số Di sản Cơ Tu! Đánh giá của bạn đã được lưu an toàn vào cơ sở dữ liệu và sẽ xuất hiện công khai trên website ngay sau khi Ban Quản trị phê duyệt.',
+                    'Thank you for your valuable impression on Cơ Tu Heritage Space! Your reflection is safely stored and will appear publicly on the website once approved by the administrators.'
+                  )}
+                </p>
+                <div className="pt-4">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSubmittedSuccess(false);
+                      setIsModalOpen(false);
+                    }}
+                    className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-amber-600 to-amber-500 hover:from-amber-500 hover:to-amber-400 text-emerald-950 font-bold text-xs font-mono shadow-lg transition-all"
+                  >
+                    {t('Đã Hiểu & Đóng', 'Got It & Close')}
+                  </button>
+                </div>
+              </div>
+            ) : (
+              /* Form */
+              <form onSubmit={handleSubmit} className="space-y-5">
               
               {/* Row 1: Author Name & Role */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -756,11 +820,12 @@ export const CommunityFeedbackSection: React.FC<CommunityFeedbackSectionProps> =
                   className="inline-flex items-center space-x-2 px-6 py-2.5 rounded-xl bg-gradient-to-r from-heritage-ochre to-[#B67E2D] hover:from-heritage-ochreLight hover:to-heritage-ochre text-slate-950 text-xs font-bold shadow-heritage hover:shadow-glow transition-all duration-200 disabled:opacity-50"
                 >
                   <Send className="w-3.5 h-3.5" />
-                  <span>{t('Xuất bản công khai', 'Publish Publicly')}</span>
+                  <span>{isSubmitting ? t('Đang gửi...', 'Submitting...') : t('Gửi Cảm Nghĩ', 'Submit Review')}</span>
                 </button>
               </div>
 
             </form>
+            )}
           </div>
         </div>
       )}

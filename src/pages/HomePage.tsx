@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import '@google/model-viewer';
 import {
@@ -10,9 +10,12 @@ import {
   Mountain,
   Sparkles,
   Layers,
-  GraduationCap
+  GraduationCap,
+  RefreshCw
 } from 'lucide-react';
 import { artifactService } from '../services/artifactService';
+import { contentService, WebsiteContentRecord } from '../services/contentService';
+import { Artifact } from '../types';
 import { ArtifactCard } from '../components/artifact/ArtifactCard';
 import { InteractiveVillageMap } from '../components/home/InteractiveVillageMap';
 import { CommunityFeedbackSection } from '../components/feedback/CommunityFeedbackSection';
@@ -20,12 +23,41 @@ import { useLanguage } from '../contexts/LanguageContext';
 import { speechService } from '../services/speechService';
 
 export const HomePage: React.FC = () => {
-  const allArtifacts = artifactService.getAll();
+  const [allArtifacts, setAllArtifacts] = useState<Artifact[]>(artifactService.getAll());
+  const [contentMap, setContentMap] = useState<Record<string, WebsiteContentRecord>>({});
+  const [, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
+
   const showcaseModels = allArtifacts.filter((a) => a.modelStatus === 'available');
   const [activeHeroSlug, setActiveHeroSlug] = useState<string>(
     showcaseModels[0]?.slug || 'guol-communal-house'
   );
   const { lang, t } = useLanguage();
+
+  const loadData = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const [fetchedArtifacts, fetchedContents] = await Promise.all([
+        artifactService.fetchAll(),
+        contentService.getAll()
+      ]);
+      setAllArtifacts(fetchedArtifacts);
+      setContentMap(fetchedContents);
+      if (fetchedArtifacts.length > 0 && !fetchedArtifacts.some((a) => a.slug === activeHeroSlug)) {
+        setActiveHeroSlug(fetchedArtifacts[0].slug);
+      }
+    } catch (err: any) {
+      console.warn('[HomePage] Failed to fetch live data:', err);
+      setError('Không thể đồng bộ dữ liệu trực tuyến. Đang dùng dữ liệu lưu tạm.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadData();
+  }, []);
 
   const activeHeroArtifact =
     showcaseModels.find((a) => a.slug === activeHeroSlug) || showcaseModels[0] || allArtifacts[0];
@@ -33,6 +65,10 @@ export const HomePage: React.FC = () => {
   const handlePlayBriefAudio = (textVi: string, textEn: string) => {
     speechService.speak(lang === 'en' ? textEn : textVi, lang);
   };
+
+  const heroContent = contentMap.home_hero;
+  const collectionContent = contentMap.home_collection_intro;
+  const lexiconContent = contentMap.home_lexicon_intro;
 
   return (
     <div className="space-y-20 sm:space-y-32 pb-20">
@@ -43,7 +79,7 @@ export const HomePage: React.FC = () => {
         <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
           <img
             key={activeHeroArtifact.slug}
-            src={activeHeroArtifact.thumbnail || '/images/hero-highlands-bg.jpg'}
+            src={activeHeroArtifact.thumbnail || heroContent?.image_path || '/images/hero-highlands-bg.jpg'}
             alt={t(activeHeroArtifact.name.vi, activeHeroArtifact.name.en)}
             className="w-full h-full object-cover object-center filter blur-sm scale-105 opacity-25 transition-all duration-700 ease-out"
           />
@@ -51,6 +87,19 @@ export const HomePage: React.FC = () => {
         </div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          {error && (
+            <div className="mb-6 p-3 rounded-xl bg-amber-950/40 border border-amber-600/30 text-amber-300 text-xs flex items-center justify-between">
+              <span>{error}</span>
+              <button
+                onClick={loadData}
+                className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-lg bg-amber-600/20 hover:bg-amber-600/30 font-semibold"
+              >
+                <RefreshCw className="w-3 h-3" />
+                <span>Thử lại</span>
+              </button>
+            </div>
+          )}
+
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-14 items-center">
             
             {/* Left Column: Poetic & Dignified Mountain-Forest Narrative */}
@@ -80,10 +129,12 @@ export const HomePage: React.FC = () => {
 
               {/* Poetic & Academic Context */}
               <p className="text-base sm:text-lg text-heritage-woodLight/90 font-normal leading-relaxed max-w-xl">
-                {t(
-                  'Bước vào buôn làng giữa sương mây Trường Sơn: xoay ngắm từng thớ gỗ chạm khắc trên mái Nhà Gươl, cảm nhận nhịp trống da trâu K’tu trầm hùng và khám phá câu chuyện bản sắc bằng học liệu song ngữ Việt – Anh.',
-                  'Step into an ancient mountain village amid Trường Sơn mists: examine hand-chiseled timber carvings of the sacred Gươl roof, feel the resonance of the K’tu drum, and explore highland ethnography in English and Vietnamese.'
-                )}
+                {heroContent
+                  ? t(heroContent.content_vi || '', heroContent.content_en || '')
+                  : t(
+                      'Bước vào buôn làng giữa sương mây Trường Sơn: xoay ngắm từng thớ gỗ chạm khắc trên mái Nhà Gươl, cảm nhận nhịp trống da trâu K’tu trầm hùng và khám phá câu chuyện bản sắc bằng học liệu song ngữ Việt – Anh.',
+                      'Step into an ancient mountain village amid Trường Sơn mists: examine hand-chiseled timber carvings of the sacred Gươl roof, feel the resonance of the K’tu drum, and explore highland ethnography in English and Vietnamese.'
+                    )}
               </p>
 
               {/* Primary Call-to-Actions */}
@@ -271,7 +322,7 @@ export const HomePage: React.FC = () => {
         <div className="cotu-pattern-divider" />
       </div>
 
-      {/* 3. 5 CULTURAL ARTIFACTS SHOWCASE (Rhythm, Authentic Photography, Editorial Cadence) */}
+      {/* 3. 5 CULTURAL ARTIFACTS SHOWCASE */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
         
         {/* Section Header */}
@@ -282,13 +333,17 @@ export const HomePage: React.FC = () => {
               <span>{t('Di sản vật thể tiêu biểu', 'Master Tangible Heritage')}</span>
             </div>
             <h2 className="text-2xl sm:text-4xl font-serif font-bold text-heritage-wood">
-              {t('Bộ Sưu Tập Di Sản Văn Hóa Cơ Tu Tây Giang', 'Cơ Tu Cultural Heritage 3D Collection')}
+              {collectionContent
+                ? t(collectionContent.title_vi || '', collectionContent.title_en || '')
+                : t('Bộ Sưu Tập Di Sản Văn Hóa Cơ Tu Tây Giang', 'Cơ Tu Cultural Heritage 3D Collection')}
             </h2>
             <p className="text-xs sm:text-sm text-heritage-woodLight/80 max-w-2xl leading-relaxed">
-              {t(
-                'Từ mái Nhà Gươl sừng sững, nhịp Trống K’tu, Gùi Ba-hieng, Chiêng đồng đến Trang phục thổ cẩm nam nữ và Tượng điêu khắc Tê tê — mỗi hiện vật là một chứng tích sống động với mô hình 3D thực tế.',
-                'From the soaring Gươl roof, resonant K’tu drum, Ba-hieng basket, and bronze gongs to traditional male & female brocade attire and chiseled pangolin sculptures—each artifact is digitized with authentic 3D photogrammetry models.'
-              )}
+              {collectionContent
+                ? t(collectionContent.content_vi || '', collectionContent.content_en || '')
+                : t(
+                    'Từ mái Nhà Gươl sừng sững, nhịp Trống K’tu, Gùi Ba-hieng, Chiêng đồng đến Trang phục thổ cẩm nam nữ và Tượng điêu khắc Tê tê — mỗi hiện vật là một chứng tích sống động với mô hình 3D thực tế.',
+                    'From the soaring Gươl roof, resonant K’tu drum, Ba-hieng basket, and bronze gongs to traditional male & female brocade attire and chiseled pangolin sculptures—each artifact is digitized with authentic 3D photogrammetry models.'
+                  )}
             </p>
           </div>
 
@@ -302,9 +357,8 @@ export const HomePage: React.FC = () => {
           </Link>
         </div>
 
-        {/* Varied Editorial Grid: 1 Featured Card + 4 Companion Cards to break visual monotony */}
+        {/* Varied Editorial Grid: 1 Featured Card + Companion Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-7">
-          {/* Card 1 (Nhà Gươl) takes Featured prominence */}
           {allArtifacts[0] && (
             <ArtifactCard artifact={allArtifacts[0]} featured={true} />
           )}
@@ -327,17 +381,21 @@ export const HomePage: React.FC = () => {
               </div>
 
               <h2 className="text-2xl sm:text-3xl font-serif font-bold text-heritage-wood leading-snug">
-                {t(
-                  'Kể Chuyện Bản Làng Cơ Tu Với Bạn Bè Quốc Tế',
-                  'Share Cơ Tu Village Stories with the World'
-                )}
+                {lexiconContent
+                  ? t(lexiconContent.title_vi || '', lexiconContent.title_en || '')
+                  : t(
+                      'Kể Chuyện Bản Làng Cơ Tu Với Bạn Bè Quốc Tế',
+                      'Share Cơ Tu Village Stories with the World'
+                    )}
               </h2>
 
               <p className="text-xs sm:text-sm text-heritage-woodLight/85 leading-relaxed">
-                {t(
-                  'Chạm vào từng thuật ngữ để nghe phát âm tiếng Anh chuẩn mực và khám phá cách chuyển tải những nét đẹp nguyên bản của Tây Giang sang ngôn ngữ học thuật quốc tế.',
-                  'Tap any cultural term to listen to authentic pronunciation and learn how highland indigenous heritage is described in international academic contexts.'
-                )}
+                {lexiconContent
+                  ? t(lexiconContent.content_vi || '', lexiconContent.content_en || '')
+                  : t(
+                      'Chạm vào từng thuật ngữ để nghe phát âm tiếng Anh chuẩn mực và khám phá cách chuyển tải những nét đẹp nguyên bản của Tây Giang sang ngôn ngữ học thuật quốc tế.',
+                      'Tap any cultural term to listen to authentic pronunciation and learn how highland indigenous heritage is described in international academic contexts.'
+                    )}
               </p>
 
               <div className="pt-2 flex flex-wrap gap-3">

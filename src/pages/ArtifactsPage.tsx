@@ -1,19 +1,83 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { artifactService } from '../services/artifactService';
+import { categoryService, CategoryRecord } from '../services/categoryService';
 import { ArtifactCard } from '../components/artifact/ArtifactCard';
-import { Search, Filter, Layers, X, Sparkles } from 'lucide-react';
+import { Search, Filter, Layers, X, Sparkles, RefreshCw, Loader2 } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
+import { Artifact } from '../types';
 
 export const ArtifactsPage: React.FC = () => {
+  const [artifacts, setArtifacts] = useState<Artifact[]>(artifactService.getAll());
+  const [categoriesData, setCategoriesData] = useState<CategoryRecord[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
+
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const { t } = useLanguage();
 
-  const categories = useMemo(() => artifactService.getCategories(), []);
+  const loadData = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const [fetchedCats, fetchedArts] = await Promise.all([
+        categoryService.getAll(),
+        artifactService.fetchAll()
+      ]);
+      setCategoriesData(fetchedCats);
+      setArtifacts(fetchedArts);
+    } catch (err: any) {
+      console.warn('[ArtifactsPage] Failed to fetch live data:', err);
+      setError('Không thể kết nối đến cơ sở dữ liệu. Đang hiển thị dữ liệu lưu tạm.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadData();
+  }, []);
+
+  const categories = useMemo(() => {
+    const list = [
+      { id: 'all', labelVi: 'Tất cả hiện vật', labelEn: 'All Artifacts' }
+    ];
+    if (categoriesData.length > 0) {
+      categoriesData.forEach((c) => {
+        list.push({
+          id: c.slug,
+          labelVi: c.name_vi,
+          labelEn: c.name_en
+        });
+      });
+    } else {
+      artifactService.getCategories().forEach((c) => {
+        if (c.id !== 'all') list.push(c);
+      });
+    }
+    return list;
+  }, [categoriesData]);
 
   const filteredArtifacts = useMemo(() => {
-    return artifactService.search(searchQuery, selectedCategory);
-  }, [searchQuery, selectedCategory]);
+    const q = searchQuery.trim().toLowerCase();
+    return artifacts.filter((item) => {
+      const matchCategory =
+        !selectedCategory || selectedCategory === 'all' || item.category === selectedCategory;
+      if (!matchCategory) return false;
+
+      if (!q) return true;
+
+      const matchViName = item.name.vi.toLowerCase().includes(q);
+      const matchEnName = item.name.en.toLowerCase().includes(q);
+      const matchViBrief = item.brief.vi.toLowerCase().includes(q);
+      const matchEnBrief = item.brief.en.toLowerCase().includes(q);
+      const matchVocab = item.vocabulary?.some(
+        (v) => v.term.toLowerCase().includes(q) || v.vietnameseMeaning.toLowerCase().includes(q)
+      );
+
+      return matchViName || matchEnName || matchViBrief || matchEnBrief || matchVocab;
+    });
+  }, [artifacts, searchQuery, selectedCategory]);
 
   const handleClearFilters = () => {
     setSearchQuery('');
@@ -40,7 +104,20 @@ export const ArtifactsPage: React.FC = () => {
         </p>
       </div>
 
-      {/* Search & Filter Controls: Refined Dark Gallery Aesthetic */}
+      {error && (
+        <div className="p-3 rounded-xl bg-amber-950/40 border border-amber-600/30 text-amber-300 text-xs flex items-center justify-between">
+          <span>{error}</span>
+          <button
+            onClick={loadData}
+            className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-lg bg-amber-600/20 hover:bg-amber-600/30 font-semibold"
+          >
+            <RefreshCw className="w-3 h-3" />
+            <span>Thử lại</span>
+          </button>
+        </div>
+      )}
+
+      {/* Search & Filter Controls */}
       <div className="bg-[#111D17]/90 border border-[#23352C] rounded-2xl p-4 sm:p-5 space-y-4 shadow-heritage">
         
         {/* Search input */}
@@ -96,8 +173,13 @@ export const ArtifactsPage: React.FC = () => {
 
       </div>
 
-      {/* Grid of Results: Dynamic Editorial Rhythm */}
-      {filteredArtifacts.length > 0 ? (
+      {/* Grid of Results */}
+      {loading && artifacts.length === 0 ? (
+        <div className="flex items-center justify-center py-20 text-heritage-woodMuted space-x-3">
+          <Loader2 className="w-6 h-6 animate-spin text-heritage-ochre" />
+          <span>{t('Đang tải danh mục hiện vật...', 'Loading artifact collection...')}</span>
+        </div>
+      ) : filteredArtifacts.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
           {filteredArtifacts.map((artifact, idx) => (
             <ArtifactCard
@@ -140,7 +222,7 @@ export const ArtifactsPage: React.FC = () => {
           </span>
         </div>
         <span className="font-mono text-heritage-ochre">
-          {filteredArtifacts.length} / 5 {t('hiện vật hiển thị', 'artifacts showing')}
+          {filteredArtifacts.length} / {artifacts.length} {t('hiện vật hiển thị', 'artifacts showing')}
         </span>
       </div>
 

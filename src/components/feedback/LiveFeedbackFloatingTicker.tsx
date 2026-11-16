@@ -14,6 +14,7 @@ import {
   X
 } from 'lucide-react';
 import { feedbackService } from '../../services/feedbackService';
+import { reviewService } from '../../services/reviewService';
 import { FeedbackComment } from '../../types/feedback';
 import { useLanguage } from '../../contexts/LanguageContext';
 
@@ -60,11 +61,29 @@ export const LiveFeedbackFloatingTicker: React.FC<LiveFeedbackFloatingTickerProp
   }, [externalDrawerOpen]);
 
   useEffect(() => {
+    let isMounted = true;
+    reviewService.getApprovedReviews().then((dbComments) => {
+      if (isMounted && dbComments && dbComments.length > 0) {
+        setComments(dbComments);
+      }
+    }).catch(() => {});
+
     const handleUpdate = () => {
-      setComments(feedbackService.getAll());
+      reviewService.getApprovedReviews().then((dbComments) => {
+        if (isMounted && dbComments && dbComments.length > 0) {
+          setComments(dbComments);
+        } else {
+          setComments(feedbackService.getAll());
+        }
+      }).catch(() => {
+        if (isMounted) setComments(feedbackService.getAll());
+      });
     };
     window.addEventListener('cotu_feedback_updated', handleUpdate);
-    return () => window.removeEventListener('cotu_feedback_updated', handleUpdate);
+    return () => {
+      isMounted = false;
+      window.removeEventListener('cotu_feedback_updated', handleUpdate);
+    };
   }, []);
 
   // Auto-cycle through comments every 6 seconds

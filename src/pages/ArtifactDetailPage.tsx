@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { artifactService } from '../services/artifactService';
+import { vocabularyService } from '../services/vocabularyService';
 import { Artifact, LanguageMode, VocabularyItem } from '../types';
 import { ModelViewer3D } from '../components/ar/ModelViewer3D';
 import { LanguageSwitcher } from '../components/artifact/LanguageSwitcher';
@@ -23,13 +24,15 @@ import {
   Sparkles,
   ArrowLeft,
   BookOpen,
-  Volume2
+  Volume2,
+  Loader2
 } from 'lucide-react';
 
 export const ArtifactDetailPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
   const { lang, setLang, t } = useLanguage();
   const [artifact, setArtifact] = useState<Artifact | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
   const [langMode, setLangMode] = useState<LanguageMode>(lang);
   const [activeVocab, setActiveVocab] = useState<VocabularyItem | null>(null);
   const [hasListenedAudio, setHasListenedAudio] = useState<boolean>(false);
@@ -43,17 +46,52 @@ export const ArtifactDetailPage: React.FC = () => {
   }, [lang]);
 
   useEffect(() => {
+    let isMounted = true;
     if (slug) {
-      const found = artifactService.getBySlug(slug);
-      setArtifact(found || null);
+      setLoading(true);
       setHasListenedAudio(false);
       setSelectedCameraOrbit(undefined);
       setChallengeModeRequest('none');
-      if (found) {
-        analyticsService.trackArtifactView(found.slug, found.name.vi, found.name.en);
+
+      // Immediate cache read to avoid layout shift
+      const initial = artifactService.getBySlug(slug);
+      if (initial && isMounted) {
+        setArtifact(initial);
       }
+
+      // Live Supabase fetch
+      artifactService.fetchBySlug(slug).then(async (found) => {
+        if (!isMounted) return;
+        if (found) {
+          try {
+            const dbVocab = await vocabularyService.getByArtifactId(found.id);
+            if (dbVocab && dbVocab.length > 0 && isMounted) {
+              found.vocabulary = dbVocab;
+            }
+          } catch (vErr) {
+            console.warn('[ArtifactDetailPage] Vocabulary fetch fallback:', vErr);
+          }
+          if (isMounted) {
+            setArtifact({ ...found });
+            analyticsService.trackArtifactView(found.slug, found.name.vi, found.name.en);
+          }
+        } else if (!initial) {
+          setArtifact(null);
+        }
+        setLoading(false);
+      }).catch((err) => {
+        if (!isMounted) return;
+        console.warn('[ArtifactDetailPage] Error fetching artifact:', err);
+        const fallback = artifactService.getBySlug(slug);
+        setArtifact(fallback || null);
+        setLoading(false);
+      });
+
       window.scrollTo(0, 0);
     }
+    return () => {
+      isMounted = false;
+    };
   }, [slug]);
 
   const handleLangModeChange = (mode: LanguageMode) => {
@@ -70,6 +108,15 @@ export const ArtifactDetailPage: React.FC = () => {
       el.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   };
+
+  if (loading && !artifact) {
+    return (
+      <div className="max-w-2xl mx-auto px-4 py-28 text-center space-y-4 text-heritage-wood">
+        <Loader2 className="w-10 h-10 mx-auto animate-spin text-heritage-ochre" />
+        <h2 className="text-xl font-serif">{t('Đang tải thông tin hiện vật...', 'Loading artifact details...')}</h2>
+      </div>
+    );
+  }
 
   if (!artifact) {
     return (

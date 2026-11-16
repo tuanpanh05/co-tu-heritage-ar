@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { artifactService } from '../services/artifactService';
 import { qrService } from '../services/qrService';
 import { QRLabelItem } from '../components/qr/QRLabelItem';
 import { useLanguage } from '../contexts/LanguageContext';
+import { Artifact } from '../types';
 import { 
   Printer, 
   QrCode, 
@@ -12,10 +13,18 @@ import {
 } from 'lucide-react';
 
 export const QRCodesPage: React.FC = () => {
-  const artifacts = artifactService.getAll();
+  const [artifacts, setArtifacts] = useState<Artifact[]>(artifactService.getAll());
   const isLocalhost = qrService.isLocalhost();
   const baseUrl = qrService.getBaseUrl();
   const { t } = useLanguage();
+
+  useEffect(() => {
+    artifactService.fetchAll().then((data) => {
+      if (data && data.length > 0) {
+        setArtifacts(data);
+      }
+    }).catch(() => {});
+  }, []);
 
   const handlePrintAll = () => {
     window.print();
