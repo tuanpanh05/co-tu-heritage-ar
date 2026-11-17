@@ -35,7 +35,7 @@ async function provisionAccounts() {
   const accounts = [
     {
       email: 'admin@cotuheritage.vn',
-      password: 'Admin@123456',
+      password: '123456',
       displayName: 'Trưởng Ban Quản Trị Di Sản',
       role: 'super_admin'
     },
@@ -49,7 +49,7 @@ async function provisionAccounts() {
 
   for (const acc of accounts) {
     console.log(`\nProcessing: ${acc.email} (${acc.role})...`);
-    
+
     // Check if user already exists
     const { data: userList } = await supabase.auth.admin.listUsers();
     let existingUser = userList?.users?.find(u => u.email === acc.email);
