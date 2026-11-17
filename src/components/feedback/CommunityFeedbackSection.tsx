@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import confetti from 'canvas-confetti';
 import {
   MessageSquare,
   Star,
@@ -160,18 +159,7 @@ export const CommunityFeedbackSection: React.FC<CommunityFeedbackSectionProps> =
         comment: content
       });
 
-      // Fire Confetti celebratory effect
-      try {
-        confetti({
-          particleCount: 80,
-          spread: 70,
-          origin: { y: 0.6 },
-          colors: ['#D49B45', '#38A17E', '#C25336', '#F5EFE6']
-        });
-      } catch {
-        // ignore
-      }
-
+      // Soft organic feedback confirmation
       setSubmittedSuccess(true);
       setContent('');
       setToastMessage(

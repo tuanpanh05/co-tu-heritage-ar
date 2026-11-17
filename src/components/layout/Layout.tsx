@@ -6,11 +6,16 @@ import { MobileBottomNav } from './MobileBottomNav';
 import { InteractiveBackground } from './InteractiveBackground';
 import { LiveFeedbackFloatingTicker } from '../feedback/LiveFeedbackFloatingTicker';
 import { SpotlightTour } from '../common/SpotlightTour';
+import { ContemplationModal } from '../common/ContemplationModal';
+import { artifactService } from '../../services/artifactService';
 import { analyticsService } from '../../services/analyticsService';
 
 export const Layout: React.FC = () => {
   const location = useLocation();
   const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
+  const [contemplationOpen, setContemplationOpen] = useState(false);
+  const [contemplationSlug, setContemplationSlug] = useState('guol-communal-house');
+  const allArtifacts = artifactService.getAll();
 
   useEffect(() => {
     analyticsService.syncGlobalVisitorCounter();
@@ -20,6 +25,17 @@ export const Layout: React.FC = () => {
     analyticsService.trackPageView(location.pathname);
     setMobileDrawerOpen(false);
   }, [location.pathname]);
+
+  useEffect(() => {
+    const handleOpenContemplation = (e: any) => {
+      if (e.detail?.slug) {
+        setContemplationSlug(e.detail.slug);
+      }
+      setContemplationOpen(true);
+    };
+    window.addEventListener('cotu_open_contemplation', handleOpenContemplation);
+    return () => window.removeEventListener('cotu_open_contemplation', handleOpenContemplation);
+  }, []);
 
   return (
     <div className="relative min-h-screen flex flex-col bg-transparent text-heritage-wood selection:bg-heritage-clay/20 pb-20 md:pb-0">
@@ -45,6 +61,14 @@ export const Layout: React.FC = () => {
 
       {/* Interactive Spotlight Tour (Points to UI buttons step-by-step) */}
       <SpotlightTour />
+
+      {/* Chế độ Lắng Nghe · Nhìn & Cảm tĩnh lặng trong sương rừng */}
+      <ContemplationModal
+        isOpen={contemplationOpen}
+        onClose={() => setContemplationOpen(false)}
+        artifacts={allArtifacts}
+        initialSlug={contemplationSlug}
+      />
     </div>
   );
 };

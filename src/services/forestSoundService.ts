@@ -1,5 +1,5 @@
-// Dịch vụ Nhạc Nền Chủ Đạo (Vết Mưa Piano Cover & Hòa Tấu Rừng Xanh)
-// Mặc định BẬT (Auto-ON) ngay khi vào trang web
+// Dịch vụ Nhạc Nền Đại Ngàn Trường Sơn & Không gian Âm thanh Tây Giang
+// Mặc định phát nhẹ nhàng (volume 0.26) mang cảm giác sớm mai trong rừng có sương
 
 type Listener = (isEnabled: boolean, isActuallyPlaying: boolean, trackIndex: number) => void;
 
@@ -12,31 +12,31 @@ export interface BgTrack {
 
 export const BG_MUSIC_TRACKS: BgTrack[] = [
   {
-    id: 'vet-mua-piano',
-    titleVi: 'Vết Mưa — Piano Cover (Nhạc nền chủ đạo)',
-    titleEn: 'Vết Mưa — Soothing Piano Cover (Main Theme)',
-    src: '/audio/vet-mua-piano.mp3'
-  },
-  {
     id: 'forest-trees',
-    titleVi: 'Giai điệu Rừng Xanh (Sáo & Guitar Mộc)',
-    titleEn: 'Woodland Flute & Acoustic Guitar',
+    titleVi: 'Đại Ngàn Trường Sơn (Sương sớm & Tiếng chim rừng)',
+    titleEn: 'Trường Sơn Forest Mist & Morning Birds',
     src: '/audio/bg-forest.mp3'
   },
   {
     id: 'windswept-flute',
-    titleVi: 'Tiếng Sáo Đại Ngàn (Windswept Flute)',
+    titleVi: 'Tiếng Sáo Đại Ngàn (Windswept Highland Flute)',
     titleEn: 'Windswept Highland Flute',
     src: '/audio/bg-flute.mp3'
+  },
+  {
+    id: 'vet-mua-piano',
+    titleVi: 'Giai Điệu Trầm Tĩnh (Acoustic Reverie)',
+    titleEn: 'Acoustic Reverie',
+    src: '/audio/vet-mua-piano.mp3'
   }
 ];
 
 class ForestSoundService {
   private audio: HTMLAudioElement | null = null;
-  // Mặc định luôn là BẬT (true) khi mở web
   private isEnabled: boolean = true;
   private isActuallyPlaying: boolean = false;
   private currentTrackIndex: number = 0;
+  private baseVolume: number = 0.28;
   private listeners: Set<Listener> = new Set();
   private unlockBound: ((e: Event) => void) | null = null;
 
@@ -52,7 +52,7 @@ class ForestSoundService {
     const track = BG_MUSIC_TRACKS[this.currentTrackIndex];
     this.audio = new Audio(track.src);
     this.audio.loop = true;
-    this.audio.volume = 0.48;
+    this.audio.volume = this.baseVolume;
     this.audio.preload = 'auto';
     this.audio.autoplay = true;
 
@@ -71,7 +71,6 @@ class ForestSoundService {
       this.notify();
     });
 
-    // Ngay khi file tải đủ dữ liệu đầu tiên, nếu đang ở chế độ Bật thì phát luôn
     this.audio.addEventListener('canplay', () => {
       if (this.isEnabled && this.audio && this.audio.paused) {
         this.tryPlay();
@@ -90,7 +89,6 @@ class ForestSoundService {
           this.removeUnlockListeners();
         })
         .catch(() => {
-          // Trình duyệt yêu cầu tương tác đầu tiên sau khi F5
           this.isActuallyPlaying = false;
           this.notify();
         });
@@ -98,13 +96,10 @@ class ForestSoundService {
   }
 
   private initAutoPlay(): void {
-    // 1. Thử phát ngay lập tức khi khởi tạo
     this.tryPlay();
     setTimeout(() => this.tryPlay(), 250);
     setTimeout(() => this.tryPlay(), 800);
 
-    // 2. Bắt mọi thao tác đầu tiên trên trang để mở khóa âm thanh tức thì
-    // (Bỏ qua nếu người dùng đang bấm trực tiếp vào nút Tắt nhạc để tránh xung đột)
     this.unlockBound = (e: Event) => {
       if (!this.isEnabled) {
         this.removeUnlockListeners();
@@ -152,8 +147,6 @@ class ForestSoundService {
 
   public toggle(): boolean {
     this.setupAudio();
-    // Nếu đang ở trạng thái Bật nhưng trình duyệt chưa kịp phát (audio.paused),
-    // bấm vào nút sẽ phát nhạc ngay thay vì tắt!
     if (this.isEnabled && this.audio && this.audio.paused) {
       this.tryPlay();
       return true;
@@ -188,6 +181,24 @@ class ForestSoundService {
     }
     this.isActuallyPlaying = false;
     this.notify();
+  }
+
+  /**
+   * Giảm âm lượng tạm thời (audio ducking) khi có lời kể của già làng
+   */
+  public duckVolume(targetVolume: number = 0.08): void {
+    if (this.audio) {
+      this.audio.volume = Math.max(0.04, targetVolume);
+    }
+  }
+
+  /**
+   * Khôi phục âm lượng nhẹ nhàng ban đầu
+   */
+  public restoreVolume(): void {
+    if (this.audio) {
+      this.audio.volume = this.baseVolume;
+    }
   }
 }
 

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Artifact } from '../../types';
 import { Rotate3d, ArrowRight } from 'lucide-react';
 import { useLanguage } from '../../contexts/LanguageContext';
+import { heritageSoundService } from '../../services/heritageSoundService';
 
 interface ArtifactCardProps {
   artifact: Artifact;
@@ -13,10 +14,15 @@ export const ArtifactCard: React.FC<ArtifactCardProps> = ({ artifact, featured =
   const is3DAvailable = artifact.modelStatus === 'available';
   const { t } = useLanguage();
 
+  const handleClick = () => {
+    heritageSoundService.playWoodClick();
+  };
+
   return (
     <Link
       to={`/artifacts/${artifact.slug}`}
-      className={`group soft-glass-card rounded-2xl overflow-hidden shadow-heritage flex flex-col hover:-translate-y-1.5 transition-all duration-300 ${
+      onClick={handleClick}
+      className={`group soft-glass-card rounded-xl overflow-hidden shadow-heritage flex flex-col hover:-translate-y-1 transition-all duration-400 border border-[#25382E] hover:border-heritage-ochre/40 ${
         featured ? 'md:col-span-2 lg:col-span-2' : ''
       }`}
     >
@@ -27,26 +33,26 @@ export const ArtifactCard: React.FC<ArtifactCardProps> = ({ artifact, featured =
         <img
           src={artifact.thumbnail}
           alt={t(artifact.name.vi, artifact.name.en)}
-          className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
+          className="w-full h-full object-cover object-center group-hover:scale-104 transition-transform duration-1000 ease-out"
           loading="lazy"
         />
 
         {/* Ambient Dark Gradient Vignette for dramatic museum illumination */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0A120E] via-transparent to-black/25 opacity-80 group-hover:opacity-60 transition-opacity" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0E1712] via-transparent to-black/30 opacity-85 group-hover:opacity-65 transition-opacity" />
 
-        {/* Top-Right 3D / AR Museum Indicator */}
+        {/* Top-Right 3D / AR Museum Indicator: Dignified Seal */}
         {is3DAvailable && (
           <div className="absolute top-3.5 right-3.5">
-            <span className="inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-lg text-[11px] font-mono tracking-wide font-semibold bg-[#0A120E]/85 backdrop-blur-md text-heritage-ochre border border-heritage-ochre/30 shadow-md">
-              <Rotate3d className="w-3.5 h-3.5 animate-pulse-soft" />
-              <span>3D · WebAR</span>
+            <span className="inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-md text-[11px] font-serif tracking-wide text-heritage-ochre bg-[#0E1712]/90 border border-heritage-ochre/30 shadow-xs backdrop-blur-md">
+              <Rotate3d className="w-3.5 h-3.5 text-heritage-ochre" />
+              <span>{t('Chứng tích 3D · WebAR', '3D Relic · AR')}</span>
             </span>
           </div>
         )}
 
         {/* Bottom overlay inside image: Category Kicker */}
         <div className="absolute bottom-3 left-4 right-4">
-          <span className="text-[11px] font-mono uppercase tracking-widest text-heritage-ochre font-semibold drop-shadow-sm">
+          <span className="text-[11px] font-serif tracking-wider text-heritage-ochre/90 drop-shadow-sm">
             {t(artifact.categoryName.vi, artifact.categoryName.en)}
           </span>
         </div>
@@ -64,19 +70,19 @@ export const ArtifactCard: React.FC<ArtifactCardProps> = ({ artifact, featured =
             </p>
           </div>
 
-          <p className="text-xs sm:text-sm text-heritage-woodLight/90 line-clamp-2 leading-relaxed">
+          <p className="text-xs sm:text-sm text-heritage-woodLight/85 line-clamp-2 leading-relaxed font-serif">
             {t(artifact.brief.vi, artifact.brief.en)}
           </p>
         </div>
 
         {/* Bottom Bar: Clean single interactive cue */}
-        <div className="pt-3 border-t border-[#23352C] flex items-center justify-between text-xs font-semibold text-heritage-ochre group-hover:text-heritage-ochreLight transition-colors">
-          <span className="text-[11px] text-heritage-woodMuted font-mono">
-            Tây Giang · Quảng Nam
+        <div className="pt-3 border-t border-[#25382E] flex items-center justify-between text-xs font-serif text-heritage-ochre group-hover:text-heritage-ochreLight transition-colors">
+          <span className="text-[11px] text-heritage-woodMuted">
+            {t('Tây Giang · Quảng Nam', 'Tây Giang Highlands')}
           </span>
 
-          <span className="inline-flex items-center space-x-1.5">
-            <span>{t('Chiêm ngưỡng 3D', 'View in 3D')}</span>
+          <span className="inline-flex items-center space-x-1.5 font-medium">
+            <span>{t('Chiêm ngưỡng 3D', 'Explore 3D')}</span>
             <ArrowRight className="w-3.5 h-3.5 transform group-hover:translate-x-1 transition-transform" />
           </span>
         </div>

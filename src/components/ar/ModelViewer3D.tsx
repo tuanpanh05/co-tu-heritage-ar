@@ -21,6 +21,8 @@ import { qrService } from '../../services/qrService';
 import { QRCodeSVG } from 'qrcode.react';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { analyticsService } from '../../services/analyticsService';
+import { heritageSoundService } from '../../services/heritageSoundService';
+import { openContemplationModal } from '../common/ContemplationModal';
 
 interface ModelViewer3DProps {
   modelUrl?: string;
@@ -102,6 +104,7 @@ export const ModelViewer3D: React.FC<ModelViewer3DProps> = ({
   };
 
   const handleZoomIn = () => {
+    heritageSoundService.playWoodClick();
     const viewer = getActiveViewer();
     if (!viewer) return;
     if (typeof viewer.zoom === 'function') {
@@ -118,6 +121,7 @@ export const ModelViewer3D: React.FC<ModelViewer3DProps> = ({
   };
 
   const handleZoomOut = () => {
+    heritageSoundService.playWoodClick();
     const viewer = getActiveViewer();
     if (!viewer) return;
     if (typeof viewer.zoom === 'function') {
@@ -134,6 +138,7 @@ export const ModelViewer3D: React.FC<ModelViewer3DProps> = ({
   };
 
   const handleResetView = () => {
+    heritageSoundService.playWoodClick();
     const viewer = getActiveViewer();
     if (!viewer) return;
     viewer.cameraOrbit = cameraOrbit ? getAdaptiveCameraOrbit(cameraOrbit) : 'auto 75deg auto';
@@ -301,8 +306,8 @@ export const ModelViewer3D: React.FC<ModelViewer3DProps> = ({
 
   return (
     <>
-      {/* Normal Embedded 3D Viewer Card: Co giãn thích ứng với chiều cao mọi thiết bị di động */}
-      <div className="relative w-full h-[52dvh] min-h-[320px] max-h-[560px] sm:h-auto sm:aspect-[16/10] rounded-2xl sm:rounded-3xl overflow-hidden shadow-heritage-lg border border-[#1E3029] group bg-[#0A120E] max-w-full">
+      {/* Normal Embedded 3D Viewer Card: Thước tấc kiến trúc mộc, vững chãi và chân thật */}
+      <div className="relative w-full h-[52dvh] min-h-[320px] max-h-[560px] sm:h-auto sm:aspect-[16/10] rounded-xl overflow-hidden shadow-heritage border border-[#25382E] group bg-[#0A120E] max-w-full">
         <model-viewer
           ref={modelViewerRef}
           src={modelUrl}
@@ -310,6 +315,7 @@ export const ModelViewer3D: React.FC<ModelViewer3DProps> = ({
           alt={altText}
           camera-controls
           auto-rotate
+          onPointerDown={() => heritageSoundService.playWoodClick()}
           bounds="tight"
           camera-orbit={getAdaptiveCameraOrbit(cameraOrbit)}
           field-of-view="auto"
@@ -364,27 +370,42 @@ export const ModelViewer3D: React.FC<ModelViewer3DProps> = ({
 
         {/* Bottom AR & 3D Interactive Control Toolbar */}
         <div className="absolute bottom-3 sm:bottom-4 left-3 sm:left-4 right-3 sm:right-4 flex items-center justify-between gap-2 z-10">
-          <button
-            onClick={handleArClick}
-            className="flex items-center space-x-1.5 sm:space-x-2 px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-full bg-heritage-ochre hover:bg-heritage-ochreLight text-slate-950 text-xs sm:text-sm font-bold shadow-lg transition-all transform active:scale-95 min-h-[40px] sm:min-h-[44px] shrink-0"
-          >
-            <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-slate-950 shrink-0" />
-            <span className="hidden sm:inline">
-              {isMobileDevice
-                ? t('Đặt vào không gian thực (AR)', 'Place in Real Space (AR)')
-                : t('Trải nghiệm AR trên điện thoại', 'Experience AR on Mobile')}
-            </span>
-            <span className="sm:hidden font-semibold">
-              {isMobileDevice ? t('Bật AR thực', 'Launch AR') : t('Quét AR', 'AR Mobile')}
-            </span>
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={handleArClick}
+              className="flex items-center space-x-1.5 sm:space-x-2 px-3.5 sm:px-4 py-2 rounded-lg bg-heritage-ochre hover:bg-heritage-ochreLight text-slate-950 text-xs sm:text-sm font-serif font-bold shadow-md transition-all transform active:scale-95 min-h-[38px] sm:min-h-[40px] shrink-0"
+            >
+              <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-slate-950 shrink-0" />
+              <span className="hidden sm:inline">
+                {isMobileDevice
+                  ? t('Đặt vào không gian thực (AR)', 'Place in Real Space (AR)')
+                  : t('Trải nghiệm AR trên điện thoại', 'Experience AR on Mobile')}
+              </span>
+              <span className="sm:hidden font-semibold">
+                {isMobileDevice ? t('Bật AR thực', 'Launch AR') : t('Quét AR', 'AR Mobile')}
+              </span>
+            </button>
+
+            {/* Nút Lắng nghe trực tiếp trên sân khấu 3D */}
+            <button
+              onClick={() => {
+                heritageSoundService.playGongShimmer();
+                openContemplationModal(artifactSlug);
+              }}
+              className="hidden xs:inline-flex items-center space-x-1.5 px-3 py-2 rounded-lg bg-[#0E1712]/90 border border-heritage-ochre/30 hover:border-heritage-ochre text-heritage-ochre text-xs font-serif transition-colors min-h-[38px] sm:min-h-[40px]"
+              title={t('Mở chế độ lắng nghe tĩnh lặng', 'Open Sanctuary Mode')}
+            >
+              <Rotate3d className="w-3.5 h-3.5" />
+              <span>{t('Lắng nghe', 'Listen')}</span>
+            </button>
+          </div>
 
           {/* Professional 3D Zoom & Fullscreen Toolbar */}
-          <div className="flex items-center space-x-0.5 sm:space-x-1 bg-[#0D1813]/90 backdrop-blur-md p-1 rounded-full border border-[#23352C] shadow-lg shrink-0">
+          <div className="flex items-center space-x-0.5 sm:space-x-1 bg-[#0E1712]/90 backdrop-blur-md p-1 rounded-lg border border-[#25382E] shadow-md shrink-0">
             {/* Zoom In (+) */}
             <button
               onClick={handleZoomIn}
-              className="p-1.5 sm:p-2 rounded-full hover:bg-white/10 text-heritage-wood hover:text-heritage-ochre transition-colors min-w-[32px] min-h-[32px] sm:min-w-[36px] sm:min-h-[36px] flex items-center justify-center"
+              className="p-1.5 sm:p-2 rounded-md hover:bg-white/10 text-heritage-wood hover:text-heritage-ochre transition-colors min-w-[32px] min-h-[32px] sm:min-w-[36px] sm:min-h-[36px] flex items-center justify-center"
               title={t('Phóng to mô hình (+)', 'Zoom In (+)')}
             >
               <ZoomIn className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
@@ -393,7 +414,7 @@ export const ModelViewer3D: React.FC<ModelViewer3DProps> = ({
             {/* Zoom Out (-) */}
             <button
               onClick={handleZoomOut}
-              className="p-1.5 sm:p-2 rounded-full hover:bg-white/10 text-heritage-wood hover:text-heritage-ochre transition-colors min-w-[32px] min-h-[32px] sm:min-w-[36px] sm:min-h-[36px] flex items-center justify-center"
+              className="p-1.5 sm:p-2 rounded-md hover:bg-white/10 text-heritage-wood hover:text-heritage-ochre transition-colors min-w-[32px] min-h-[32px] sm:min-w-[36px] sm:min-h-[36px] flex items-center justify-center"
               title={t('Thu nhỏ mô hình (-)', 'Zoom Out (-)')}
             >
               <ZoomOut className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
@@ -402,7 +423,7 @@ export const ModelViewer3D: React.FC<ModelViewer3DProps> = ({
             {/* Reset Camera Orbit (🔄) */}
             <button
               onClick={handleResetView}
-              className="p-1.5 sm:p-2 rounded-full hover:bg-white/10 text-heritage-wood hover:text-heritage-ochre transition-colors min-w-[32px] min-h-[32px] sm:min-w-[36px] sm:min-h-[36px] flex items-center justify-center"
+              className="p-1.5 sm:p-2 rounded-md hover:bg-white/10 text-heritage-wood hover:text-heritage-ochre transition-colors min-w-[32px] min-h-[32px] sm:min-w-[36px] sm:min-h-[36px] flex items-center justify-center"
               title={t('Đặt lại góc nhìn ban đầu', 'Reset Camera Orbit')}
             >
               <RotateCcw className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
@@ -410,8 +431,11 @@ export const ModelViewer3D: React.FC<ModelViewer3DProps> = ({
 
             {/* Open Fullscreen (⛶) */}
             <button
-              onClick={toggleFullscreen}
-              className="p-1.5 sm:p-2 rounded-full hover:bg-white/10 text-heritage-ochre transition-colors min-w-[32px] min-h-[32px] sm:min-w-[36px] sm:min-h-[36px] flex items-center justify-center"
+              onClick={() => {
+                heritageSoundService.playWoodClick();
+                toggleFullscreen();
+              }}
+              className="p-1.5 sm:p-2 rounded-md hover:bg-white/10 text-heritage-ochre transition-colors min-w-[32px] min-h-[32px] sm:min-w-[36px] sm:min-h-[36px] flex items-center justify-center"
               title={t('Phóng to toàn màn hình', 'View Fullscreen')}
             >
               <Maximize2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />

@@ -8,66 +8,71 @@ export default {
     extend: {
       colors: {
         heritage: {
-          // Bảng màu: Đại Ngàn Tây Giang & Gỗ Trầm, Lửa Trại, Thổ Cẩm
-          dark: '#0A120E',          // Nền chính tối trầm đại ngàn
-          darker: '#060B08',        // Nền tối sâu thẳm
-          surface: '#111D17',       // Nền card/panel tối sang trọng
-          surfaceHover: '#172720',  // Hover trên surface
-          surfaceLight: '#1E3228',  // Khối nổi
-          sand: '#22342A',          // Viền tinh tế trầm
-          sandDark: '#334D3F',      // Viền nhấn
-          border: 'rgba(212, 163, 89, 0.22)', // Viền vàng đồng ánh kim
-          clay: '#38A17E',          // Xanh ngọc bích rừng (Luminous Jade)
-          clayDark: '#237358',      // Xanh rừng đậm
-          clayLight: '#5CC9A3',     // Điểm nhấn sáng
-          ochre: '#D49B45',         // Vàng đồng ánh kim / Hổ phách Tây Giang
-          ochreLight: '#E8B868',    // Vàng sáng
-          terracotta: '#C25336',    // Đỏ thổ cẩm Cơ Tu / Đất nung
-          terracottaDark: '#8F381F',// Đỏ sẫm
-          wood: '#F5EFE6',          // Chữ chính: Trắng ngà cổ / Xương ngà giấy dó
-          woodLight: '#D2C7B8',     // Chữ phụ sáng
-          woodMuted: '#8E9E95',     // Chữ chú thích dịu
-          cream: '#131F19',         // Thẻ phụ tối nhẹ
-          ivory: '#0A120E',         // Nền phụ
-          charcoal: '#060A08',      // Nền đen than
-          forest: '#142E23',        // Xanh rừng già
+          // Bảng màu: Rừng ẩm Tây Giang, Đất nung, Khói bếp & Gỗ kiền kiền già
+          dark: '#0E1712',          // Nền rừng ẩm sâu lắng có ánh nâu nhẹ của đất
+          darker: '#09100C',        // Nền tối sương đêm đại ngàn
+          surface: '#13211A',       // Bề mặt gỗ/card mộc mạc, vững chãi
+          surfaceHover: '#182920',  // Hover trầm tĩnh
+          surfaceLight: '#1F3429',  // Khối nổi tự nhiên
+          sand: '#25382E',          // Viền mộng gỗ
+          sandDark: '#364D40',      // Viền trầm
+          border: 'rgba(201, 148, 70, 0.22)', // Viền vàng gỗ già
+          moss: '#233F31',          // Xanh rêu ẩm rừng nguyên sinh
+          soil: '#2A1F17',          // Đất đỏ bazan ủ lá mục
+          clay: '#327B62',          // Xanh lá ẩm Tây Giang (không pastel mint)
+          clayDark: '#205B47',      // Xanh rừng thẳm
+          clayLight: '#4E9A80',     // Ánh sương trên lá
+          ochre: '#C89344',         // Vàng gỗ già / Hổ phách nhựa thông
+          ochreLight: '#DEAA5C',    // Ánh nắng xiên qua tán cây
+          terracotta: '#B6543A',    // Đất nung thổ cẩm Cơ Tu
+          terracottaDark: '#853723',// Đỏ đất trầm
+          wood: '#F3EDE3',          // Trắng ngà giấy dó / Thớ gỗ thông
+          woodLight: '#CDC2B2',     // Chữ phụ trầm ấm
+          woodMuted: '#88988F',     // Chú thích mờ như sương
+          cream: '#15231C',         // Thẻ phụ
+          ivory: '#0E1712',         // Nền phụ
+          charcoal: '#0A120E',      // Nền than củi
+          forest: '#162F23',        // Xanh rừng già Trường Sơn
         }
       },
       fontFamily: {
-        // Cả hai font đều tự host qua @fontsource và hỗ trợ đầy đủ dấu tiếng Việt chồng (ề, ố, ế, ữ...)
         sans: ['"Be Vietnam Pro"', '"Segoe UI"', 'Roboto', 'Arial', 'sans-serif'],
         serif: ['"Lora Variable"', '"Lora"', '"Noto Serif"', '"Times New Roman"', 'serif'],
       },
       fontSize: {
-        // Nới khoảng dòng cho tiêu đề lớn để dấu tiếng Việt (ầ, ổ, ữ, ỗ...) không chạm dòng trên
         '3xl': ['1.875rem', { lineHeight: '1.3' }],
         '4xl': ['2.25rem', { lineHeight: '1.28' }],
         '5xl': ['3rem', { lineHeight: '1.22' }],
       },
       boxShadow: {
-        'heritage': '0 16px 36px -8px rgba(0, 0, 0, 0.45), 0 4px 16px -2px rgba(0, 0, 0, 0.3)',
-        'heritage-lg': '0 24px 50px -12px rgba(0, 0, 0, 0.65), 0 8px 24px -4px rgba(212, 163, 89, 0.08)',
-        'glow': '0 0 30px rgba(212, 163, 89, 0.25)',
-        'glow-jade': '0 0 30px rgba(56, 161, 126, 0.25)',
+        'heritage': '0 12px 30px -8px rgba(0, 0, 0, 0.55), 0 2px 8px -2px rgba(0, 0, 0, 0.35)',
+        'heritage-lg': '0 20px 45px -10px rgba(0, 0, 0, 0.7), 0 4px 16px -2px rgba(200, 147, 68, 0.08)',
+        'hearth': '0 0 35px rgba(200, 147, 68, 0.12)',
+        'mist': '0 10px 40px rgba(14, 23, 18, 0.8)',
       },
       borderRadius: {
-        'xl': '0.875rem',
-        '2xl': '1.125rem',
-        '3xl': '1.5rem',
-        '4xl': '1.75rem',
+        // Thay thế bo góc siêu tròn kiểu SaaS bằng bo góc vững chãi kiểu kiến trúc mộng gỗ
+        'xl': '0.625rem',
+        '2xl': '0.875rem',
+        '3xl': '1.125rem',
       },
       animation: {
-        'float-slow': 'float 7s ease-in-out infinite',
-        'pulse-soft': 'pulseSoft 4s ease-in-out infinite',
+        'mist-drift': 'mistDrift 28s ease-in-out infinite alternate',
+        'dappled-light': 'dappledLight 18s ease-in-out infinite alternate',
+        'subtle-pulse': 'subtlePulse 6s ease-in-out infinite',
       },
       keyframes: {
-        float: {
-          '0%, 100%': { transform: 'translateY(0px)' },
-          '50%': { transform: 'translateY(-8px)' },
+        mistDrift: {
+          '0%': { transform: 'translateX(-2%) translateY(0)' },
+          '100%': { transform: 'translateX(2%) translateY(-10px)' },
         },
-        pulseSoft: {
-          '0%, 100%': { opacity: '0.6', transform: 'scale(1)' },
-          '50%': { opacity: '0.9', transform: 'scale(1.03)' },
+        dappledLight: {
+          '0%': { opacity: '0.35', transform: 'scale(1)' },
+          '100%': { opacity: '0.65', transform: 'scale(1.05)' },
+        },
+        subtlePulse: {
+          '0%, 100%': { opacity: '0.7' },
+          '50%': { opacity: '0.95' },
         }
       }
     },

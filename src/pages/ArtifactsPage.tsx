@@ -2,9 +2,11 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { artifactService } from '../services/artifactService';
 import { categoryService, CategoryRecord } from '../services/categoryService';
 import { ArtifactCard } from '../components/artifact/ArtifactCard';
-import { Search, Filter, Layers, X, Sparkles, RefreshCw, Loader2 } from 'lucide-react';
+import { Search, Filter, Layers, X, Sparkles, RefreshCw, Loader2, Compass } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { Artifact } from '../types';
+import { openContemplationModal } from '../components/common/ContemplationModal';
+import { heritageSoundService } from '../services/heritageSoundService';
 
 export const ArtifactsPage: React.FC = () => {
   const [artifacts, setArtifacts] = useState<Artifact[]>(artifactService.getAll());
@@ -88,20 +90,33 @@ export const ArtifactsPage: React.FC = () => {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-10">
       
       {/* Header */}
-      <div className="space-y-3">
-        <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-lg bg-[#14221A] border border-heritage-ochre/30 text-heritage-ochre text-xs font-mono uppercase tracking-wider">
-          <Layers className="w-3.5 h-3.5" />
-          <span>{t('Bộ sưu tập Bảo tàng Số Tây Giang', 'Tây Giang Museum Collection')}</span>
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 border-b border-[#25382E] pb-6">
+        <div className="space-y-2">
+          <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-lg bg-[#14231B] border border-heritage-ochre/30 text-heritage-ochre text-xs font-serif">
+            <Layers className="w-3.5 h-3.5" />
+            <span>{t('Bộ sưu tập Bảo tàng Số Tây Giang', 'Tây Giang Living Collection')}</span>
+          </div>
+          <h1 className="text-2xl sm:text-4xl font-serif font-bold text-heritage-wood">
+            {t('Hồn Rừng & Dấu Vết Thời Gian', 'Forest Spirit & Patina of Time')}
+          </h1>
+          <p className="text-xs sm:text-sm text-heritage-woodLight/85 max-w-2xl leading-relaxed font-serif">
+            {t(
+              'Mỗi hiện vật ở đây từng qua tay bao thế hệ người Cơ Tu. Được đẽo từ gỗ rừng già, đan từ sợi mây trên vách đá, nhuộm từ bùn đất quê hương — sống động và mong manh trước dòng chảy thời gian.',
+              'Each relic here has passed through generations of Cơ Tu hands. Hewn from ancient timber, woven from cliffside rattan, dyed in highland earth — enduring yet delicate before the river of time.'
+            )}
+          </p>
         </div>
-        <h1 className="text-2xl sm:text-4xl font-serif font-bold text-heritage-wood">
-          {t('Di Sản Văn Hóa Cơ Tu Trong Không Gian 3D/AR', 'Cơ Tu Tangible Cultural Heritage Collection')}
-        </h1>
-        <p className="text-xs sm:text-sm text-heritage-woodLight/85 max-w-2xl leading-relaxed">
-          {t(
-            'Khám phá chiều sâu lịch sử, kỹ thuật đẽo khắc và âm thanh linh thiêng của từng hiện vật tiêu biểu. Trải nghiệm mô hình 3D tương tác 360° và đặt hiện vật vào không gian thực tế qua WebAR.',
-            'Explore the historical depth, craftsmanship, and spiritual significance of iconic artifacts. Inspect 360° interactive 3D models and project them into physical space via WebAR.'
-          )}
-        </p>
+
+        <button
+          onClick={() => {
+            heritageSoundService.playGongShimmer();
+            openContemplationModal();
+          }}
+          className="inline-flex items-center space-x-2 px-5 py-2.5 rounded-lg bg-heritage-ochre hover:bg-heritage-ochreLight text-slate-950 text-xs sm:text-sm font-serif font-bold transition-all shadow-md self-start sm:self-auto shrink-0"
+        >
+          <Compass className="w-4 h-4 text-slate-950" />
+          <span>{t('Chế độ Lắng nghe', 'Sanctuary Mode')}</span>
+        </button>
       </div>
 
       {error && (
@@ -155,7 +170,10 @@ export const ArtifactsPage: React.FC = () => {
             return (
               <button
                 key={cat.id}
-                onClick={() => setSelectedCategory(cat.id)}
+                onClick={() => {
+                  heritageSoundService.playWoodClick();
+                  setSelectedCategory(cat.id);
+                }}
                 className={`px-3.5 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-all min-h-[36px] flex items-center shrink-0 ${
                   isActive
                     ? 'bg-heritage-forest text-heritage-ochre border border-heritage-ochre/40 shadow-sm font-semibold'
@@ -209,6 +227,17 @@ export const ArtifactsPage: React.FC = () => {
           </button>
         </div>
       )}
+
+      {/* Khoảng lặng cuối danh mục */}
+      <div className="py-6 text-center space-y-2 max-w-xl mx-auto">
+        <div className="w-8 h-0.5 bg-heritage-ochre/40 mx-auto" />
+        <p className="font-serif italic text-xs sm:text-sm text-heritage-woodLight/75 leading-relaxed">
+          {t(
+            '“Người Cơ Tu không giữ di sản trong kho báu. Di sản nằm trong bàn tay làm lúa, trong nhịp cồng chiêng gọi thần linh và trong mái nhà Gươl che chở buôn làng.”',
+            '“The Cơ Tu do not lock heritage away in vaults. It lives within hands that harvest mountain rice, in the sacred gong calls, and under the Gươl roof sheltering the tribe.”'
+          )}
+        </p>
+      </div>
 
       {/* Bottom Heritage Academic Strip */}
       <div className="border-t border-[#23352C] pt-6 flex flex-col sm:flex-row items-center justify-between text-xs text-heritage-woodMuted gap-3">

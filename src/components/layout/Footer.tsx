@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { Sparkles, QrCode, Compass } from 'lucide-react';
 import { useLanguage } from '../../contexts/LanguageContext';
 import { contentService, WebsiteContentRecord } from '../../services/contentService';
+import { openContemplationModal } from '../common/ContemplationModal';
+import { heritageSoundService } from '../../services/heritageSoundService';
 
 export const Footer: React.FC = () => {
   const { t } = useLanguage();
@@ -19,7 +21,27 @@ export const Footer: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Traditional Brocade Accent */}
-        <div className="cotu-pattern-divider mb-10" />
+        <div className="cotu-pattern-divider mb-8" />
+
+        {/* Lời gửi gắm dư âm cuối trang */}
+        <div className="mb-10 p-5 rounded-lg bg-[#0E1712]/80 border border-[#25382E] text-center max-w-2xl mx-auto space-y-2">
+          <p className="font-serif italic text-xs sm:text-sm text-heritage-woodLight/85 leading-relaxed">
+            {t(
+              '“Trang web này chỉ là một ô cửa nhỏ mở vào sương mù Trường Sơn. Vẻ đẹp thật sự của người Cơ Tu, của nếp nhà Gươl và tiếng cồng chiêng đón khách, vẫn đang đợi bạn đặt chân đến Tây Giang.”',
+              '“This screen is merely a small window opening into the Trường Sơn mists. The true soul of the Cơ Tu, the living Gươl hearth, and the welcoming gongs await your footsteps in Tây Giang.”'
+            )}
+          </p>
+          <button
+            onClick={() => {
+              heritageSoundService.playGongShimmer();
+              openContemplationModal();
+            }}
+            className="inline-flex items-center space-x-1.5 text-xs font-serif text-heritage-ochre hover:text-heritage-ochreLight pt-1"
+          >
+            <Compass className="w-3.5 h-3.5" />
+            <span className="underline underline-offset-4">{t('Mở Chế độ Lắng nghe tĩnh lặng', 'Enter Quiet Sanctuary Mode')}</span>
+          </button>
+        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 mb-10">
           

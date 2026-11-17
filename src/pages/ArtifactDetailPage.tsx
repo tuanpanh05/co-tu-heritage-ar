@@ -15,6 +15,9 @@ import { ArtifactCard } from '../components/artifact/ArtifactCard';
 import { CommunityFeedbackSection } from '../components/feedback/CommunityFeedbackSection';
 import { useLanguage } from '../contexts/LanguageContext';
 import { analyticsService } from '../services/analyticsService';
+import { openContemplationModal } from '../components/common/ContemplationModal';
+import { ElderVoiceVignette } from '../components/artifact/ElderVoiceVignette';
+import { heritageSoundService } from '../services/heritageSoundService';
 import {
   ChevronRight,
   MapPin,
@@ -201,11 +204,25 @@ export const ArtifactDetailPage: React.FC = () => {
           </p>
         </div>
 
-        <LanguageSwitcher
-          currentMode={langMode}
-          onChange={handleLangModeChange}
-          className="self-start md:self-auto shrink-0"
-        />
+        <div className="flex flex-wrap items-center gap-2.5 self-start md:self-auto shrink-0">
+          <button
+            onClick={() => {
+              heritageSoundService.playGongShimmer();
+              openContemplationModal(artifact.slug);
+            }}
+            className="inline-flex items-center space-x-1.5 px-3.5 py-2 rounded-lg bg-[#14231B] border border-heritage-ochre/30 hover:border-heritage-ochre text-heritage-ochre text-xs font-serif transition-all shadow-xs"
+            title={t('Mở chế độ lắng nghe toàn cảnh', 'Enter Sanctuary Mode')}
+          >
+            <Sparkles className="w-3.5 h-3.5" />
+            <span>{t('Chế độ Lắng nghe', 'Sanctuary Mode')}</span>
+          </button>
+
+          <LanguageSwitcher
+            currentMode={langMode}
+            onChange={handleLangModeChange}
+            className="shrink-0"
+          />
+        </div>
       </div>
 
       {/* 3. MAIN SECTION: 3D VIEWER + CONTENT */}
@@ -229,6 +246,9 @@ export const ArtifactDetailPage: React.FC = () => {
                 onSelectCameraOrbit={(orbit) => setSelectedCameraOrbit(orbit)}
               />
             )}
+
+            {/* Giọng người thật ngắn (15-25s) kể câu chuyện đời thường */}
+            <ElderVoiceVignette artifactSlug={artifact.slug} />
 
             <AudioGuidePlayer
               audioFiles={artifact.audio}
@@ -397,6 +417,17 @@ export const ArtifactDetailPage: React.FC = () => {
           </div>
         </div>
       )}
+
+      {/* Khoảng Lặng & Dư Âm */}
+      <div className="py-4 text-center space-y-2 max-w-xl mx-auto">
+        <div className="w-8 h-0.5 bg-heritage-ochre/40 mx-auto" />
+        <p className="font-serif italic text-xs sm:text-sm text-heritage-woodLight/75 leading-relaxed">
+          {t(
+            '“Mỗi hiện vật không chỉ là hình khối, mà là mồ hôi, là niềm tin và ký ức của tiền nhân gửi lại.”',
+            '“Every relic is not merely form, but devotion, endurance, and ancestral memory passed to future generations.”'
+          )}
+        </p>
+      </div>
 
       {/* 6. ARTIFACT COMMUNITY REFLECTIONS & GUESTBOOK */}
       <div className="pt-6">

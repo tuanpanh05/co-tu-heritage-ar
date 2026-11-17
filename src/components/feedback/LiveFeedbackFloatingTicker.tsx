@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import confetti from 'canvas-confetti';
 import {
   MessageSquare,
   Star,
@@ -31,8 +30,8 @@ export const LiveFeedbackFloatingTicker: React.FC<LiveFeedbackFloatingTickerProp
   const [comments, setComments] = useState<FeedbackComment[]>(() => feedbackService.getAll());
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  // Desktop minimize state
-  const [isDesktopMinimized, setIsDesktopMinimized] = useState(false);
+  // Desktop minimize state: Mặc định thu gọn để giữ khoảng lặng cảm xúc
+  const [isDesktopMinimized, setIsDesktopMinimized] = useState(true);
 
   // Mobile ticker hide state (user can temporarily dismiss the pill)
   const [isMobilePillDismissed, setIsMobilePillDismissed] = useState(false);
@@ -130,16 +129,7 @@ export const LiveFeedbackFloatingTicker: React.FC<LiveFeedbackFloatingTickerProp
       content
     });
 
-    try {
-      confetti({
-        particleCount: 60,
-        spread: 60,
-        origin: { y: 0.7 },
-        colors: ['#D49B45', '#38A17E', '#C25336', '#F5EFE6']
-      });
-    } catch {
-      // ignore
-    }
+      // Quiet submit confirmation
 
     setIsSubmitting(false);
     setContent('');
@@ -188,11 +178,10 @@ export const LiveFeedbackFloatingTicker: React.FC<LiveFeedbackFloatingTickerProp
             tabIndex={0}
             className="w-full h-11 px-3 rounded-full bg-[#0C1712]/95 border border-heritage-ochre/40 shadow-[0_10px_25px_rgba(0,0,0,0.7)] backdrop-blur-xl flex items-center justify-between gap-2.5 active:scale-98 transition-all cursor-pointer"
           >
-            {/* Left: Live Dot + Rating */}
+            {/* Left: Gentle Dot + Rating */}
             <div className="flex items-center space-x-1.5 shrink-0">
               <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-heritage-ochre"></span>
               </span>
               <div className="flex items-center space-x-0.5 text-heritage-ochre text-xs font-bold font-mono">
                 <Star className="w-3 h-3 fill-heritage-ochre text-heritage-ochre" />
@@ -581,9 +570,8 @@ export const LiveFeedbackFloatingTicker: React.FC<LiveFeedbackFloatingTickerProp
               className="group flex items-center space-x-2.5 px-4 py-2.5 rounded-full bg-[#0D1813]/95 border border-heritage-ochre/40 hover:border-heritage-ochre text-heritage-wood shadow-[0_12px_36px_rgba(0,0,0,0.65)] backdrop-blur-xl transition-all duration-300 hover:scale-105 active:scale-95"
               title={t('Mở lại bảng tin phản hồi', 'Expand community feedback')}
             >
-              <span className="relative flex h-2.5 w-2.5">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+              <span className="relative flex h-2 w-2">
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-heritage-ochre"></span>
               </span>
               <MessageSquare className="w-4 h-4 text-heritage-ochre" />
               <span className="text-xs font-semibold text-heritage-wood group-hover:text-heritage-ochre transition-colors">
@@ -603,8 +591,7 @@ export const LiveFeedbackFloatingTicker: React.FC<LiveFeedbackFloatingTickerProp
               <div className="flex items-center justify-between gap-2 pb-2.5 mb-2.5 border-b border-[#23352C]">
                 <div className="flex items-center space-x-2">
                   <span className="relative flex h-2 w-2">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-heritage-ochre"></span>
                   </span>
                   <span className="text-[11px] font-mono uppercase tracking-wider text-heritage-ochre font-bold flex items-center gap-1">
                     <Sparkles className="w-3 h-3 text-heritage-ochre" />

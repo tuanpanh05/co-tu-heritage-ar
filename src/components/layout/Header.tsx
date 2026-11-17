@@ -16,6 +16,8 @@ import {
 import { useLanguage } from '../../contexts/LanguageContext';
 import { forestSoundService, BG_MUSIC_TRACKS } from '../../services/forestSoundService';
 import { openSpotlightTour } from '../common/SpotlightTour';
+import { openContemplationModal } from '../common/ContemplationModal';
+import { heritageSoundService } from '../../services/heritageSoundService';
 
 export const Header: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -209,10 +211,23 @@ export const Header: React.FC = () => {
                 </button>
               </div>
 
+              {/* Chế độ Lắng nghe · Sanctuary Mode */}
+              <button
+                onClick={() => {
+                  heritageSoundService.playGongShimmer();
+                  openContemplationModal();
+                }}
+                className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-[#14231B] border border-heritage-ochre/30 hover:border-heritage-ochre text-heritage-ochre transition-all text-xs font-serif shrink-0 whitespace-nowrap shadow-xs"
+                title={t('Chế độ Lắng nghe · Tắt chữ, chỉ còn hình & âm thanh', 'Sanctuary Mode · Just visuals & forest sounds')}
+              >
+                <Compass className="w-3.5 h-3.5 text-heritage-ochre shrink-0" />
+                <span className="whitespace-nowrap font-medium">{t('Lắng nghe', 'Contemplate')}</span>
+              </button>
+
               {/* Tour / Guide Button */}
               <button
                 onClick={openSpotlightTour}
-                className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-[#101A15]/90 border border-[#23352C] hover:border-heritage-ochre/50 text-heritage-woodMuted hover:text-heritage-ochre transition-all text-xs font-medium shrink-0 whitespace-nowrap"
+                className="inline-flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-[#101A15]/90 border border-[#23352C] hover:border-heritage-ochre/50 text-heritage-woodMuted hover:text-heritage-ochre transition-all text-xs font-medium shrink-0 whitespace-nowrap"
                 title={t('Xem chỉ dẫn tương tác', 'Interactive Tour')}
               >
                 <HelpCircle className="w-3.5 h-3.5 text-heritage-ochre shrink-0" />
@@ -222,8 +237,19 @@ export const Header: React.FC = () => {
             </div>
           </div>
 
-          {/* Mobile controls: Compact Audio + Language Switcher + Hamburger */}
+          {/* Mobile controls: Lắng nghe + Compact Audio + Language Switcher + Hamburger */}
           <div className="flex md:hidden items-center space-x-1 sm:space-x-1.5 shrink-0">
+            <button
+              onClick={() => {
+                heritageSoundService.playGongShimmer();
+                openContemplationModal();
+              }}
+              className="p-2 rounded-lg bg-heritage-forest border border-heritage-ochre/40 text-heritage-ochre"
+              title={t('Chế độ Lắng nghe', 'Sanctuary Mode')}
+            >
+              <Compass className="w-4 h-4" />
+            </button>
+
             <button
               data-tour="sound-toggle-mobile"
               data-music-control="true"

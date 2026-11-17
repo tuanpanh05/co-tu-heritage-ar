@@ -13,21 +13,35 @@
   body {
     max-width: 100%;
     overflow-x: hidden;
-    background: radial-gradient(circle at 50% 0%, #14231B 0%, #0C1511 42%, #060A08 100%);
+    background: radial-gradient(circle at 50% 6%, #1A2F24 0%, #122119 42%, #0E1712 80%, #09100C 100%);
+    background-color: #0E1712;
     background-attachment: fixed;
-    color: #F5EFE6;
+    color: #F3EDE3;
     @apply font-sans;
     font-size: 15.5px;
-    line-height: 1.65;
+    line-height: 1.68;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
     font-feature-settings: 'kern' 1;
+    position: relative;
+  }
+
+  /* Lớp phủ Texture Hữu cơ (Vân giấy dó & thớ gỗ Tây Giang) giảm độ bóng bẩy digital */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.045;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    mix-blend-mode: overlay;
   }
 
   h1, h2, h3, h4, .font-serif {
     font-variant-numeric: lining-nums;
-    letter-spacing: -0.01em;
+    letter-spacing: -0.015em;
   }
 
   h1, h2 {
@@ -39,66 +53,89 @@
   }
 }
 
-/* Không gian Trưng bày Bảo tàng Số (Digital Museum Glassmorphism) */
+/* Không gian Trưng bày Mộc mạc, Trầm tĩnh (Weathered Timber & Mist Glass) */
 .soft-glass {
-  background: rgba(14, 23, 18, 0.82);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(212, 163, 89, 0.16);
+  background: rgba(16, 27, 21, 0.88);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(200, 147, 68, 0.16);
 }
 
 .soft-glass-card {
-  background: linear-gradient(145deg, rgba(20, 32, 25, 0.88) 0%, rgba(12, 20, 16, 0.94) 100%);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(212, 163, 89, 0.18);
-  box-shadow: 0 16px 36px -10px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.05);
-  transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  background: linear-gradient(155deg, rgba(20, 34, 27, 0.92) 0%, rgba(14, 23, 18, 0.96) 100%);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(200, 147, 68, 0.18);
+  box-shadow: 0 14px 34px -10px rgba(0, 0, 0, 0.65), inset 0 1px 0 rgba(243, 237, 227, 0.04);
+  transition: all 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 .soft-glass-card:hover {
-  background: linear-gradient(145deg, rgba(24, 38, 30, 0.95) 0%, rgba(15, 25, 20, 0.98) 100%);
-  border-color: rgba(212, 163, 89, 0.42);
-  box-shadow: 0 24px 48px -12px rgba(0, 0, 0, 0.75), 0 0 28px -4px rgba(212, 163, 89, 0.16);
+  background: linear-gradient(155deg, rgba(25, 42, 33, 0.96) 0%, rgba(17, 28, 22, 0.98) 100%);
+  border-color: rgba(200, 147, 68, 0.38);
+  box-shadow: 0 20px 42px -12px rgba(0, 0, 0, 0.75), 0 0 24px -4px rgba(200, 147, 68, 0.1);
 }
 
-/* Sân khấu trưng bày 3D rừng sương đậm chất chiều sâu và ánh lửa bản làng */
+/* Sân khấu trưng bày 3D Rừng sương Tây Giang */
 .forest-stage-dark {
-  background: radial-gradient(circle at 50% 30%, #1A3528 0%, #102219 55%, #07100B 100%);
-  border: 1px solid rgba(212, 163, 89, 0.28);
-  box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(245, 239, 230, 0.1);
+  background: radial-gradient(circle at 50% 32%, #1C362A 0%, #12251D 56%, #09120E 100%);
+  border: 1px solid rgba(200, 147, 68, 0.24);
+  box-shadow: 0 28px 55px -14px rgba(0, 0, 0, 0.85), inset 0 1px 0 rgba(243, 237, 227, 0.08);
 }
 
-/* Đường diềm dệt thổ cẩm Cơ Tu Zơ-râm (Cơ Tu Traditional Brocade Weave Divider) */
+/* Ánh sáng lọc qua tán cây rừng (Dappled Forest Light) */
+.dappled-forest-light {
+  background: radial-gradient(
+    ellipse at 65% 20%,
+    rgba(222, 170, 92, 0.08) 0%,
+    rgba(78, 154, 128, 0.04) 40%,
+    transparent 75%
+  );
+  pointer-events: none;
+}
+
+/* Màn khói sương mỏng lơ lửng */
+.thin-forest-mist {
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(243, 237, 227, 0.03) 45%,
+    rgba(35, 63, 49, 0.08) 75%,
+    transparent 100%
+  );
+  pointer-events: none;
+}
+
+/* Đường diềm dệt thổ cẩm Cơ Tu Zơ-râm truyền thống */
 .cotu-pattern-divider {
-  height: 14px;
+  height: 8px;
   width: 100%;
   background: repeating-linear-gradient(
     45deg,
-    #C25336 0px,
-    #C25336 6px,
-    #D49B45 6px,
-    #D49B45 12px,
-    #0C1511 12px,
-    #0C1511 16px,
-    #38A17E 16px,
-    #38A17E 20px,
-    #F5EFE6 20px,
-    #F5EFE6 22px
+    #B6543A 0px,
+    #B6543A 6px,
+    #C89344 6px,
+    #C89344 12px,
+    #0E1712 12px,
+    #0E1712 16px,
+    #327B62 16px,
+    #327B62 20px,
+    #F3EDE3 20px,
+    #F3EDE3 22px
   );
-  opacity: 0.55;
-  border-radius: 9999px;
-  box-shadow: 0 2px 10px rgba(194, 83, 54, 0.2);
+  opacity: 0.42;
+  border-radius: 4px;
 }
 
 /* 3D Model Viewer Element Styling */
 model-viewer {
   width: 100%;
   height: 100%;
-  background: radial-gradient(circle at 50% 42%, #183327 0%, #0F2119 60%, #060D0A 100%);
+  background: radial-gradient(circle at 50% 42%, #1A3428 0%, #11231B 60%, #08110D 100%);
   --poster-color: transparent;
-  --progress-bar-color: #D49B45;
-  --progress-bar-height: 4px;
+  --progress-bar-color: #C89344;
+  --progress-bar-height: 3px;
+  touch-action: pan-y;
 }
 
 model-viewer.hero-viewer {
@@ -107,19 +144,19 @@ model-viewer.hero-viewer {
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 7px;
+  height: 7px;
 }
 ::-webkit-scrollbar-track {
-  background: #0A120E;
+  background: #0E1712;
 }
 ::-webkit-scrollbar-thumb {
-  background: #25392F;
-  border-radius: 9999px;
-  border: 2px solid #0A120E;
+  background: #25382E;
+  border-radius: 4px;
+  border: 1px solid #0E1712;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #D49B45;
+  background: #C89344;
 }
 
 .no-scrollbar::-webkit-scrollbar {
@@ -130,108 +167,18 @@ model-viewer.hero-viewer {
   scrollbar-width: none;
 }
 
-/* Flashcard 3D Flip Utilities */
-.perspective-1000 {
-  perspective: 1000px;
-}
-.transform-style-3d {
-  transform-style: preserve-3d;
-}
-.backface-hidden {
-  backface-visibility: hidden;
-}
-.rotate-y-180 {
-  transform: rotateY(180deg);
-}
-
-/* PRINT STYLESHEET FOR QR LABELS */
-@media print {
-  body {
-    background: #FFFFFF !important;
-    color: #000000 !important;
-  }
-
-  .no-print {
-    display: none !important;
-  }
-
-  .printable-qr-grid {
-    display: grid !important;
-    grid-template-columns: repeat(2, 1fr) !important;
-    gap: 16px !important;
-    padding: 0 !important;
-    margin: 0 !important;
-  }
-
-  .qr-label-card {
-    break-inside: avoid !important;
-    page-break-inside: avoid !important;
-    border: 2px solid #1E332C !important;
-    box-shadow: none !important;
-    background: #FFFFFF !important;
-    padding: 16px !important;
-  }
-}
-
-/* MARQUEE RUNNING FEEDBACK TICKER */
-@keyframes feedback-marquee {
-  0% {
-    transform: translateX(0%);
-  }
-  100% {
-    transform: translateX(-50%);
-  }
-}
-
-.animate-feedback-marquee {
-  display: flex;
-  width: max-content;
-  animation: feedback-marquee 60s linear infinite;
-}
-
-.animate-feedback-marquee:hover {
-  animation-play-state: paused;
-}
-
-/* ═══════════════════════════════════════════════════
-   MOBILE-FIRST GLOBAL FIXES
-   Prevents iOS input zoom, improves touch targets,
-   fixes modal scroll, ensures safe-area padding
-═══════════════════════════════════════════════════ */
-
-/* Prevent iOS Safari auto-zoom on input focus (font-size < 16px triggers zoom) */
-@media (max-width: 767px) {
-  input[type="text"],
-  input[type="email"],
-  input[type="number"],
-  input[type="search"],
-  input[type="tel"],
-  input[type="url"],
-  input[type="password"],
-  select,
-  textarea {
-    font-size: 16px !important;
-  }
-}
-
-/* Safe-area padding for iOS notch & home indicator */
+/* Safe-area padding for mobile */
 .safe-pb {
   padding-bottom: env(safe-area-inset-bottom, 0px);
 }
 
-/* Modal / overlay body lock (prevents background scroll on mobile) */
 body.modal-open {
   overflow: hidden;
   position: fixed;
   width: 100%;
 }
 
-/* Touch-action for 3D model viewer: allow vertical page scroll outside the model */
-model-viewer {
-  touch-action: pan-y;
-}
-
-/* Bottom sheet slide-up animation */
+/* Fade in & Slide up */
 @keyframes slide-up {
   from {
     transform: translateY(100%);
@@ -244,16 +191,19 @@ model-viewer {
 }
 
 .animate-slide-up {
-  animation: slide-up 0.32s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation: slide-up 0.38s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
 }
 
-/* Fade in helper */
 @keyframes fade-in {
   from { opacity: 0; }
   to   { opacity: 1; }
 }
 
 .animate-fade-in {
-  animation: fade-in 0.25s ease-out forwards;
+  animation: fade-in 0.45s ease-out forwards;
 }
 
+/* Chuyển cảnh mềm mại cho Chế độ Lắng Nghe */
+.contemplation-transition {
+  transition: all 1.2s cubic-bezier(0.25, 1, 0.5, 1);
+}

@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import confetti from 'canvas-confetti';
 import {
   X,
   Volume2,
@@ -69,20 +68,10 @@ export const SpotlightTour: React.FC = () => {
   const [targetRect, setTargetRect] = useState<DOMRect | null>(null);
   const animFrameRef = useRef<number | null>(null);
 
-  // Check if first-time visitor
+// Không tự động bật trên trang để giữ trọn vẹn không gian tĩnh lặng ban đầu của bảo tàng
+  // Người dùng có thể bấm nút "Chỉ dẫn" ở thanh menu bất kỳ lúc nào để khởi động tour
   useEffect(() => {
-    try {
-      const isDone = localStorage.getItem(TOUR_STORAGE_KEY);
-      if (!isDone) {
-        const timer = setTimeout(() => {
-          setIsActive(true);
-          setCurrentStepIdx(0);
-        }, 1000);
-        return () => clearTimeout(timer);
-      }
-    } catch {
-      // ignore
-    }
+    // Không auto-trigger
   }, []);
 
   // Listen for custom trigger to re-run tour anytime
@@ -183,16 +172,7 @@ export const SpotlightTour: React.FC = () => {
     }
     setIsActive(false);
 
-    try {
-      confetti({
-        particleCount: 50,
-        spread: 50,
-        origin: { y: 0.6 },
-        colors: ['#D49B45', '#38A17E', '#C25336', '#F5EFE6']
-      });
-    } catch {
-      // ignore
-    }
+
   };
 
   const handleSkip = () => {
