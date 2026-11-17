@@ -2,10 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Sparkles, QrCode, Compass } from 'lucide-react';
 import { useLanguage } from '../../contexts/LanguageContext';
+import { useAdminAuth } from '../../contexts/AdminAuthContext';
 import { contentService, WebsiteContentRecord } from '../../services/contentService';
 
 export const Footer: React.FC = () => {
   const { t } = useLanguage();
+  const { isAuthenticated, isSuperAdmin, logout } = useAdminAuth();
   const [aboutContent, setAboutContent] = useState<WebsiteContentRecord | null>(null);
 
   useEffect(() => {
@@ -117,22 +119,41 @@ export const Footer: React.FC = () => {
         </div>
 
         {/* Bottom bar */}
-        <div className="pt-6 border-t border-[#23352C] flex flex-col sm:flex-row items-center justify-between text-xs text-heritage-woodMuted space-y-2 sm:space-y-0">
-          <div>
+        <div className="pt-6 border-t border-[#23352C] flex flex-col sm:flex-row items-center justify-between text-xs text-heritage-woodMuted gap-3 sm:gap-4">
+          <div className="text-center sm:text-left leading-relaxed">
             © {new Date().getFullYear()} CO TU HERITAGE AR ·{' '}
             {t('Không gian Di sản Văn hóa Cơ Tu Tây Giang.', 'Tây Giang Cơ Tu Cultural Heritage Space.')}
           </div>
-          <div className="flex items-center space-x-4">
-            <Link
-              to="/admin"
-              className="hover:text-heritage-wood text-heritage-woodMuted/50 hover:underline transition-colors text-[11px] font-mono"
-            >
-              Cổng Quản Trị
-            </Link>
+          <div className="flex flex-wrap items-center justify-center sm:justify-end gap-x-3 gap-y-1">
             <div className="flex items-center space-x-1.5 text-heritage-ochre font-mono text-[11px]">
               <Sparkles className="w-3.5 h-3.5 text-heritage-ochre" />
               <span>WebXR 3D/AR Digital Museum</span>
             </div>
+            <span className="text-heritage-woodMuted/25 select-none">·</span>
+            {isAuthenticated ? (
+              <div className="inline-flex items-center gap-2 font-mono text-[11px]">
+                <Link
+                  to="/admin/dashboard"
+                  className="py-1.5 px-2 rounded-lg text-heritage-ochre/80 hover:text-heritage-ochre hover:underline transition-colors touch-manipulation"
+                >
+                  {t('Quản trị', 'CMS')} ({isSuperAdmin ? 'Admin' : 'Editor'})
+                </Link>
+                <button
+                  type="button"
+                  onClick={() => logout()}
+                  className="py-1.5 px-1.5 rounded-lg text-heritage-woodMuted/50 hover:text-red-400 transition-colors touch-manipulation"
+                >
+                  {t('Thoát', 'Logout')}
+                </button>
+              </div>
+            ) : (
+              <Link
+                to="/admin"
+                className="py-1.5 px-2 -mx-1 rounded-lg hover:text-heritage-wood active:text-heritage-ochre text-heritage-woodMuted/40 hover:underline transition-colors text-[11px] font-mono touch-manipulation"
+              >
+                {t('Cổng Quản Trị', 'Admin')}
+              </Link>
+            )}
           </div>
         </div>
 

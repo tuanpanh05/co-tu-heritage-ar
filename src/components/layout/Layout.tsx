@@ -22,7 +22,7 @@ export const Layout: React.FC = () => {
   }, [location.pathname]);
 
   return (
-    <div className="relative min-h-screen flex flex-col bg-transparent text-heritage-wood selection:bg-heritage-clay/20 pb-20 md:pb-0">
+    <div className="relative min-h-screen flex flex-col bg-transparent text-heritage-wood selection:bg-heritage-clay/20 pb-32 md:pb-0">
       {/* Nền hạt bay tương tác (Rừng sương Tây Giang) */}
       <InteractiveBackground />
 

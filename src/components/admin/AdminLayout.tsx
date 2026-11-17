@@ -94,23 +94,38 @@ export const AdminLayout: React.FC = () => {
     <div className="min-h-screen bg-[#0a110e] text-[#f4efe6] flex flex-col md:flex-row antialiased selection:bg-amber-600/30 selection:text-amber-200">
       
       {/* Mobile Header Bar */}
-      <div className="md:hidden bg-[#101b15] border-b border-emerald-800/30 px-4 py-3 flex items-center justify-between sticky top-0 z-40">
-        <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#1b3b2b] to-[#2d5a3e] border border-amber-500/30 flex items-center justify-center">
+      <div className="md:hidden bg-[#101b15] border-b border-emerald-800/30 px-3 sm:px-4 py-2.5 sm:py-3 flex items-center justify-between sticky top-0 z-40">
+        <div className="flex items-center gap-2 min-w-0">
+          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#1b3b2b] to-[#2d5a3e] border border-amber-500/30 flex items-center justify-center shrink-0">
             <ShieldCheck className="w-4 h-4 text-amber-400" />
           </div>
-          <span className="font-serif font-bold text-amber-100 text-sm tracking-wide">
-            CƠ TU CMS
-          </span>
+          <div className="min-w-0">
+            <span className="font-serif font-bold text-amber-100 text-xs sm:text-sm tracking-wide block truncate">
+              CƠ TU CMS
+            </span>
+            <span className="text-[10px] font-mono text-emerald-400/70 block truncate max-w-[120px]">
+              {getPageTitle()}
+            </span>
+          </div>
         </div>
-        <div className="flex items-center gap-2">
-          <span className="text-[11px] font-mono px-2 py-0.5 rounded-full bg-emerald-900/60 border border-emerald-700/40 text-emerald-300">
+        <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+          <Link
+            to="/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="p-1.5 px-2 rounded-lg bg-[#14231b] hover:bg-[#1a3023] border border-emerald-800/40 text-amber-300 text-xs font-mono flex items-center gap-1 active:scale-95 transition-all"
+            title="Xem website du khách"
+          >
+            <ExternalLink className="w-3.5 h-3.5" />
+            <span className="text-[11px] hidden xs:inline">Web</span>
+          </Link>
+          <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-900/60 border border-emerald-700/40 text-emerald-300">
             {isSuperAdmin ? 'Admin' : 'Học sinh'}
           </span>
           <button
             type="button"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="p-2 rounded-lg bg-[#17251e] text-emerald-200 border border-emerald-800/40"
+            className="p-2 rounded-lg bg-[#17251e] text-emerald-200 border border-emerald-800/40 min-w-[38px] min-h-[38px] flex items-center justify-center touch-manipulation"
             aria-label="Toggle menu"
           >
             {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
